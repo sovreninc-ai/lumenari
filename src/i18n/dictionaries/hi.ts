@@ -29,6 +29,11 @@ export const hi: Dictionary = {
     ctaPrimary: "अपनी किट खोजें",
     ctaSecondary: "कैटलॉग देखें",
   },
+  home: {
+    launchShelfEyebrow: "लॉन्च कैटलॉग",
+    launchShelfHeading: "{count} किट। असली डिलीवरेबल।",
+    seeAllKits: "सभी किट देखें",
+  },
   wizard: {
     step: "स्टेप",
     of: "/",
@@ -55,7 +60,7 @@ export const hi: Dictionary = {
     eyebrowShelf: "कैटलॉग",
     catalogTitle: "एक किट चुनिए। या एक बंडल ले लीजिए।",
     catalogSubtitle:
-      "हर किट एक ही डाउनलोड में आती है — एक SKILL.md, ChatGPT के लिए तैयार सिस्टम प्रॉम्प्ट, और कई सहायक फ़ाइलें जिन्हें आप अपने मनपसंद AI टूल में डाल सकते हैं।",
+      "हर किट एक ही डाउनलोड में आती है — एक SKILL.md, हर AI में चलने वाला यूनिवर्सल सिस्टम प्रॉम्प्ट, और कई सहायक फ़ाइलें जिन्हें आप अपने मनपसंद AI टूल में डाल सकते हैं।",
     individualKits: "अलग-अलग किट",
     featuredBundles: "ख़ास बंडल",
     moreBundles: "और बंडल",

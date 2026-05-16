@@ -99,14 +99,16 @@ function SiteHeader({ locale }: { locale: Locale }) {
           className="flex items-center gap-2 font-semibold tracking-tight"
         >
           <Image
-            src="/logo.png"
+            src="/logo-mark.png"
             alt="Lumenari"
-            width={32}
-            height={32}
+            width={48}
+            height={48}
             priority
             className="rounded-full"
           />
-          <span className="text-base">Lumenari</span>
+          <span className="text-base tracking-widest font-semibold">
+            LUMENARI
+          </span>
         </Link>
         <nav className="flex items-center gap-1 text-sm">
           <Link
@@ -162,7 +164,7 @@ function SiteFooter() {
         <div className="pt-8 flex flex-col md:flex-row md:items-center md:justify-between gap-4 text-sm text-[var(--muted)]">
           <div className="flex items-center gap-2">
             <Image
-              src="/logo.png"
+              src="/logo-mark.png"
               alt="Lumenari"
               width={24}
               height={24}

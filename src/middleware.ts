@@ -12,13 +12,12 @@ import {
  * i18n middleware.
  *
  *   1. Skips API routes, static assets, and Next internals.
- *   2. On `/`, leaves the request alone but ensures the locale cookie is set.
- *      The homepage reads the cookie via `getServerLocale()`.
+ *   2. On `/`, rewrites to `/<desired>` so the locale-aware homepage at
+ *      `src/app/[locale]/page.tsx` renders. Cookie wins over Accept-Language.
  *   3. On `/<locale>/...` where <locale> is known: passes through.
  *   4. On any other path: rewrites to inject the locale segment so the
  *      `[locale]` route tree picks it up. Cookie wins over Accept-Language.
- *   5. On `/<locale>` (bare locale, no rest) → redirect to `/` so we don't
- *      404 someone who typed the URL. Cookie gets set first.
+ *   5. On `/<locale>` (bare locale): passes through to `[locale]/page.tsx`.
  */
 
 const PUBLIC_PASSTHROUGH = [
@@ -28,6 +27,7 @@ const PUBLIC_PASSTHROUGH = [
   "/robots.txt",
   "/sitemap.xml",
   "/logo.png",
+  "/logo-mark.png",
   "/icon.png",
   "/og.png",
   "/og/",
@@ -72,28 +72,19 @@ export function middleware(req: NextRequest) {
       ? cookieLocale
       : (headerLocale ?? DEFAULT_LOCALE);
 
-  // 2. Homepage at `/` — pass through, but make sure cookie is set so the
-  //    server component reads a stable value.
+  // 2. Homepage at `/` — rewrite to `/<desired>` so [locale]/page.tsx renders.
   if (segments.length === 0) {
-    const res = NextResponse.next();
+    const url = req.nextUrl.clone();
+    url.pathname = `/${desired}`;
+    const res = NextResponse.rewrite(url);
     if (!cookieLocale) setLocaleCookie(res, desired);
     maybeSetReferralCookie(req, res);
     return res;
   }
 
-  // 3. Already locale-prefixed (e.g. /en/kits).
+  // 3. Already locale-prefixed (e.g. /en, /en/kits). Pass through and refresh
+  //    the cookie so the language switcher works.
   if (isLocale(first)) {
-    // If it's a bare /<locale> with no further segments, redirect to /
-    // (we don't have a [locale]/page.tsx — the homepage lives at root).
-    if (segments.length === 1) {
-      const url = req.nextUrl.clone();
-      url.pathname = "/";
-      const res = NextResponse.redirect(url);
-      setLocaleCookie(res, first);
-      maybeSetReferralCookie(req, res);
-      return res;
-    }
-    // Otherwise pass through. Refresh the cookie so the switcher works.
     const res = NextResponse.next();
     if (cookieLocale !== first) setLocaleCookie(res, first);
     maybeSetReferralCookie(req, res);

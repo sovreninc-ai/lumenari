@@ -108,8 +108,9 @@ create table if not exists public.api_usage_logs (
 create index if not exists api_usage_logs_account_time_idx
   on public.api_usage_logs(account_id, occurred_at desc);
 
-create index if not exists api_usage_logs_month_idx
-  on public.api_usage_logs(account_id, date_trunc('month', occurred_at));
+-- Monthly aggregation queries use the index above with a range filter on
+-- occurred_at — no separate month-truncated index needed (and date_trunc on
+-- timestamptz isn't IMMUTABLE, so it can't be in an index expression anyway).
 
 -- --------------------------------------------------------------------
 -- View: api_usage_current_month

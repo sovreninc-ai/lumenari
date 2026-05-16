@@ -1,0 +1,55 @@
+{
+  "sorted_middleware": [
+    "/og/page/route"
+  ],
+  "middleware": {},
+  "instrumentation": null,
+  "functions": {
+    "/og/page/route": {
+      "files": [
+        "server/middleware-build-manifest.js",
+        "server/interception-route-rewrite-manifest.js",
+        "required-server-files.js",
+        "server/server-reference-manifest.js",
+        "server/app/og/page/route_client-reference-manifest.js",
+        "server/edge/chunks/_next-internal_server_app_og_page_route_actions_0zhiisk.js",
+        "server/edge/chunks/[root-of-the-server]__0.jou4e._.js",
+        "server/edge/chunks/node_modules_next_dist_0vo8bfp._.js",
+        "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_11csqje._.js",
+        "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_0-~nfid.js"
+      ],
+      "name": "app/og/page/route",
+      "page": "/og/page/route",
+      "entrypoint": "server/edge/chunks/turbopack-node_modules_next_dist_esm_build_templates_edge-wrapper_0-~nfid.js",
+      "matchers": [
+        {
+          "regexp": "^/og/page(?:/)?$",
+          "originalSource": "/og/page"
+        }
+      ],
+      "wasm": [
+        {
+          "name": "wasm_10a187050363648b49a36c79d5266d2c",
+          "filePath": "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_yoga_0656eb_.wasm"
+        },
+        {
+          "name": "wasm_151b7f7b511bd6dda63695d2c75c87a3",
+          "filePath": "server/edge/chunks/node_modules_next_dist_compiled_@vercel_og_resvg_0656eb_.wasm"
+        }
+      ],
+      "assets": [
+        {
+          "name": "server/edge/assets/Geist-Regular.01xk7kbsv57y-.ttf",
+          "filePath": "server/edge/assets/Geist-Regular.01xk7kbsv57y-.ttf"
+        }
+      ],
+      "env": {
+        "__NEXT_BUILD_ID": "GgC8ulGl0ATc9Rhfu_wnQ",
+        "NEXT_SERVER_ACTIONS_ENCRYPTION_KEY": "GoqkA6bKjBakrxcSVKi69GYbuQBgOGdlPsqNNeP7fQU=",
+        "__NEXT_PREVIEW_MODE_ID": "12b2239ce876265b120072b9eb23649d",
+        "__NEXT_PREVIEW_MODE_ENCRYPTION_KEY": "7a1d5aa5a145fabf7d23023e4afb763fcf7ab7d40ac33d74ee06612c973dd755",
+        "__NEXT_PREVIEW_MODE_SIGNING_KEY": "ea6b87a16b53d713b95e8b1027fe2a2b6c9afbd57d8bdb58123a869ef9638d25"
+      }
+    }
+  }
+}

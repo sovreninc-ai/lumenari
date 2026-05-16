@@ -17,6 +17,11 @@ export const pt: Dictionary = {
     ctaPrimary: "Encontre seu kit",
     ctaSecondary: "Conheça a prateleira",
   },
+  home: {
+    launchShelfEyebrow: "A prateleira de lançamento",
+    launchShelfHeading: "{count} kits. Entregas de verdade.",
+    seeAllKits: "Ver todos os kits",
+  },
   wizard: {
     step: "Passo",
     of: "de",
@@ -41,7 +46,7 @@ export const pt: Dictionary = {
     eyebrowShelf: "A prateleira",
     catalogTitle: "Escolha um kit. Ou pegue um bundle.",
     catalogSubtitle:
-      "Cada kit é um único download — um SKILL.md, um system prompt pronto para ChatGPT e uma pilha de arquivos de apoio que você joga na ferramenta de IA da sua escolha.",
+      "Cada kit é um único download — um SKILL.md, um system prompt universal e uma pilha de arquivos de apoio que você joga na ferramenta de IA da sua escolha.",
     individualKits: "Kits individuais",
     featuredBundles: "Bundles em destaque",
     moreBundles: "Mais bundles",

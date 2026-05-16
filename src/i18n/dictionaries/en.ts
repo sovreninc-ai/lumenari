@@ -22,6 +22,11 @@ export const en = {
     ctaPrimary: "Find your kit",
     ctaSecondary: "Browse the shelf",
   },
+  home: {
+    launchShelfEyebrow: "The launch shelf",
+    launchShelfHeading: "{count} kits. Real deliverables.",
+    seeAllKits: "See all kits",
+  },
   wizard: {
     step: "Step",
     of: "of",
@@ -46,7 +51,7 @@ export const en = {
     eyebrowShelf: "The shelf",
     catalogTitle: "Pick a kit. Or grab a bundle.",
     catalogSubtitle:
-      "Each kit is a single download — a SKILL.md, a ChatGPT-ready system prompt, and a stack of supporting files you drop into your AI tool of choice.",
+      "Each kit is a single download — a SKILL.md, a universal system prompt, and a stack of supporting files you drop into your AI tool of choice.",
     individualKits: "Individual kits",
     featuredBundles: "Featured bundles",
     moreBundles: "More bundles",

@@ -28,6 +28,11 @@ export const ja: Dictionary = {
     ctaPrimary: "あなたに合うキットを探す",
     ctaSecondary: "カタログを見る",
   },
+  home: {
+    launchShelfEyebrow: "ローンチカタログ",
+    launchShelfHeading: "{count}個のキット。本物の成果物。",
+    seeAllKits: "すべてのキットを見る",
+  },
   wizard: {
     step: "ステップ",
     of: "/",
@@ -53,7 +58,7 @@ export const ja: Dictionary = {
     eyebrowShelf: "カタログ",
     catalogTitle: "キットを選ぶ。あるいはバンドルでまとめて。",
     catalogSubtitle:
-      "各キットはひとつのダウンロード。SKILL.md、ChatGPTにそのまま使えるシステムプロンプト、そしてお好みのAIツールに入れて使う関連ファイル一式が含まれます。",
+      "各キットはひとつのダウンロード。SKILL.md、どのAIでも使える汎用システムプロンプト、そしてお好みのAIツールに入れて使う関連ファイル一式が含まれます。",
     individualKits: "個別キット",
     featuredBundles: "おすすめバンドル",
     moreBundles: "その他のバンドル",

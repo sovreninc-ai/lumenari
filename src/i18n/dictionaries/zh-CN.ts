@@ -29,6 +29,11 @@ export const zhCN: Dictionary = {
     ctaPrimary: "找到适合你的工具包",
     ctaSecondary: "浏览全部",
   },
+  home: {
+    launchShelfEyebrow: "首发目录",
+    launchShelfHeading: "{count} 个工具包。真正的交付成果。",
+    seeAllKits: "查看全部工具包",
+  },
   wizard: {
     step: "第",
     of: "步,共",
@@ -54,7 +59,7 @@ export const zhCN: Dictionary = {
     eyebrowShelf: "工具包目录",
     catalogTitle: "选一个工具包。或者打包带走。",
     catalogSubtitle:
-      "每个工具包都是一次性下载,包含一份 SKILL.md、可直接用于 ChatGPT 的系统提示词,以及一整套配套文件,放进您常用的 AI 工具即可使用。",
+      "每个工具包都是一次性下载,包含一份 SKILL.md、一份通用系统提示词,以及一整套配套文件,放进您常用的 AI 工具即可使用。",
     individualKits: "单个工具包",
     featuredBundles: "精选组合包",
     moreBundles: "更多组合包",
