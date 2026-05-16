@@ -1,0 +1,253 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------
+   Lumenari brand tokens
+   Palette extracted from the logo: warm golds at the sun + apex,
+   spectrum oranges through the middle, deep cool blues at the base,
+   on a clean white field. The sun-yellow is the action color.
+--------------------------------------------------------------- */
+:root {
+  --background: #ffffff;
+  --foreground: #111418;
+  --muted: #6b7280;
+  --hairline: #ececec;
+  --surface: #fafafa;
+
+  /* Brand spectrum (top of pyramid → base) */
+  --sun: #f4c03b;
+  --gold: #e8a93a;
+  --amber: #ee8a3b;
+  --coral: #e16a4f;
+  --rose: #c6536a;
+  --plum: #8a4f8b;
+  --indigo: #3c4f9c;
+  --deep: #1f3a6d;
+
+  --accent: var(--sun);
+  --accent-strong: var(--amber);
+  --accent-deep: var(--deep);
+
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --radius-xl: 28px;
+}
+
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-muted: var(--muted);
+  --color-hairline: var(--hairline);
+  --color-surface: var(--surface);
+  --color-sun: var(--sun);
+  --color-gold: var(--gold);
+  --color-amber: var(--amber);
+  --color-coral: var(--coral);
+  --color-rose: var(--rose);
+  --color-plum: var(--plum);
+  --color-indigo: var(--indigo);
+  --color-deep: var(--deep);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-deep: var(--accent-deep);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+* {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+html,
+body {
+  background: var(--background);
+  color: var(--foreground);
+}
+
+body {
+  font-family:
+    var(--font-geist-sans),
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "Inter",
+    system-ui,
+    sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* Apple-style display heading scale */
+.display {
+  font-weight: 600;
+  letter-spacing: -0.035em;
+  line-height: 1.04;
+}
+
+.eyebrow {
+  text-transform: uppercase;
+  font-size: 0.72rem;
+  letter-spacing: 0.18em;
+  font-weight: 600;
+  color: var(--muted);
+}
+
+/* Buttons */
+.btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 52px;
+  padding: 0 1.5rem;
+  border-radius: 999px;
+  background: var(--foreground);
+  color: #ffffff;
+  font-weight: 500;
+  font-size: 1rem;
+  transition:
+    transform 200ms ease,
+    background 200ms ease,
+    box-shadow 200ms ease;
+  box-shadow:
+    0 1px 1px rgba(0, 0, 0, 0.04),
+    0 10px 30px -10px rgba(0, 0, 0, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  background: #0a0d10;
+}
+
+.btn-primary:active {
+  transform: translateY(0);
+}
+
+.btn-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  height: 52px;
+  padding: 0 1.25rem;
+  border-radius: 999px;
+  color: var(--foreground);
+  font-weight: 500;
+  border: 1px solid var(--hairline);
+  background: transparent;
+  transition: background 200ms ease;
+}
+
+.btn-ghost:hover {
+  background: var(--surface);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.55rem 1rem;
+  border-radius: 999px;
+  border: 1px solid var(--hairline);
+  background: #fff;
+  font-size: 0.95rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 180ms ease;
+  min-height: 44px;
+}
+
+.chip:hover {
+  border-color: #d3d3d3;
+  background: var(--surface);
+}
+
+.chip[data-active="true"] {
+  border-color: var(--foreground);
+  background: var(--foreground);
+  color: #fff;
+}
+
+/* Subtle hairline card */
+.card {
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-lg);
+  padding: 1.75rem;
+  transition:
+    border-color 200ms ease,
+    box-shadow 200ms ease,
+    transform 200ms ease;
+}
+
+.card:hover {
+  border-color: #d8d8d8;
+  box-shadow: 0 10px 40px -15px rgba(0, 0, 0, 0.12);
+}
+
+/* Spectrum gradient (sampled from the logo) */
+.bg-spectrum {
+  background: linear-gradient(
+    135deg,
+    var(--sun) 0%,
+    var(--amber) 22%,
+    var(--coral) 42%,
+    var(--rose) 60%,
+    var(--plum) 75%,
+    var(--indigo) 88%,
+    var(--deep) 100%
+  );
+}
+
+.text-spectrum {
+  background: linear-gradient(
+    135deg,
+    var(--amber) 0%,
+    var(--coral) 35%,
+    var(--rose) 60%,
+    var(--indigo) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: transparent;
+}
+
+/* Focus ring — accessible + branded */
+:where(button, a, input, textarea, select):focus-visible {
+  outline: 2px solid var(--sun);
+  outline-offset: 2px;
+  border-radius: 6px;
+}
+
+/* Inputs */
+.input,
+.textarea {
+  width: 100%;
+  background: #fff;
+  border: 1px solid var(--hairline);
+  border-radius: var(--radius-md);
+  padding: 0.95rem 1.1rem;
+  font-size: 1rem;
+  color: var(--foreground);
+  transition: border-color 200ms ease;
+}
+
+.input:focus,
+.textarea:focus {
+  border-color: var(--foreground);
+  outline: none;
+}
+
+.textarea {
+  min-height: 140px;
+  resize: vertical;
+  line-height: 1.5;
+}
+
+/* Hide print/scroll bars in chip rails */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  scrollbar-width: none;
+}

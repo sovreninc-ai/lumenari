@@ -1,0 +1,468 @@
+{
+  "$schema": "lumenari-batch-manifest-v1",
+  "batch": "1-of-3",
+  "kit_range": "1-20",
+  "generated_at": "2026-05-14",
+  "notes": "Batch 1 manifest. Parallel sessions handle batches 2 + 3. The Everything Bundle price ($149) will be revisited when all 100 kits land.",
+  "kits": [
+    {
+      "id": "ts-next-production",
+      "slug": "ts-next-production",
+      "name": "TypeScript + Next.js Production Pack",
+      "description": "RLS-aware App Router patterns, Supabase wiring, and conventions that survive contact with real users.",
+      "price_cents": 1900,
+      "ai_target": "claude-code",
+      "bundle_only": false,
+      "file_paths": [
+        "content/ts-next-production/SKILL.md",
+        "content/ts-next-production/memory.md",
+        "content/ts-next-production/optimization-pack.md",
+        "content/ts-next-production/custom-gpt-instructions.md",
+        "content/ts-next-production/quick-start.md",
+        "content/ts-next-production/patterns/supabase-clients.md",
+        "content/ts-next-production/patterns/server-actions.md",
+        "content/ts-next-production/patterns/forms-and-validation.md",
+        "content/ts-next-production/checklists/pr-ready.md"
+      ]
+    },
+    {
+      "id": "supabase-schema-rls",
+      "slug": "supabase-schema-rls",
+      "name": "Supabase Schema & RLS Pack",
+      "description": "Multi-tenant Postgres schema patterns and a real RLS policy library — not the toy examples in the docs.",
+      "price_cents": 1900,
+      "ai_target": "claude-code",
+      "bundle_only": false,
+      "file_paths": [
+        "content/supabase-schema-rls/SKILL.md",
+        "content/supabase-schema-rls/memory.md",
+        "content/supabase-schema-rls/optimization-pack.md",
+        "content/supabase-schema-rls/custom-gpt-instructions.md",
+        "content/supabase-schema-rls/quick-start.md",
+        "content/supabase-schema-rls/patterns/tenant-models.md",
+        "content/supabase-schema-rls/patterns/rls-policy-library.md",
+        "content/supabase-schema-rls/patterns/migration-discipline.md",
+        "content/supabase-schema-rls/examples/0001_init_example.sql"
+      ]
+    },
+    {
+      "id": "stripe-connect",
+      "slug": "stripe-connect",
+      "name": "Stripe Connect Implementation Pack",
+      "description": "Platform → creator payments, parent → club splits, webhooks, refunds, and the failure modes nobody documents.",
+      "price_cents": 1900,
+      "ai_target": "claude-code",
+      "bundle_only": false,
+      "file_paths": [
+        "content/stripe-connect/SKILL.md",
+        "content/stripe-connect/memory.md",
+        "content/stripe-connect/optimization-pack.md",
+        "content/stripe-connect/custom-gpt-instructions.md",
+        "content/stripe-connect/quick-start.md",
+        "content/stripe-connect/patterns/account-onboarding.md",
+        "content/stripe-connect/patterns/destination-charges.md",
+        "content/stripe-connect/patterns/webhook-idempotency.md",
+        "content/stripe-connect/playbooks/refunds-and-disputes.md"
+      ]
+    },
+    {
+      "id": "trades-construction",
+      "slug": "trades-construction",
+      "name": "Trades & Construction Workflow Pack",
+      "description": "Turn your AI into a back-office for certs, safety paperwork, and onboarding documents.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/trades-construction/SKILL.md",
+        "content/trades-construction/memory.md",
+        "content/trades-construction/optimization-pack.md",
+        "content/trades-construction/custom-gpt-instructions.md",
+        "content/trades-construction/quick-start.md",
+        "content/trades-construction/templates/toolbox-talk.md",
+        "content/trades-construction/templates/jha-template.md",
+        "content/trades-construction/templates/fit-for-duty.md",
+        "content/trades-construction/checklists/sub-onboarding.md"
+      ]
+    },
+    {
+      "id": "startup-founder",
+      "slug": "startup-founder",
+      "name": "Startup Founder Toolkit",
+      "description": "Pitch decks, investor updates, hiring briefs, and runway math — without the consultant-speak.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/startup-founder/SKILL.md",
+        "content/startup-founder/memory.md",
+        "content/startup-founder/optimization-pack.md",
+        "content/startup-founder/custom-gpt-instructions.md",
+        "content/startup-founder/quick-start.md",
+        "content/startup-founder/templates/pitch-deck.md",
+        "content/startup-founder/templates/investor-update.md",
+        "content/startup-founder/templates/job-description.md",
+        "content/startup-founder/models/runway-prompt.md"
+      ]
+    },
+    {
+      "id": "apple-style-ux",
+      "slug": "apple-style-ux",
+      "name": "Apple-Style UX Pack",
+      "description": "Design principles, copy patterns, progressive disclosure, and sensible defaults baked into every prompt.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/apple-style-ux/SKILL.md",
+        "content/apple-style-ux/memory.md",
+        "content/apple-style-ux/optimization-pack.md",
+        "content/apple-style-ux/custom-gpt-instructions.md",
+        "content/apple-style-ux/quick-start.md",
+        "content/apple-style-ux/principles/seven-rules.md",
+        "content/apple-style-ux/patterns/microcopy.md",
+        "content/apple-style-ux/patterns/progressive-disclosure.md",
+        "content/apple-style-ux/checklists/sensible-defaults.md"
+      ]
+    },
+    {
+      "id": "real-estate-pro",
+      "slug": "real-estate-pro",
+      "name": "Real Estate Listings + Market Analysis",
+      "description": "MLS-ready listings, CMAs, neighborhood profiles, and the follow-up emails that actually close deals.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/real-estate-pro/SKILL.md",
+        "content/real-estate-pro/memory.md",
+        "content/real-estate-pro/optimization-pack.md",
+        "content/real-estate-pro/custom-gpt-instructions.md",
+        "content/real-estate-pro/quick-start.md",
+        "content/real-estate-pro/templates/listing-descriptions.md",
+        "content/real-estate-pro/templates/cma-prompt.md",
+        "content/real-estate-pro/templates/buyer-seller-followups.md"
+      ]
+    },
+    {
+      "id": "sales-outreach-pro",
+      "slug": "sales-outreach-pro",
+      "name": "Sales Cold Outreach + Follow-up",
+      "description": "Personalized cold emails, follow-up cadences, and reply handling that doesn't sound like a template.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/sales-outreach-pro/SKILL.md",
+        "content/sales-outreach-pro/memory.md",
+        "content/sales-outreach-pro/optimization-pack.md",
+        "content/sales-outreach-pro/custom-gpt-instructions.md",
+        "content/sales-outreach-pro/quick-start.md",
+        "content/sales-outreach-pro/frameworks/cold-email-frameworks.md",
+        "content/sales-outreach-pro/templates/follow-up-cadences.md",
+        "content/sales-outreach-pro/playbooks/objection-handling.md"
+      ]
+    },
+    {
+      "id": "solopreneur-toolkit",
+      "slug": "solopreneur-toolkit",
+      "name": "Solopreneur Toolkit",
+      "description": "Proposals, SOWs, intake forms, invoice nudges, and the visibility posts that bring the next client.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/solopreneur-toolkit/SKILL.md",
+        "content/solopreneur-toolkit/memory.md",
+        "content/solopreneur-toolkit/optimization-pack.md",
+        "content/solopreneur-toolkit/custom-gpt-instructions.md",
+        "content/solopreneur-toolkit/quick-start.md",
+        "content/solopreneur-toolkit/templates/proposal-and-sow.md",
+        "content/solopreneur-toolkit/templates/client-updates-and-invoices.md",
+        "content/solopreneur-toolkit/playbooks/pricing-and-niching.md"
+      ]
+    },
+    {
+      "id": "seo-content-writer",
+      "slug": "seo-content-writer",
+      "name": "SEO Content Writer",
+      "description": "Keyword-clustered outlines, longform article generation, meta optimization, schema markup, and refresh prompts.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/seo-content-writer/SKILL.md",
+        "content/seo-content-writer/memory.md",
+        "content/seo-content-writer/optimization-pack.md",
+        "content/seo-content-writer/custom-gpt-instructions.md",
+        "content/seo-content-writer/quick-start.md",
+        "content/seo-content-writer/templates/article-outliner.md",
+        "content/seo-content-writer/templates/meta-and-schema.md",
+        "content/seo-content-writer/playbooks/content-refresh.md"
+      ]
+    },
+    {
+      "id": "recruiter-pro",
+      "slug": "recruiter-pro",
+      "name": "Recruiter Outreach + JD Writer",
+      "description": "JDs that read like a person wrote them, Boolean searches that find the right candidates, outreach that gets replies.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/recruiter-pro/SKILL.md",
+        "content/recruiter-pro/memory.md",
+        "content/recruiter-pro/optimization-pack.md",
+        "content/recruiter-pro/custom-gpt-instructions.md",
+        "content/recruiter-pro/quick-start.md",
+        "content/recruiter-pro/templates/jd-generator.md",
+        "content/recruiter-pro/templates/outreach-and-interviews.md",
+        "content/recruiter-pro/playbooks/boolean-and-sourcing.md"
+      ]
+    },
+    {
+      "id": "resume-job-search",
+      "slug": "resume-job-search",
+      "name": "Resume + Job Search Pack",
+      "description": "Résumé tailoring per JD, cover letters, LinkedIn rewrites, interview prep, and post-interview follow-ups.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/resume-job-search/SKILL.md",
+        "content/resume-job-search/memory.md",
+        "content/resume-job-search/optimization-pack.md",
+        "content/resume-job-search/custom-gpt-instructions.md",
+        "content/resume-job-search/quick-start.md",
+        "content/resume-job-search/templates/resume-tailoring.md",
+        "content/resume-job-search/templates/cover-letter-and-linkedin.md",
+        "content/resume-job-search/playbooks/interview-prep-and-followups.md"
+      ]
+    },
+    {
+      "id": "pm-toolkit",
+      "slug": "pm-toolkit",
+      "name": "Product Manager Toolkit",
+      "description": "PRDs, roadmap docs, sprint planning, stakeholder updates, and the metrics-review prompts that make exec readouts easy.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/pm-toolkit/SKILL.md",
+        "content/pm-toolkit/memory.md",
+        "content/pm-toolkit/optimization-pack.md",
+        "content/pm-toolkit/custom-gpt-instructions.md",
+        "content/pm-toolkit/quick-start.md",
+        "content/pm-toolkit/templates/prd-and-roadmap.md",
+        "content/pm-toolkit/templates/stakeholder-updates.md",
+        "content/pm-toolkit/playbooks/sprint-and-metrics.md"
+      ]
+    },
+    {
+      "id": "newsletter-writer",
+      "slug": "newsletter-writer",
+      "name": "Newsletter / Substack Writer",
+      "description": "Issue outliner, headline tester, hook generator, growth-loop ideas, and re-engagement copy.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/newsletter-writer/SKILL.md",
+        "content/newsletter-writer/memory.md",
+        "content/newsletter-writer/optimization-pack.md",
+        "content/newsletter-writer/custom-gpt-instructions.md",
+        "content/newsletter-writer/quick-start.md",
+        "content/newsletter-writer/templates/issue-outliner-and-hooks.md",
+        "content/newsletter-writer/templates/headlines-and-growth.md",
+        "content/newsletter-writer/playbooks/re-engagement.md"
+      ]
+    },
+    {
+      "id": "ios-swiftui",
+      "slug": "ios-swiftui",
+      "name": "iOS / SwiftUI Production Pack",
+      "description": "Apple HIG patterns, App Store readiness, SwiftData + CloudKit examples, accessibility patterns, and SwiftUI gotchas.",
+      "price_cents": 1900,
+      "ai_target": "claude-code",
+      "bundle_only": false,
+      "file_paths": [
+        "content/ios-swiftui/SKILL.md",
+        "content/ios-swiftui/memory.md",
+        "content/ios-swiftui/optimization-pack.md",
+        "content/ios-swiftui/custom-gpt-instructions.md",
+        "content/ios-swiftui/quick-start.md",
+        "content/ios-swiftui/patterns/swiftui-idioms.md",
+        "content/ios-swiftui/patterns/swiftdata-cloudkit.md",
+        "content/ios-swiftui/checklists/app-store-readiness.md"
+      ]
+    },
+    {
+      "id": "python-data",
+      "slug": "python-data",
+      "name": "Python Data Analysis Pack",
+      "description": "Pandas / DuckDB / Plotly recipes, EDA prompts, statistical-test cookbook, and the SQL→pandas idioms.",
+      "price_cents": 1900,
+      "ai_target": "claude-code",
+      "bundle_only": false,
+      "file_paths": [
+        "content/python-data/SKILL.md",
+        "content/python-data/memory.md",
+        "content/python-data/optimization-pack.md",
+        "content/python-data/custom-gpt-instructions.md",
+        "content/python-data/quick-start.md",
+        "content/python-data/recipes/pandas-duckdb-polars.md",
+        "content/python-data/recipes/stats-cookbook.md",
+        "content/python-data/patterns/sql-to-pandas.md"
+      ]
+    },
+    {
+      "id": "support-templates",
+      "slug": "support-templates",
+      "name": "Customer Support Templates",
+      "description": "Refund, escalation, lost-order, upsell-from-support, and NPS-detractor responses — formal, friendly, or warm.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/support-templates/SKILL.md",
+        "content/support-templates/memory.md",
+        "content/support-templates/optimization-pack.md",
+        "content/support-templates/custom-gpt-instructions.md",
+        "content/support-templates/quick-start.md",
+        "content/support-templates/templates/refunds-and-escalations.md",
+        "content/support-templates/templates/lost-orders-and-upsell.md",
+        "content/support-templates/playbooks/nps-detractor-recovery.md"
+      ]
+    },
+    {
+      "id": "brand-voice",
+      "slug": "brand-voice",
+      "name": "Brand Voice Builder",
+      "description": "Hand the AI 3-5 samples of your writing and it produces a voice profile you can apply to every future asset.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/brand-voice/SKILL.md",
+        "content/brand-voice/memory.md",
+        "content/brand-voice/optimization-pack.md",
+        "content/brand-voice/custom-gpt-instructions.md",
+        "content/brand-voice/quick-start.md",
+        "content/brand-voice/templates/sample-to-voice.md",
+        "content/brand-voice/templates/voice-application.md",
+        "content/brand-voice/playbooks/voice-drift-detection.md"
+      ]
+    },
+    {
+      "id": "coach-pro",
+      "slug": "coach-pro",
+      "name": "Coach / Trainer / Therapist Pack",
+      "description": "Client comms, session notes, intake forms, and content marketing for solo practitioners — with disclaimers baked in.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/coach-pro/SKILL.md",
+        "content/coach-pro/memory.md",
+        "content/coach-pro/optimization-pack.md",
+        "content/coach-pro/custom-gpt-instructions.md",
+        "content/coach-pro/quick-start.md",
+        "content/coach-pro/templates/intake-and-session-notes.md",
+        "content/coach-pro/templates/marketing-copy.md",
+        "content/coach-pro/playbooks/disclaimers-and-crisis-flags.md"
+      ]
+    },
+    {
+      "id": "ecommerce-pro",
+      "slug": "ecommerce-pro",
+      "name": "E-commerce / Shopify Owner Pack",
+      "description": "Product descriptions, ad copy for Meta / Google / TikTok, review responses, abandoned-cart sequences, supplier emails.",
+      "price_cents": 1400,
+      "ai_target": "any",
+      "bundle_only": false,
+      "file_paths": [
+        "content/ecommerce-pro/SKILL.md",
+        "content/ecommerce-pro/memory.md",
+        "content/ecommerce-pro/optimization-pack.md",
+        "content/ecommerce-pro/custom-gpt-instructions.md",
+        "content/ecommerce-pro/quick-start.md",
+        "content/ecommerce-pro/templates/product-descriptions-and-ads.md",
+        "content/ecommerce-pro/templates/email-sequences.md",
+        "content/ecommerce-pro/playbooks/reviews-and-suppliers.md"
+      ]
+    }
+  ],
+  "bundles": [
+    {
+      "id": "developer-quartet",
+      "slug": "developer-quartet",
+      "name": "Developer Quartet",
+      "kit_slugs": ["ts-next-production", "supabase-schema-rls", "stripe-connect", "ios-swiftui"],
+      "price_cents": 5900,
+      "savings_cents": 1700,
+      "featured": true
+    },
+    {
+      "id": "builders-pack",
+      "slug": "builders-pack",
+      "name": "Builder's Pack",
+      "kit_slugs": ["startup-founder", "pm-toolkit", "apple-style-ux", "solopreneur-toolkit"],
+      "price_cents": 4500,
+      "savings_cents": 1100,
+      "featured": true
+    },
+    {
+      "id": "sales-and-marketing-bundle",
+      "slug": "sales-and-marketing-bundle",
+      "name": "Sales + Marketing Bundle",
+      "kit_slugs": ["sales-outreach-pro", "seo-content-writer", "newsletter-writer", "brand-voice"],
+      "price_cents": 4500,
+      "savings_cents": 1100,
+      "featured": true
+    },
+    {
+      "id": "real-estate-power-bundle",
+      "slug": "real-estate-power-bundle",
+      "name": "Real Estate Power Bundle",
+      "kit_slugs": ["real-estate-pro", "solopreneur-toolkit", "brand-voice"],
+      "price_cents": 3500,
+      "savings_cents": 700,
+      "featured": false
+    },
+    {
+      "id": "career-pack",
+      "slug": "career-pack",
+      "name": "Career Pack",
+      "kit_slugs": ["resume-job-search", "recruiter-pro"],
+      "price_cents": 2400,
+      "savings_cents": 400,
+      "featured": false
+    },
+    {
+      "id": "everything-20",
+      "slug": "everything-20",
+      "name": "The Lumenari Everything Bundle (20)",
+      "kit_slugs": [
+        "ts-next-production", "supabase-schema-rls", "stripe-connect",
+        "trades-construction", "startup-founder", "apple-style-ux",
+        "real-estate-pro", "sales-outreach-pro", "solopreneur-toolkit",
+        "seo-content-writer", "recruiter-pro",
+        "resume-job-search", "pm-toolkit", "newsletter-writer",
+        "ios-swiftui", "python-data", "support-templates",
+        "brand-voice", "coach-pro", "ecommerce-pro"
+      ],
+      "price_cents": 14900,
+      "savings_cents": 15100,
+      "featured": true,
+      "note": "Will be re-priced once batches 2 + 3 land (target 100 kits)."
+    }
+  ],
+  "pricing_summary": {
+    "individual_kits": {
+      "developer_kits_19": 4,
+      "non_dev_kits_14": 16,
+      "total_individual_value_cents": 30000
+    },
+    "savings_via_everything_bundle_cents": 15100
+  }
+}

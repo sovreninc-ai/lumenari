@@ -1,0 +1,4 @@
+{
+  "/api/lead-magnet/claim/route": "app/api/lead-magnet/claim/route.js",
+  "/api/wishlist/save/route": "app/api/wishlist/save/route.js"
+}

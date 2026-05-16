@@ -1,0 +1,3 @@
+module.exports=[22260,(e,r,s)=>{"use strict";r.exports=e.r(42315).vendored["react-rsc"].ReactJsxRuntime},81111,(e,r,s)=>{r.exports=e.x("node:stream",()=>require("node:stream"))},24640,e=>{e.v(r=>Promise.all(["server/chunks/[externals]__0jx4htf._.js","server/chunks/[root-of-the-server]__10wbopk._.js"].map(r=>e.l(r))).then(()=>r(37072)))}];
+
+//# sourceMappingURL=%5Broot-of-the-server%5D__0ed8z04._.js.map
