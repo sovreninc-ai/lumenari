@@ -14,6 +14,7 @@ import { BuyButton } from "@/components/BuyButton";
 import { SaveKitButton } from "@/components/save-kit-button";
 import { RecommendedTools } from "@/components/recommended-tools";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
+import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { kitOrBundleMetadata, siteUrl } from "@/lib/seo";
 import {
   JsonLd,
@@ -45,12 +46,20 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function KitDetailPage({ params }: PageProps) {
   const { locale, slug } = await params;
   const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
   const localePath = safeLocale === "en" ? "" : `/${safeLocale}`;
   const base = siteUrl();
 
   const bundle = getBundle(slug);
   if (bundle) {
-    return <BundlePage bundle={bundle} localePath={localePath} base={base} />;
+    return (
+      <BundlePage
+        bundle={bundle}
+        localePath={localePath}
+        base={base}
+        dict={dict}
+      />
+    );
   }
 
   const kit = getKit(slug);
@@ -69,10 +78,10 @@ export default async function KitDetailPage({ params }: PageProps) {
         href="/kits"
         className="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--foreground)] mb-10"
       >
-        <ArrowLeft className="w-4 h-4" /> All kits
+        <ArrowLeft className="w-4 h-4" /> {dict.kitDetail.allKits}
       </Link>
 
-      <span className="eyebrow">Optimization Pack</span>
+      <span className="eyebrow">{dict.kitDetail.eyebrow}</span>
       <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">{kit.name}</h1>
       <p className="text-xl text-[var(--muted)] leading-relaxed mb-8">
         {kit.tagline}
@@ -80,16 +89,16 @@ export default async function KitDetailPage({ params }: PageProps) {
 
       <div className="flex flex-wrap items-center gap-3 text-sm text-[var(--muted)] mb-10">
         <span className="rounded-full bg-[var(--surface)] border border-[var(--hairline)] px-3 py-1.5">
-          Optimized for: {kit.aiTargets.join(" · ")}
+          {dict.kitDetail.optimizedForPrefix} {kit.aiTargets.join(" · ")}
         </span>
         <span className="rounded-full bg-[var(--surface)] border border-[var(--hairline)] px-3 py-1.5">
-          One-time · {formatCAD(kit.priceCents)}
+          {dict.kitDetail.oneTimePrefix} {formatCAD(kit.priceCents)}
         </span>
       </div>
 
       <p className="text-lg leading-relaxed mb-10">{kit.description}</p>
 
-      <h2 className="display text-2xl mb-5">What&apos;s inside</h2>
+      <h2 className="display text-2xl mb-5">{dict.kitDetail.whatsInside}</h2>
       <ul className="space-y-3 mb-12">
         {kit.whatsInside.map((b) => (
           <li key={b} className="flex items-start gap-3">
@@ -99,11 +108,9 @@ export default async function KitDetailPage({ params }: PageProps) {
         ))}
       </ul>
 
-      <h2 className="display text-2xl mb-3">Files you&apos;ll receive</h2>
+      <h2 className="display text-2xl mb-3">{dict.kitDetail.filesYouReceive}</h2>
       <p className="text-sm text-[var(--muted)] mb-4">
-        Every kit ships with the four standard formats — SKILL.md, an
-        optimization pack, a Custom GPT prompt, and a per-platform quick start
-        — plus the reference docs specific to this kit.
+        {dict.kitDetail.filesIntro}
       </p>
       <ul className="space-y-1.5 mb-12 font-mono text-sm text-[var(--muted)]">
         {kit.deliverables.map((d) => (
@@ -115,22 +122,22 @@ export default async function KitDetailPage({ params }: PageProps) {
         <div>
           <p className="text-2xl font-semibold">{formatCAD(kit.priceCents)}</p>
           <p className="text-sm text-[var(--muted)]">
-            One-time, lifetime access. Download instantly after checkout.
+            {dict.kitDetail.lifetimeAccess}
           </p>
         </div>
         <div className="flex flex-col sm:flex-row sm:items-center gap-3 sm:w-auto">
           <SaveKitButton kitSlug={kit.slug} kitName={kit.name} />
           <BuyButton
             slugs={[kit.slug]}
-            label={`Get ${kit.name.split(" ")[0]} kit`}
+            label={`${dict.kitDetail.getKitPrefix} ${kit.name.split(" ")[0]} ${dict.kitDetail.getKitSuffix}`}
             className="sm:w-64"
           />
         </div>
       </div>
 
-      <BundleNudges currentKitSlug={kit.slug} />
+      <BundleNudges currentKitSlug={kit.slug} dict={dict} />
 
-      <RecommendedTools kit={kit} />
+      <RecommendedTools kit={kit} dict={dict} />
     </article>
   );
 }
@@ -139,10 +146,12 @@ function BundlePage({
   bundle,
   localePath,
   base,
+  dict,
 }: {
   bundle: Bundle;
   localePath: string;
   base: string;
+  dict: Dictionary;
 }) {
   const total = bundle.kitSlugs
     .map((slug) => getKit(slug))
@@ -161,16 +170,16 @@ function BundlePage({
         href="/kits"
         className="inline-flex items-center gap-1 text-sm text-[var(--muted)] hover:text-[var(--foreground)] mb-10"
       >
-        <ArrowLeft className="w-4 h-4" /> All kits
+        <ArrowLeft className="w-4 h-4" /> {dict.bundleDetail.allKits}
       </Link>
 
-      <span className="eyebrow">Bundle</span>
+      <span className="eyebrow">{dict.bundleDetail.eyebrow}</span>
       <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">{bundle.name}</h1>
       <p className="text-xl text-[var(--muted)] leading-relaxed mb-10">
         {bundle.tagline}
       </p>
 
-      <h2 className="display text-2xl mb-5">What&apos;s inside</h2>
+      <h2 className="display text-2xl mb-5">{dict.bundleDetail.whatsInside}</h2>
       <ul className="space-y-3 mb-12">
         {total.map((k) => (
           <li
@@ -193,14 +202,19 @@ function BundlePage({
               {formatCAD(bundle.priceCents)}
             </p>
             <p className="text-sm text-[var(--muted)]">
-              Saves {formatCAD(bundleSavings(bundle))} vs. standalone.
+              {dict.bundleDetail.savesPrefix} {formatCAD(bundleSavings(bundle))}{" "}
+              {dict.bundleDetail.savesSuffix}
             </p>
           </div>
           <div className="flex flex-col sm:flex-row sm:items-center gap-3">
-            <SaveKitButton kitSlug={bundle.slug} kitName={bundle.name} source="bundle-detail" />
+            <SaveKitButton
+              kitSlug={bundle.slug}
+              kitName={bundle.name}
+              source="bundle-detail"
+            />
             <BuyButton
               slugs={[bundle.slug]}
-              label="Get this bundle"
+              label={dict.bundleDetail.getThisBundle}
               className="sm:w-64"
             />
           </div>
@@ -210,7 +224,13 @@ function BundlePage({
   );
 }
 
-function BundleNudges({ currentKitSlug }: { currentKitSlug: string }) {
+function BundleNudges({
+  currentKitSlug,
+  dict,
+}: {
+  currentKitSlug: string;
+  dict: Dictionary;
+}) {
   const matchingBundles = BUNDLES.filter((b) =>
     b.kitSlugs.includes(currentKitSlug),
   );
@@ -224,19 +244,22 @@ function BundleNudges({ currentKitSlug }: { currentKitSlug: string }) {
   return (
     <div className="mt-12 rounded-2xl border border-dashed border-[var(--hairline)] p-6 text-sm text-[var(--muted)] flex flex-col sm:flex-row sm:items-center justify-between gap-3">
       <span>
-        Or get the{" "}
-        <strong className="text-[var(--foreground)]">{nudge.name}</strong> —{" "}
-        {nudge.kitSlugs.length} kits for{" "}
+        {dict.kitDetail.bundleNudgePrefix}{" "}
+        <strong className="text-[var(--foreground)]">{nudge.name}</strong>{" "}
+        {dict.kitDetail.bundleNudgeMiddle} {nudge.kitSlugs.length}{" "}
+        {dict.kitDetail.bundleNudgeKitsFor}{" "}
         <strong className="text-[var(--foreground)]">
           {formatCAD(nudge.priceCents)}
         </strong>{" "}
-        (saves {formatCAD(bundleSavings(nudge))}).
+        {dict.kitDetail.bundleNudgeSaves}
+        {formatCAD(bundleSavings(nudge))}
+        {dict.kitDetail.bundleNudgeSavesClose}
       </span>
       <Link
         href={`/kits/${nudge.slug}`}
         className="font-medium hover:text-[var(--foreground)] whitespace-nowrap"
       >
-        See bundle →
+        {dict.kitDetail.seeBundle}
       </Link>
     </div>
   );

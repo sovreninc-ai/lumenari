@@ -5,6 +5,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, RotateCcw, Check } from "lucide-react";
 import { KITS, formatCAD } from "@/data/kits";
 import { KitCard } from "./KitCard";
+import { useDictionary } from "@/i18n/use-dictionary";
+import type { Dictionary } from "@/i18n/dictionaries";
 
 /**
  * Onboarding funnel — chip-driven 3-step replacement for the open-textarea
@@ -15,131 +17,43 @@ import { KitCard } from "./KitCard";
  * Step 2: "I want help with…" chips, dynamically populated per role.
  * Step 3: AI of choice (Claude, ChatGPT, Codex, Gemini, Cursor, Any).
  * Step 3 done → call /api/recommend and render kits.
+ *
+ * The role-id + recommendPrefix strings stay in English on purpose — they're
+ * fed into the recommender's prompt template downstream, which expects EN.
+ * The user-visible label + taskChips come from the active dictionary.
  */
 
+type RoleId =
+  | "marketing"
+  | "sales"
+  | "developer"
+  | "founder"
+  | "realEstate"
+  | "recruiter"
+  | "solopreneur"
+  | "creator"
+  | "other";
+
 interface RoleDef {
-  id: string;
-  label: string;
-  taskChips: string[];
+  id: RoleId;
   /** Phrase prepended in the useCase string so the recommender knows the role. */
   recommendPrefix: string;
 }
 
 const ROLES: RoleDef[] = [
-  {
-    id: "marketing",
-    label: "Marketing pro",
-    recommendPrefix: "I'm a marketing professional and",
-    taskChips: [
-      "Writing SEO content at scale",
-      "Drafting brand-voice copy",
-      "Building a newsletter",
-      "Product copy + landing pages",
-      "Campaign briefs + creative",
-    ],
-  },
-  {
-    id: "sales",
-    label: "Sales pro",
-    recommendPrefix: "I'm a sales professional and",
-    taskChips: [
-      "Cold outreach + sequences",
-      "Discovery + qualification",
-      "Proposal drafting",
-      "Follow-up + reverse-engagement",
-      "Account research briefs",
-    ],
-  },
-  {
-    id: "developer",
-    label: "Developer",
-    recommendPrefix: "I'm a developer and",
-    taskChips: [
-      "Next.js + Supabase production",
-      "Stripe Connect + webhooks",
-      "Supabase RLS + auth",
-      "iOS / SwiftUI work",
-      "Python data + ML",
-      "Go / Node / Rails backend",
-      "DevOps / Terraform / Kubernetes",
-    ],
-  },
-  {
-    id: "founder",
-    label: "Founder",
-    recommendPrefix: "I'm a startup founder and",
-    taskChips: [
-      "Investor updates + decks",
-      "Hiring + first-team workflow",
-      "Customer support patterns",
-      "Solo-operator playbook",
-      "Pricing + positioning",
-    ],
-  },
-  {
-    id: "real-estate",
-    label: "Real estate agent",
-    recommendPrefix: "I'm a real estate agent and",
-    taskChips: [
-      "Listing copy + descriptions",
-      "CMAs + market briefs",
-      "Buyer + seller outreach",
-      "Open-house follow-up",
-      "Lead nurture sequences",
-    ],
-  },
-  {
-    id: "recruiter",
-    label: "Recruiter",
-    recommendPrefix: "I'm a recruiter and",
-    taskChips: [
-      "Sourcing senior engineers",
-      "Cold outreach to passive candidates",
-      "Screening notes + scorecards",
-      "Hiring-manager calibration",
-      "Diverse-pipeline searches",
-    ],
-  },
-  {
-    id: "solopreneur",
-    label: "Solopreneur",
-    recommendPrefix: "I'm a solopreneur and",
-    taskChips: [
-      "Email + social drafting",
-      "Client proposals + SOWs",
-      "Customer support templates",
-      "Product launches",
-      "Newsletter + content",
-    ],
-  },
-  {
-    id: "creator",
-    label: "Creator",
-    recommendPrefix: "I'm a content creator and",
-    taskChips: [
-      "YouTube scripts + outlines",
-      "Newsletter + Substack",
-      "Twitter / LinkedIn threads",
-      "Podcast prep + show notes",
-      "Sponsor outreach",
-    ],
-  },
-  {
-    id: "other",
-    label: "Something else",
-    recommendPrefix: "My role is:",
-    taskChips: [],
-  },
+  { id: "marketing", recommendPrefix: "I'm a marketing professional and" },
+  { id: "sales", recommendPrefix: "I'm a sales professional and" },
+  { id: "developer", recommendPrefix: "I'm a developer and" },
+  { id: "founder", recommendPrefix: "I'm a startup founder and" },
+  { id: "realEstate", recommendPrefix: "I'm a real estate agent and" },
+  { id: "recruiter", recommendPrefix: "I'm a recruiter and" },
+  { id: "solopreneur", recommendPrefix: "I'm a solopreneur and" },
+  { id: "creator", recommendPrefix: "I'm a content creator and" },
+  { id: "other", recommendPrefix: "My role is:" },
 ];
 
-const AI_OPTIONS = [
-  { id: "claude", label: "Claude" },
-  { id: "chatgpt", label: "ChatGPT" },
-  { id: "codex", label: "Codex" },
-  { id: "gemini", label: "Gemini" },
-  { id: "cursor", label: "Cursor" },
-  { id: "any", label: "Any of them" },
-] as const;
+const AI_IDS = ["claude", "chatgpt", "codex", "gemini", "cursor", "any"] as const;
+type AiId = (typeof AI_IDS)[number];
 
 interface Recommendation {
   slug: string;
@@ -159,12 +73,15 @@ const fadeUp = {
 };
 
 export function OnboardingFunnel() {
+  const dict = useDictionary();
+  const t = dict.onboarding;
+
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [role, setRole] = useState<RoleDef | null>(null);
   const [otherRole, setOtherRole] = useState("");
   const [tasks, setTasks] = useState<string[]>([]);
   const [customTask, setCustomTask] = useState("");
-  const [ai, setAi] = useState<string | null>(null);
+  const [ai, setAi] = useState<AiId | null>(null);
   const [recs, setRecs] = useState<Recommendation[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
@@ -180,9 +97,11 @@ export function OnboardingFunnel() {
     setError(null);
   }
 
-  function toggleTask(t: string) {
+  function toggleTask(taskValue: string) {
     setTasks((prev) =>
-      prev.includes(t) ? prev.filter((x) => x !== t) : [...prev, t],
+      prev.includes(taskValue)
+        ? prev.filter((x) => x !== taskValue)
+        : [...prev, taskValue],
     );
   }
 
@@ -210,7 +129,7 @@ export function OnboardingFunnel() {
     setError(null);
     const useCase = buildUseCase();
     if (useCase.length < 6) {
-      setError("Please pick a role and at least one task.");
+      setError(t.errorPickRoleAndTask);
       return;
     }
     try {
@@ -221,15 +140,13 @@ export function OnboardingFunnel() {
       });
       const data = (await res.json()) as RecommendResponse | { error: string };
       if (!res.ok) {
-        const msg = "error" in data ? data.error : "Failed to recommend";
+        const msg = "error" in data ? data.error : t.errorGeneric;
         throw new Error(msg);
       }
       const parsed = data as RecommendResponse;
       setRecs(parsed.recommendations.slice(0, 3));
     } catch (e) {
-      setError(
-        e instanceof Error ? e.message : "Couldn't fetch recommendations.",
-      );
+      setError(e instanceof Error ? e.message : t.errorFetch);
     }
   }
 
@@ -240,19 +157,20 @@ export function OnboardingFunnel() {
     });
   }
 
+  const currentRoleTasks: string[] = role
+    ? (t.tasks as Record<RoleId, string[]>)[role.id] ?? []
+    : [];
+
   return (
     <section
       id="wizard"
       className="mx-auto max-w-3xl px-6 py-20 border-t border-[var(--hairline)]"
     >
       <div className="flex flex-col items-center text-center mb-10">
-        <span className="eyebrow">Find your kit in 30 seconds</span>
-        <h2 className="display text-3xl sm:text-4xl mt-2 mb-3">
-          Tell us about you. We&apos;ll pick the kit.
-        </h2>
+        <span className="eyebrow">{t.eyebrow}</span>
+        <h2 className="display text-3xl sm:text-4xl mt-2 mb-3">{t.title}</h2>
         <p className="text-[var(--muted)] max-w-xl leading-relaxed">
-          Three taps — your role, what you&apos;re working on, and which AI
-          you reach for. We recommend the closest-fit kit from the catalog.
+          {t.subtitle}
         </p>
       </div>
 
@@ -262,11 +180,11 @@ export function OnboardingFunnel() {
         <AnimatePresence mode="wait">
           {recs ? (
             <motion.div key="recs" {...fadeUp}>
-              <RecsView recs={recs} reset={reset} />
+              <RecsView recs={recs} reset={reset} dict={dict} />
             </motion.div>
           ) : step === 1 ? (
             <motion.div key="step1" {...fadeUp}>
-              <h3 className="display text-xl mb-4">What&apos;s your role?</h3>
+              <h3 className="display text-xl mb-4">{t.step1Heading}</h3>
               <div className="flex flex-wrap gap-2 mb-6">
                 {ROLES.map((r) => (
                   <Chip
@@ -278,28 +196,26 @@ export function OnboardingFunnel() {
                       setStep(2);
                     }}
                   >
-                    {r.label}
+                    {t.roles[r.id]}
                   </Chip>
                 ))}
               </div>
             </motion.div>
           ) : step === 2 ? (
             <motion.div key="step2" {...fadeUp}>
-              <h3 className="display text-xl mb-2">
-                What do you want help with?
-              </h3>
+              <h3 className="display text-xl mb-2">{t.step2Heading}</h3>
               {role?.id === "other" ? (
                 <div className="mb-4">
                   <label
                     htmlFor="other-role"
                     className="text-sm text-[var(--muted)] mb-2 block"
                   >
-                    Tell us your role
+                    {t.step2OtherLabel}
                   </label>
                   <input
                     id="other-role"
                     type="text"
-                    placeholder="e.g. nonprofit director, lawyer, teacher…"
+                    placeholder={t.step2OtherPlaceholder}
                     value={otherRole}
                     onChange={(e) => setOtherRole(e.target.value)}
                     className="w-full rounded-2xl border border-[var(--hairline)] bg-white px-4 h-12 text-base focus:outline-none focus:ring-2 focus:ring-[var(--accent-strong)]/30 focus:border-[var(--accent-strong)]"
@@ -307,25 +223,25 @@ export function OnboardingFunnel() {
                 </div>
               ) : null}
               <p className="text-sm text-[var(--muted)] mb-4">
-                Pick any that apply, or add your own.
+                {t.step2PickAny}
               </p>
               <div className="flex flex-wrap gap-2 mb-4">
-                {(role?.taskChips ?? []).map((t) => (
+                {currentRoleTasks.map((taskLabel) => (
                   <Chip
-                    key={t}
-                    active={tasks.includes(t)}
-                    onClick={() => toggleTask(t)}
+                    key={taskLabel}
+                    active={tasks.includes(taskLabel)}
+                    onClick={() => toggleTask(taskLabel)}
                   >
-                    {tasks.includes(t) ? (
+                    {tasks.includes(taskLabel) ? (
                       <Check className="w-3.5 h-3.5 mr-1" />
                     ) : null}
-                    {t}
+                    {taskLabel}
                   </Chip>
                 ))}
               </div>
               <input
                 type="text"
-                placeholder="Or describe what you do (optional)…"
+                placeholder={t.step2CustomPlaceholder}
                 value={customTask}
                 onChange={(e) => setCustomTask(e.target.value)}
                 className="w-full rounded-2xl border border-[var(--hairline)] bg-white px-4 h-12 text-base focus:outline-none focus:ring-2 focus:ring-[var(--accent-strong)]/30 focus:border-[var(--accent-strong)]"
@@ -336,7 +252,7 @@ export function OnboardingFunnel() {
                   className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
                   onClick={() => setStep(1)}
                 >
-                  ← Back
+                  ← {t.back}
                 </button>
                 <button
                   type="button"
@@ -344,24 +260,22 @@ export function OnboardingFunnel() {
                   onClick={() => setStep(3)}
                   className="btn-primary"
                 >
-                  Continue
+                  {t.continue}
                   <ArrowRight className="w-4 h-4" />
                 </button>
               </div>
             </motion.div>
           ) : (
             <motion.div key="step3" {...fadeUp}>
-              <h3 className="display text-xl mb-4">
-                Which AI do you reach for?
-              </h3>
+              <h3 className="display text-xl mb-4">{t.step3Heading}</h3>
               <div className="flex flex-wrap gap-2 mb-6">
-                {AI_OPTIONS.map((opt) => (
+                {AI_IDS.map((id) => (
                   <Chip
-                    key={opt.id}
-                    active={ai === opt.id}
-                    onClick={() => setAi(opt.id)}
+                    key={id}
+                    active={ai === id}
+                    onClick={() => setAi(id)}
                   >
-                    {opt.label}
+                    {t.aiOptions[id]}
                   </Chip>
                 ))}
               </div>
@@ -376,7 +290,7 @@ export function OnboardingFunnel() {
                   className="text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
                   onClick={() => setStep(2)}
                 >
-                  ← Back
+                  ← {t.back}
                 </button>
                 <button
                   type="button"
@@ -387,7 +301,7 @@ export function OnboardingFunnel() {
                   {isPending ? (
                     <Loader2 className="w-4 h-4 animate-spin" />
                   ) : null}
-                  {isPending ? "Finding kits…" : "Get my kit"}
+                  {isPending ? t.finding : t.getMyKit}
                 </button>
               </div>
             </motion.div>
@@ -444,10 +358,13 @@ function ProgressDots({ step, hasRecs }: { step: number; hasRecs: boolean }) {
 function RecsView({
   recs,
   reset,
+  dict,
 }: {
   recs: Recommendation[];
   reset: () => void;
+  dict: Dictionary;
 }) {
+  const t = dict.onboarding;
   const matched = recs
     .map((r) => ({
       rec: r,
@@ -458,21 +375,18 @@ function RecsView({
   return (
     <div>
       <div className="flex items-center justify-between mb-6">
-        <h3 className="display text-xl">Your kits</h3>
+        <h3 className="display text-xl">{t.yourKits}</h3>
         <button
           type="button"
           onClick={reset}
           className="inline-flex items-center gap-1.5 text-sm text-[var(--muted)] hover:text-[var(--foreground)]"
         >
           <RotateCcw className="w-3.5 h-3.5" />
-          Start over
+          {t.startOver}
         </button>
       </div>
       {matched.length === 0 ? (
-        <p className="text-[var(--muted)]">
-          We couldn&apos;t pick a kit cleanly — try browsing the catalog
-          directly.
-        </p>
+        <p className="text-[var(--muted)]">{t.couldNotPick}</p>
       ) : (
         <div className="space-y-4">
           {matched.map(({ rec, kit }, i) =>
@@ -482,7 +396,7 @@ function RecsView({
                 {rec.reason ? (
                   <p className="text-sm text-[var(--muted)] mt-2 pl-1">
                     <strong className="text-[var(--foreground)] not-italic">
-                      Why:
+                      {t.why}
                     </strong>{" "}
                     {rec.reason}
                   </p>
@@ -491,13 +405,12 @@ function RecsView({
             ) : null,
           )}
           <p className="text-xs text-[var(--muted)] pt-2">
-            Prefer the all-access route? Pro+ unlocks every kit for{" "}
-            {formatCAD(1900)} CAD/month.{" "}
+            {t.proNudgePrefix} {formatCAD(1900)} {t.proNudgeSuffix}{" "}
             <a
               href="/pro"
               className="underline hover:text-[var(--foreground)]"
             >
-              See Pro+ →
+              {t.proNudgeLink}
             </a>
           </p>
         </div>

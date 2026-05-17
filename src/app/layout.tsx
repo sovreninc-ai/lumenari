@@ -6,7 +6,9 @@ import Image from "next/image";
 import "./globals.css";
 import { LanguageSwitcher } from "@/components/language-switcher";
 import { getServerLocale } from "@/i18n/get-locale";
+import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/locales";
+import { LocaleProvider } from "@/i18n/use-dictionary";
 import {
   NewsletterFooterForm,
   ExitIntentNewsletterModal,
@@ -50,6 +52,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getServerLocale();
+  const dict = getDictionary(locale);
   const plausibleDomain = process.env.NEXT_PUBLIC_PLAUSIBLE_DOMAIN;
   const posthogKey = process.env.NEXT_PUBLIC_POSTHOG_KEY;
   const posthogHost =
@@ -81,16 +84,18 @@ export default async function RootLayout({
         ) : null}
       </head>
       <body className="min-h-full flex flex-col bg-[var(--background)] text-[var(--foreground)]">
-        <SiteHeader locale={locale} />
-        <main className="flex-1">{children}</main>
-        <SiteFooter />
-        <ExitIntentNewsletterModal />
+        <LocaleProvider locale={locale}>
+          <SiteHeader locale={locale} dict={dict} />
+          <main className="flex-1">{children}</main>
+          <SiteFooter dict={dict} />
+          <ExitIntentNewsletterModal />
+        </LocaleProvider>
       </body>
     </html>
   );
 }
 
-function SiteHeader({ locale }: { locale: Locale }) {
+function SiteHeader({ locale, dict }: { locale: Locale; dict: Dictionary }) {
   return (
     <header className="sticky top-0 z-30 backdrop-blur-md bg-white/70 border-b border-[var(--hairline)]">
       <div className="mx-auto max-w-6xl px-6 h-16 flex items-center justify-between">
@@ -115,26 +120,26 @@ function SiteHeader({ locale }: { locale: Locale }) {
             href="/kits"
             className="px-3 py-2 rounded-full hover:bg-[var(--surface)]"
           >
-            Kits
+            {dict.header.kits}
           </Link>
           <Link
             href="/pro"
             className="px-3 py-2 rounded-full hover:bg-[var(--surface)]"
           >
-            Pro+
+            {dict.header.pro}
           </Link>
           <Link
             href="/library"
             className="px-3 py-2 rounded-full hover:bg-[var(--surface)]"
           >
-            Library
+            {dict.header.library}
           </Link>
           <LanguageSwitcher initialLocale={locale} />
           <Link
             href="/#wizard"
             className="ml-2 inline-flex items-center justify-center h-9 px-4 rounded-full bg-[var(--foreground)] text-white text-sm font-medium hover:bg-black transition-colors"
           >
-            Find your kit
+            {dict.header.findYourKit}
           </Link>
         </nav>
       </div>
@@ -142,7 +147,8 @@ function SiteHeader({ locale }: { locale: Locale }) {
   );
 }
 
-function SiteFooter() {
+function SiteFooter({ dict }: { dict: Dictionary }) {
+  const year = new Date().getFullYear();
   return (
     <footer className="border-t border-[var(--hairline)] mt-24">
       <div className="mx-auto max-w-6xl px-6 py-12">
@@ -150,11 +156,10 @@ function SiteFooter() {
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-8 border-b border-[var(--hairline)]">
           <div className="max-w-md">
             <h3 className="font-semibold text-[var(--foreground)] mb-1">
-              One useful email a week.
+              {dict.footer.newsletterHeading}
             </h3>
             <p className="text-sm text-[var(--muted)]">
-              Tactics, deep-dives, and the occasional kit drop. No fluff.
-              Subscribe and we&apos;ll send your first kit free.
+              {dict.footer.newsletterBody}
             </p>
           </div>
           <NewsletterFooterForm />
@@ -170,38 +175,38 @@ function SiteFooter() {
               height={24}
               className="rounded-full"
             />
-            <span>© {new Date().getFullYear()} Lumenari.</span>
+            <span>{dict.footer.copyright.replace("{year}", String(year))}</span>
           </div>
           <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
             <Link href="/kits" className="hover:text-[var(--foreground)]">
-              Browse kits
+              {dict.footer.browseKits}
             </Link>
             <Link href="/blog" className="hover:text-[var(--foreground)]">
-              Blog
+              {dict.footer.blog}
             </Link>
             <Link href="/pro" className="hover:text-[var(--foreground)]">
-              Pro+
+              {dict.footer.pro}
             </Link>
             <Link
               href="/api-platform"
               className="hover:text-[var(--foreground)]"
             >
-              API
+              {dict.footer.api}
             </Link>
             <Link href="/library" className="hover:text-[var(--foreground)]">
-              Library
+              {dict.footer.library}
             </Link>
             <Link href="/free" className="hover:text-[var(--foreground)]">
-              Free kit
+              {dict.footer.freeKit}
             </Link>
             <Link href="/terms" className="hover:text-[var(--foreground)]">
-              Terms
+              {dict.footer.terms}
             </Link>
             <Link href="/privacy" className="hover:text-[var(--foreground)]">
-              Privacy
+              {dict.footer.privacy}
             </Link>
             <Link href="/refunds" className="hover:text-[var(--foreground)]">
-              Refunds
+              {dict.footer.refunds}
             </Link>
             <a
               href="mailto:hello@lumenari.io"

@@ -2,12 +2,15 @@
 
 import { useState } from "react";
 import { CheckCircle2, Loader2, Mail } from "lucide-react";
+import { useDictionary } from "@/i18n/use-dictionary";
 
 /**
  * Email-magic-link sign-in for the API account dashboard.
  * Mirrors `LibraryLookup` — different endpoint, same UX.
  */
 export function AccountSignIn() {
+  const dict = useDictionary();
+  const t = dict.accountSignIn;
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle",
@@ -26,12 +29,12 @@ export function AccountSignIn() {
       });
       if (!res.ok) {
         const data = (await res.json()) as { error?: string };
-        throw new Error(data.error ?? "Could not send link");
+        throw new Error(data.error ?? t.couldNotSend);
       }
       setStatus("sent");
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t.somethingWentWrong);
     }
   }
 
@@ -39,10 +42,10 @@ export function AccountSignIn() {
     return (
       <div className="card text-center">
         <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-[var(--accent-strong)]" />
-        <h2 className="text-xl font-semibold mb-2">Check your inbox.</h2>
+        <h2 className="text-xl font-semibold mb-2">{t.inboxTitle}</h2>
         <p className="text-[var(--muted)]">
-          We sent a sign-in link to <strong>{email}</strong>. Click it to open
-          your API dashboard.
+          {t.inboxBodyPrefix} <strong>{email}</strong>
+          {t.inboxBodySuffix}
         </p>
       </div>
     );
@@ -51,7 +54,7 @@ export function AccountSignIn() {
   return (
     <form onSubmit={submit} className="card">
       <label htmlFor="email" className="block text-sm font-medium mb-2">
-        Work email
+        {t.workEmail}
       </label>
       <div className="relative">
         <Mail className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
@@ -62,7 +65,7 @@ export function AccountSignIn() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@yourcompany.com"
+          placeholder={t.placeholder}
           autoComplete="email"
           className="input pl-10"
         />
@@ -78,10 +81,10 @@ export function AccountSignIn() {
         className="btn-primary w-full mt-5 disabled:opacity-60"
       >
         {status === "sending" ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-        {status === "sending" ? "Sending link…" : "Send me a sign-in link"}
+        {status === "sending" ? t.sending : t.send}
       </button>
       <p className="text-xs text-[var(--muted)] mt-3 text-center">
-        New here? We&apos;ll create a free-tier account automatically.
+        {t.newHereNote}
       </p>
     </form>
   );

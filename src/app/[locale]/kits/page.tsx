@@ -66,6 +66,7 @@ export default async function KitsPage({
             bundleSlug={b.slug}
             seeBundleLabel={dict.kits.seeBundle}
             savesLabel={dict.wizard.saves}
+            bundleLabel={dict.wizard.bundle}
           />
         ))}
       </div>
@@ -81,6 +82,7 @@ export default async function KitsPage({
                 variant="compact"
                 seeBundleLabel={dict.kits.seeBundle}
                 savesLabel={dict.wizard.saves}
+                bundleLabel={dict.wizard.bundle}
               />
             ))}
           </div>
@@ -95,11 +97,13 @@ function BundleCard({
   variant = "featured",
   seeBundleLabel,
   savesLabel,
+  bundleLabel,
 }: {
   bundleSlug: string;
   variant?: "featured" | "compact";
   seeBundleLabel: string;
   savesLabel: string;
+  bundleLabel: string;
 }) {
   const bundle = BUNDLES.find((b) => b.slug === bundleSlug);
   if (!bundle) return null;
@@ -111,7 +115,7 @@ function BundleCard({
       className={`rounded-3xl p-[1px] ${isFeatured ? "bg-spectrum" : "bg-[var(--hairline)]"}`}
     >
       <div className="rounded-3xl bg-white p-6 sm:p-7 h-full flex flex-col">
-        <span className="eyebrow">Bundle</span>
+        <span className="eyebrow">{bundleLabel}</span>
         <h3 className="display text-xl sm:text-2xl mt-1.5 mb-2">
           {bundle.name}
         </h3>

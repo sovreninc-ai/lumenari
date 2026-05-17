@@ -2,8 +2,11 @@
 
 import { useState } from "react";
 import { CheckCircle2, Loader2, Mail } from "lucide-react";
+import { useDictionary } from "@/i18n/use-dictionary";
 
 export function LibraryLookup() {
+  const dict = useDictionary();
+  const t = dict.libraryLookup;
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "sending" | "sent" | "error">(
     "idle",
@@ -22,12 +25,12 @@ export function LibraryLookup() {
       });
       if (!res.ok) {
         const data = (await res.json()) as { error?: string };
-        throw new Error(data.error ?? "Could not send link");
+        throw new Error(data.error ?? t.couldNotSend);
       }
       setStatus("sent");
     } catch (err) {
       setStatus("error");
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t.somethingWentWrong);
     }
   }
 
@@ -35,10 +38,10 @@ export function LibraryLookup() {
     return (
       <div className="card text-center">
         <CheckCircle2 className="w-10 h-10 mx-auto mb-3 text-[var(--accent-strong)]" />
-        <h2 className="text-xl font-semibold mb-2">Check your inbox.</h2>
+        <h2 className="text-xl font-semibold mb-2">{t.inboxTitle}</h2>
         <p className="text-[var(--muted)]">
-          If we have a record of <strong>{email}</strong>, your download links
-          are on the way.
+          {t.inboxBodyPrefix} <strong>{email}</strong>
+          {t.inboxBodySuffix}
         </p>
       </div>
     );
@@ -46,11 +49,8 @@ export function LibraryLookup() {
 
   return (
     <form onSubmit={submit} className="card">
-      <label
-        htmlFor="email"
-        className="block text-sm font-medium mb-2"
-      >
-        Email
+      <label htmlFor="email" className="block text-sm font-medium mb-2">
+        {t.emailLabel}
       </label>
       <div className="relative">
         <Mail className="w-4 h-4 absolute left-4 top-1/2 -translate-y-1/2 text-[var(--muted)]" />
@@ -61,7 +61,7 @@ export function LibraryLookup() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="you@example.com"
+          placeholder={t.emailPlaceholder}
           autoComplete="email"
           className="input pl-10"
         />
@@ -79,10 +79,10 @@ export function LibraryLookup() {
         {status === "sending" ? (
           <Loader2 className="w-4 h-4 animate-spin" />
         ) : null}
-        {status === "sending" ? "Sending link…" : "Send my downloads"}
+        {status === "sending" ? t.sending : t.send}
       </button>
       <p className="text-xs text-[var(--muted)] mt-3 text-center">
-        No password. The link is signed and good for 24 hours.
+        {t.passwordlessNote}
       </p>
     </form>
   );

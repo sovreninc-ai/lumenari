@@ -10,6 +10,7 @@ import {
   X,
   AlertTriangle,
 } from "lucide-react";
+import { useDictionary } from "@/i18n/use-dictionary";
 
 interface ApiKey {
   id: string;
@@ -31,9 +32,11 @@ export function ApiKeysManager({
   accessToken,
   initialKeys,
 }: ApiKeysManagerProps) {
+  const dict = useDictionary();
+  const t = dict.apiKeysManager;
   const [keys, setKeys] = useState<ApiKey[]>(initialKeys);
   const [showCreate, setShowCreate] = useState(false);
-  const [newKeyName, setNewKeyName] = useState("Production");
+  const [newKeyName, setNewKeyName] = useState(t.placeholderName);
   const [creating, setCreating] = useState(false);
   const [createError, setCreateError] = useState<string | null>(null);
   const [revealedKey, setRevealedKey] = useState<string | null>(null);
@@ -43,8 +46,8 @@ export function ApiKeysManager({
 
   useEffect(() => {
     if (!copied) return;
-    const t = setTimeout(() => setCopied(false), 1800);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setCopied(false), 1800);
+    return () => clearTimeout(timer);
   }, [copied]);
 
   async function createKey() {
@@ -57,7 +60,7 @@ export function ApiKeysManager({
         body: JSON.stringify({
           account_id: accountId,
           access_token: accessToken,
-          name: newKeyName.trim() || "Untitled",
+          name: newKeyName.trim() || t.untitled,
         }),
       });
       const data = (await res.json()) as {
@@ -69,7 +72,7 @@ export function ApiKeysManager({
         key?: string;
       };
       if (!res.ok || !data.key) {
-        throw new Error(data.error ?? "Could not create key");
+        throw new Error(data.error ?? t.couldNotCreate);
       }
       setRevealedKey(data.key);
       setKeys((prev) => [
@@ -84,9 +87,9 @@ export function ApiKeysManager({
         ...prev,
       ]);
       setShowCreate(false);
-      setNewKeyName("Production");
+      setNewKeyName(t.placeholderName);
     } catch (err) {
-      setCreateError(err instanceof Error ? err.message : "Something went wrong");
+      setCreateError(err instanceof Error ? err.message : t.somethingWentWrong);
     } finally {
       setCreating(false);
     }
@@ -101,7 +104,7 @@ export function ApiKeysManager({
       );
       if (!res.ok) {
         const data = (await res.json()) as { error?: string };
-        throw new Error(data.error ?? "Could not revoke key");
+        throw new Error(data.error ?? t.couldNotRevoke);
       }
       setKeys((prev) =>
         prev.map((k) =>
@@ -110,7 +113,7 @@ export function ApiKeysManager({
       );
       setConfirmRevoke(null);
     } catch (err) {
-      alert(err instanceof Error ? err.message : "Something went wrong");
+      alert(err instanceof Error ? err.message : t.somethingWentWrong);
     } finally {
       setRevoking(null);
     }
@@ -132,27 +135,22 @@ export function ApiKeysManager({
   return (
     <div>
       <div className="flex items-center justify-between mb-5">
-        <h2 className="text-xl font-semibold">API keys</h2>
+        <h2 className="text-xl font-semibold">{t.heading}</h2>
         <button
           onClick={() => setShowCreate(true)}
           className="inline-flex items-center gap-2 rounded-full bg-[var(--foreground)] text-white px-4 py-2 text-sm font-medium hover:bg-black transition-colors"
         >
           <Plus className="w-4 h-4" />
-          Generate new key
+          {t.generateNewKey}
         </button>
       </div>
 
       {activeKeys.length === 0 ? (
         <div className="card text-center py-12">
-          <p className="text-[var(--muted)] mb-4">
-            No keys yet. Create one to start calling the API.
-          </p>
-          <button
-            onClick={() => setShowCreate(true)}
-            className="btn-primary"
-          >
+          <p className="text-[var(--muted)] mb-4">{t.noKeysBody}</p>
+          <button onClick={() => setShowCreate(true)} className="btn-primary">
             <Plus className="w-4 h-4" />
-            Generate your first key
+            {t.generateFirstKey}
           </button>
         </div>
       ) : (
@@ -168,10 +166,10 @@ export function ApiKeysManager({
                   {k.key_prefix}…
                 </p>
                 <p className="text-xs text-[var(--muted)] mt-1">
-                  Created {formatDate(k.created_at)}
+                  {t.createdPrefix} {formatDate(k.created_at)}
                   {k.last_used_at
-                    ? ` · last used ${formatDate(k.last_used_at)}`
-                    : " · never used"}
+                    ? ` · ${t.lastUsedPrefix} ${formatDate(k.last_used_at)}`
+                    : ` · ${t.neverUsed}`}
                 </p>
               </div>
               {confirmRevoke === k.id ? (
@@ -186,13 +184,13 @@ export function ApiKeysManager({
                     ) : (
                       <Trash2 className="w-3 h-3" />
                     )}
-                    Confirm revoke
+                    {t.confirmRevoke}
                   </button>
                   <button
                     onClick={() => setConfirmRevoke(null)}
                     className="text-xs text-[var(--muted)] hover:text-[var(--foreground)]"
                   >
-                    Cancel
+                    {t.cancel}
                   </button>
                 </div>
               ) : (
@@ -212,7 +210,7 @@ export function ApiKeysManager({
       {revokedKeys.length > 0 ? (
         <details className="mt-8">
           <summary className="text-sm text-[var(--muted)] cursor-pointer hover:text-[var(--foreground)]">
-            Revoked keys ({revokedKeys.length})
+            {t.revokedKeys} ({revokedKeys.length})
           </summary>
           <ul className="mt-4 space-y-2">
             {revokedKeys.map((k) => (
@@ -224,7 +222,7 @@ export function ApiKeysManager({
                   {k.name} · <span className="font-mono">{k.key_prefix}…</span>
                 </span>
                 <span className="text-xs text-[var(--muted)] flex-shrink-0">
-                  Revoked {formatDate(k.revoked_at!)}
+                  {t.revokedPrefix} {formatDate(k.revoked_at!)}
                 </span>
               </li>
             ))}
@@ -234,13 +232,14 @@ export function ApiKeysManager({
 
       {/* Generate-key modal */}
       {showCreate ? (
-        <Modal onClose={() => (creating ? undefined : setShowCreate(false))}>
-          <h3 className="text-lg font-semibold mb-2">New API key</h3>
-          <p className="text-sm text-[var(--muted)] mb-5">
-            Give the key a name so you can recognize it later.
-          </p>
+        <Modal
+          onClose={() => (creating ? undefined : setShowCreate(false))}
+          closeLabel={dict.saveKit.close}
+        >
+          <h3 className="text-lg font-semibold mb-2">{t.newApiKey}</h3>
+          <p className="text-sm text-[var(--muted)] mb-5">{t.newApiKeyBody}</p>
           <label htmlFor="keyName" className="block text-sm font-medium mb-2">
-            Name
+            {t.name}
           </label>
           <input
             id="keyName"
@@ -249,7 +248,7 @@ export function ApiKeysManager({
             onChange={(e) => setNewKeyName(e.target.value)}
             maxLength={60}
             className="input"
-            placeholder="Production"
+            placeholder={t.placeholderName}
           />
           {createError ? (
             <p className="mt-3 text-sm text-red-600" role="alert">
@@ -262,7 +261,7 @@ export function ApiKeysManager({
               disabled={creating}
               className="btn-ghost text-sm h-10 px-4"
             >
-              Cancel
+              {t.cancel}
             </button>
             <button
               onClick={createKey}
@@ -270,7 +269,7 @@ export function ApiKeysManager({
               className="btn-primary text-sm h-10 px-4 disabled:opacity-60"
             >
               {creating ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-              {creating ? "Generating…" : "Generate key"}
+              {creating ? t.generating : t.generateKey}
             </button>
           </div>
         </Modal>
@@ -278,14 +277,16 @@ export function ApiKeysManager({
 
       {/* Reveal-key modal — shown ONCE */}
       {revealedKey ? (
-        <Modal onClose={() => setRevealedKey(null)}>
+        <Modal
+          onClose={() => setRevealedKey(null)}
+          closeLabel={dict.saveKit.close}
+        >
           <div className="flex items-start gap-3 mb-4">
             <AlertTriangle className="w-5 h-5 text-amber-600 mt-0.5 flex-shrink-0" />
             <div>
-              <h3 className="text-lg font-semibold">Save your key now.</h3>
+              <h3 className="text-lg font-semibold">{t.saveKeyNow}</h3>
               <p className="text-sm text-[var(--muted)] mt-1">
-                This is the only time we&apos;ll show the full key. We store
-                only a hash — we can&apos;t recover it for you.
+                {t.saveKeyNowBody}
               </p>
             </div>
           </div>
@@ -302,12 +303,12 @@ export function ApiKeysManager({
               {copied ? (
                 <>
                   <Check className="w-4 h-4 text-green-600" />
-                  Copied
+                  {t.copied}
                 </>
               ) : (
                 <>
                   <Copy className="w-4 h-4" />
-                  Copy to clipboard
+                  {t.copy}
                 </>
               )}
             </button>
@@ -315,7 +316,7 @@ export function ApiKeysManager({
               onClick={() => setRevealedKey(null)}
               className="btn-primary text-sm h-10 px-4"
             >
-              I&apos;ve saved it
+              {t.iSavedIt}
             </button>
           </div>
         </Modal>
@@ -327,9 +328,11 @@ export function ApiKeysManager({
 function Modal({
   children,
   onClose,
+  closeLabel,
 }: {
   children: React.ReactNode;
   onClose: () => void;
+  closeLabel: string;
 }) {
   return (
     <div
@@ -342,7 +345,7 @@ function Modal({
       >
         <button
           onClick={onClose}
-          aria-label="Close"
+          aria-label={closeLabel}
           className="absolute top-3 right-3 text-[var(--muted)] hover:text-[var(--foreground)] p-2"
         >
           <X className="w-4 h-4" />

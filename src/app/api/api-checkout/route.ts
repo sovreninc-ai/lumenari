@@ -94,14 +94,14 @@ export async function POST(req: Request) {
   };
 
   try {
+    const automaticTax = process.env.STRIPE_AUTOMATIC_TAX === "true";
     const session = await stripe().checkout.sessions.create({
       mode: "subscription",
       line_items: [{ price, quantity: 1 }],
-      currency: "cad",
       customer_email: email,
       allow_promotion_codes: true,
-      automatic_tax: { enabled: true },
-      tax_id_collection: { enabled: true },
+      automatic_tax: { enabled: automaticTax },
+      ...(automaticTax ? { tax_id_collection: { enabled: true } } : {}),
       billing_address_collection: "required",
       success_url: `${env.siteUrl}/account/api-keys?session_id={CHECKOUT_SESSION_ID}&welcome=1`,
       cancel_url: `${env.siteUrl}/api-platform?canceled=1`,

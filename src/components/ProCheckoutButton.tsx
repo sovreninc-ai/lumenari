@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import type { ProTier } from "@/data/subscription-tiers";
+import { useDictionary } from "@/i18n/use-dictionary";
 
 interface ProCheckoutButtonProps {
   tier: ProTier;
@@ -17,10 +18,13 @@ interface ProCheckoutButtonProps {
  */
 export function ProCheckoutButton({
   tier,
-  label = "Upgrade to Pro+",
+  label,
   className,
   emailPrefill,
 }: ProCheckoutButtonProps) {
+  const dict = useDictionary();
+  const t = dict.proCheckout;
+  const resolvedLabel = label ?? t.defaultLabel;
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
@@ -35,11 +39,11 @@ export function ProCheckoutButton({
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {
-        throw new Error(data.error ?? "Checkout failed");
+        throw new Error(data.error ?? t.checkoutFailed);
       }
       window.location.assign(data.url);
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Checkout failed";
+      const msg = e instanceof Error ? e.message : t.checkoutFailed;
       setError(msg);
       setLoading(false);
     }
@@ -54,7 +58,7 @@ export function ProCheckoutButton({
         className="btn-primary w-full disabled:opacity-60"
       >
         {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-        {loading ? "Opening Stripe…" : label}
+        {loading ? t.opening : resolvedLabel}
       </button>
       {error ? (
         <p className="mt-2 text-sm text-red-600" role="alert">

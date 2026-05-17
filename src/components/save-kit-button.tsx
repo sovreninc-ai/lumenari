@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { Bookmark, BookmarkCheck, Loader2, X } from "lucide-react";
+import { useDictionary } from "@/i18n/use-dictionary";
 
 /**
  * Save-to-wishlist button for kit detail pages.
@@ -19,6 +20,8 @@ export function SaveKitButton({
   kitName: string;
   source?: string;
 }) {
+  const dict = useDictionary();
+  const t = dict.saveKit;
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "saved" | "error">("idle");
@@ -56,7 +59,9 @@ export function SaveKitButton({
           | { ok: true; leadId: string; wishlistId: string; already?: boolean }
           | { error: string };
         if (!res.ok || !("ok" in data)) {
-          throw new Error("error" in data ? data.error : "Something went wrong");
+          throw new Error(
+            "error" in data ? data.error : t.somethingWentWrong,
+          );
         }
         if (typeof window !== "undefined") {
           window.localStorage.setItem("lumenari_email", targetEmail);
@@ -64,15 +69,13 @@ export function SaveKitButton({
         setStatus("saved");
         setMessage(
           data.already
-            ? `Already saved — it's on your /library wishlist.`
-            : `Saved. We'll email you if ${kitName} drops in price or appears in a new bundle.`,
+            ? t.alreadySaved
+            : `${t.savedNotificationPrefix} ${kitName} ${t.savedNotificationSuffix}`,
         );
         setOpen(false);
       } catch (err) {
         setStatus("error");
-        setMessage(
-          err instanceof Error ? err.message : "Something went wrong.",
-        );
+        setMessage(err instanceof Error ? err.message : t.somethingWentWrong);
       }
     });
   }
@@ -81,7 +84,7 @@ export function SaveKitButton({
     return (
       <div className="inline-flex items-center gap-2 rounded-full border border-[var(--hairline)] bg-white px-4 py-2 text-sm text-[var(--muted)]">
         <BookmarkCheck className="w-4 h-4 text-[var(--accent-strong)]" />
-        Saved to your library
+        {t.savedBadge}
       </div>
     );
   }
@@ -93,14 +96,14 @@ export function SaveKitButton({
         onClick={trySaveWithStoredEmail}
         disabled={isPending}
         className="inline-flex items-center gap-2 rounded-full border border-[var(--hairline)] bg-white px-4 py-2 text-sm font-medium hover:bg-[var(--surface)] transition-colors disabled:opacity-60"
-        aria-label={`Save ${kitName} to wishlist`}
+        aria-label={`${t.save} ${kitName}`}
       >
         {isPending ? (
           <Loader2 className="w-4 h-4 animate-spin" />
         ) : (
           <Bookmark className="w-4 h-4" />
         )}
-        {isPending ? "Saving…" : "Save kit"}
+        {isPending ? t.saving : t.save}
       </button>
 
       {status === "error" && message ? (
@@ -114,28 +117,29 @@ export function SaveKitButton({
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 backdrop-blur-sm px-4"
           role="dialog"
           aria-modal="true"
-          aria-label="Save kit to your wishlist"
+          aria-label={`${t.modalTitlePrefix} ${kitName} ${t.modalTitleSuffix}`}
         >
           <div className="w-full max-w-md rounded-3xl bg-white border border-[var(--hairline)] p-6 sm:p-8 shadow-2xl relative">
             <button
               type="button"
               onClick={() => setOpen(false)}
               className="absolute top-3 right-3 p-2 rounded-full hover:bg-[var(--surface)]"
-              aria-label="Close"
+              aria-label={t.close}
             >
               <X className="w-4 h-4" />
             </button>
-            <h3 className="display text-2xl mb-2">Save {kitName} for later</h3>
+            <h3 className="display text-2xl mb-2">
+              {t.modalTitlePrefix} {kitName} {t.modalTitleSuffix}
+            </h3>
             <p className="text-sm text-[var(--muted)] mb-5 leading-relaxed">
-              Drop your email and we&apos;ll let you know if this kit drops in
-              price or shows up in a bundle. No spam, unsubscribe anytime.
+              {t.modalBody}
             </p>
             <form
               onSubmit={(e) => {
                 e.preventDefault();
                 if (!email.includes("@")) {
                   setStatus("error");
-                  setMessage("Please enter a valid email.");
+                  setMessage(t.invalidEmail);
                   return;
                 }
                 submit(email);
@@ -146,7 +150,7 @@ export function SaveKitButton({
                 type="email"
                 required
                 autoComplete="email"
-                placeholder="you@work.com"
+                placeholder={t.emailPlaceholder}
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 className="rounded-full border border-[var(--hairline)] bg-white px-5 h-12 text-base focus:outline-none focus:ring-2 focus:ring-[var(--accent-strong)]/30 focus:border-[var(--accent-strong)]"
@@ -159,7 +163,7 @@ export function SaveKitButton({
                 {isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : null}
-                {isPending ? "Saving…" : "Save kit"}
+                {isPending ? t.saving : t.submit}
               </button>
               {status === "error" && message ? (
                 <p role="alert" className="text-sm text-red-600">

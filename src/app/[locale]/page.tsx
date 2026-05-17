@@ -33,6 +33,7 @@ export default async function LocaleHome({
   }
   const dict = getDictionary(locale);
 
+  // OnboardingFunnel reads its strings via useDictionary() (LocaleProvider in layout).
   return (
     <>
       <Hero dict={dict} />

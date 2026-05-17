@@ -64,14 +64,14 @@ export async function POST(req: Request) {
     void taxCode; // Tax code is set on the Stripe Product, not the line item;
     // we attach it via Product metadata in the dashboard so it persists across
     // sessions. `automatic_tax` below is what actually enables tax calc.
+    const automaticTax = process.env.STRIPE_AUTOMATIC_TAX === "true";
     const session = await stripe().checkout.sessions.create({
       mode: "payment",
       line_items: [{ price, quantity: 1 }],
-      currency: "cad",
       customer_email: email,
       allow_promotion_codes: true,
-      automatic_tax: { enabled: true },
-      tax_id_collection: { enabled: true },
+      automatic_tax: { enabled: automaticTax },
+      ...(automaticTax ? { tax_id_collection: { enabled: true } } : {}),
       billing_address_collection: "required",
       success_url: `${env.siteUrl}/thanks?session_id={CHECKOUT_SESSION_ID}`,
       cancel_url: `${env.siteUrl}/kits/${slug}?canceled=1`,

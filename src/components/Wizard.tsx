@@ -12,6 +12,7 @@ import {
 } from "@/data/kits";
 import { KitCard } from "./KitCard";
 import { BuyButton } from "./BuyButton";
+import { useDictionary } from "@/i18n/use-dictionary";
 
 // All five platforms — see /Users/chrisholwell/Desktop/Lumenari/src/data/kits.ts
 const AI_OPTIONS = [
@@ -21,18 +22,6 @@ const AI_OPTIONS = [
   { id: "gemini", label: "Gemini" },
   { id: "cursor", label: "Cursor" },
 ] as const;
-
-// Lean non-dev: the wizard is for everyone, not just engineers.
-const EXAMPLE_USE_CASES: string[] = [
-  "I'm a real estate agent writing listings",
-  "I'm an SDR sending cold emails",
-  "I'm a freelancer writing proposals",
-  "I'm an SEO writer publishing 3 articles a week",
-  "I'm a recruiter sourcing senior engineers",
-  "I'm a founder writing investor updates",
-  "I run a small construction crew and drown in safety paperwork",
-  "I'm shipping a Next.js + Supabase SaaS",
-];
 
 interface Recommendation {
   slug: string;
@@ -52,6 +41,9 @@ const fadeUp = {
 };
 
 export function Wizard() {
+  const dict = useDictionary();
+  const t = dict.wizardClassic;
+
   const [step, setStep] = useState<1 | 2 | 3>(1);
   const [ai, setAi] = useState<string | null>(null);
   const [useCase, setUseCase] = useState("");
@@ -77,14 +69,14 @@ export function Wizard() {
       });
       const data = (await res.json()) as RecommendResponse | { error: string };
       if (!res.ok) {
-        const msg = "error" in data ? data.error : "Failed to recommend";
+        const msg = "error" in data ? data.error : t.failedToRecommend;
         throw new Error(msg);
       }
       const recs = (data as RecommendResponse).recommendations ?? [];
       setRecs(recs);
       setStep(3);
     } catch (e) {
-      const msg = e instanceof Error ? e.message : "Something went wrong";
+      const msg = e instanceof Error ? e.message : t.somethingWentWrong;
       setError(msg);
     }
   }
@@ -100,7 +92,9 @@ export function Wizard() {
           <Dot active={step >= 1} />
           <Dot active={step >= 2} />
           <Dot active={step >= 3} />
-          <span className="ml-2">Step {step} of 3</span>
+          <span className="ml-2">
+            {t.stepLabel.replace("{step}", String(step))}
+          </span>
         </div>
         {step > 1 ? (
           <button
@@ -108,7 +102,7 @@ export function Wizard() {
             onClick={reset}
             className="inline-flex items-center gap-1 hover:text-[var(--foreground)]"
           >
-            <RotateCcw className="w-3.5 h-3.5" /> Start over
+            <RotateCcw className="w-3.5 h-3.5" /> {t.startOver}
           </button>
         ) : null}
       </div>
@@ -116,12 +110,8 @@ export function Wizard() {
       <AnimatePresence mode="wait">
         {step === 1 ? (
           <motion.div key="step-1" {...fadeUp}>
-            <h2 className="display text-3xl sm:text-4xl mb-3">
-              Which AI are you using?
-            </h2>
-            <p className="text-[var(--muted)] mb-8">
-              Pick the tool you reach for most. We&apos;ll match a kit to it.
-            </p>
+            <h2 className="display text-3xl sm:text-4xl mb-3">{t.step1Title}</h2>
+            <p className="text-[var(--muted)] mb-8">{t.step1Subtitle}</p>
             <div className="flex flex-wrap gap-2.5">
               {AI_OPTIONS.map((opt) => (
                 <button
@@ -142,7 +132,7 @@ export function Wizard() {
                 disabled={!ai}
                 onClick={() => setStep(2)}
               >
-                Continue <ArrowRight className="w-4 h-4" />
+                {t.continue} <ArrowRight className="w-4 h-4" />
               </button>
             </div>
           </motion.div>
@@ -150,21 +140,17 @@ export function Wizard() {
 
         {step === 2 ? (
           <motion.div key="step-2" {...fadeUp}>
-            <h2 className="display text-3xl sm:text-4xl mb-3">
-              What are you using it for?
-            </h2>
-            <p className="text-[var(--muted)] mb-6">
-              A sentence or two is plenty. Plain English.
-            </p>
+            <h2 className="display text-3xl sm:text-4xl mb-3">{t.step2Title}</h2>
+            <p className="text-[var(--muted)] mb-6">{t.step2Subtitle}</p>
             <textarea
               className="textarea"
-              placeholder="e.g. I'm a real estate agent in Calgary writing listings and following up with buyers."
+              placeholder={t.step2Placeholder}
               value={useCase}
               onChange={(e) => setUseCase(e.target.value)}
               maxLength={800}
             />
             <div className="mt-4 flex flex-wrap gap-2">
-              {EXAMPLE_USE_CASES.map((ex) => (
+              {t.examples.map((ex) => (
                 <button
                   key={ex}
                   type="button"
@@ -186,7 +172,7 @@ export function Wizard() {
                 className="btn-ghost"
                 onClick={() => setStep(1)}
               >
-                Back
+                {t.back}
               </button>
               <button
                 type="button"
@@ -197,7 +183,7 @@ export function Wizard() {
                 {isPending ? (
                   <Loader2 className="w-4 h-4 animate-spin" />
                 ) : null}
-                {isPending ? "Thinking…" : "Show my kit"}
+                {isPending ? t.thinking : t.showMyKit}
               </button>
             </div>
           </motion.div>
@@ -205,11 +191,9 @@ export function Wizard() {
 
         {step === 3 && recs ? (
           <motion.div key="step-3" {...fadeUp}>
-            <h2 className="display text-3xl sm:text-4xl mb-3">
-              Built for what you described.
-            </h2>
+            <h2 className="display text-3xl sm:text-4xl mb-3">{t.step3Title}</h2>
             <p className="text-[var(--muted)] mb-10 max-w-xl">
-              Buy any kit on its own, or pick a bundle below and save.
+              {t.step3Subtitle}
             </p>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-5 mb-10">
@@ -221,13 +205,18 @@ export function Wizard() {
                     kit={kit}
                     reason={r.reason}
                     index={i}
+                    label={`${t.getThisKitPrefix} · ${formatCAD(kit.priceCents)}`}
                     key={kit.slug}
                   />
                 );
               })}
             </div>
 
-            <FeaturedBundles />
+            <FeaturedBundles
+              bundleLabel={t.bundleLabel}
+              savesLabel={t.saves}
+              getBundlePrefix={t.getBundlePrefix}
+            />
           </motion.div>
         ) : null}
       </AnimatePresence>
@@ -250,23 +239,30 @@ function RecommendedKit({
   kit,
   reason,
   index,
+  label,
 }: {
   kit: Kit;
   reason: string;
   index: number;
+  label: string;
 }) {
   return (
     <div className="flex flex-col gap-3">
       <KitCard kit={kit} reason={reason} index={index} />
-      <BuyButton
-        slugs={[kit.slug]}
-        label={`Get this kit · ${formatCAD(kit.priceCents)}`}
-      />
+      <BuyButton slugs={[kit.slug]} label={label} />
     </div>
   );
 }
 
-function FeaturedBundles() {
+function FeaturedBundles({
+  bundleLabel,
+  savesLabel,
+  getBundlePrefix,
+}: {
+  bundleLabel: string;
+  savesLabel: string;
+  getBundlePrefix: string;
+}) {
   const featured = BUNDLES.filter((b) => b.featured);
   return (
     <div className="space-y-4">
@@ -280,7 +276,7 @@ function FeaturedBundles() {
         >
           <div className="rounded-3xl bg-white p-6 sm:p-8 flex flex-col md:flex-row md:items-center justify-between gap-5">
             <div className="max-w-md">
-              <span className="eyebrow">Bundle</span>
+              <span className="eyebrow">{bundleLabel}</span>
               <h3 className="display text-xl sm:text-2xl mt-1.5 mb-1">
                 {b.name}
               </h3>
@@ -291,13 +287,13 @@ function FeaturedBundles() {
                 <strong>{formatCAD(b.priceCents)}</strong>
                 <span className="text-[var(--muted)]">
                   {" "}
-                  · saves {formatCAD(bundleSavings(b))}
+                  · {savesLabel} {formatCAD(bundleSavings(b))}
                 </span>
               </p>
             </div>
             <BuyButton
               slugs={[b.slug]}
-              label={`Get bundle · ${formatCAD(b.priceCents)}`}
+              label={`${getBundlePrefix} · ${formatCAD(b.priceCents)}`}
               className="md:w-64"
             />
           </div>

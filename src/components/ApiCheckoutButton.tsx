@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
+import { useDictionary } from "@/i18n/use-dictionary";
 
 type Tier = "pro" | "business";
 
@@ -22,6 +23,8 @@ interface ApiCheckoutButtonProps {
  * pre-filled by a future enhancement; for MVP it always asks.
  */
 export function ApiCheckoutButton({ tier, label, highlight }: ApiCheckoutButtonProps) {
+  const dict = useDictionary();
+  const t = dict.apiCheckout;
   const [show, setShow] = useState(false);
   const [email, setEmail] = useState("");
   const [organization, setOrganization] = useState("");
@@ -44,14 +47,16 @@ export function ApiCheckoutButton({ tier, label, highlight }: ApiCheckoutButtonP
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {
-        throw new Error(data.error ?? "Could not start checkout");
+        throw new Error(data.error ?? t.couldNotStart);
       }
       window.location.href = data.url;
     } catch (err) {
       setLoading(false);
-      setError(err instanceof Error ? err.message : "Something went wrong");
+      setError(err instanceof Error ? err.message : t.somethingWentWrong);
     }
   }
+
+  const tierName = tier === "pro" ? t.proName : t.businessName;
 
   return (
     <>
@@ -77,28 +82,29 @@ export function ApiCheckoutButton({ tier, label, highlight }: ApiCheckoutButtonP
             className="w-full max-w-md rounded-2xl bg-white p-7 shadow-2xl"
           >
             <h3 className="text-xl font-semibold mb-1">
-              Start the {tier === "pro" ? "Pro" : "Business"} plan
+              {t.titleProPrefix} {tierName} {t.titleSuffix}
             </h3>
-            <p className="text-sm text-[var(--muted)] mb-5">
-              We&apos;ll send your API key to this email after checkout.
-            </p>
-            <label className="block text-sm font-medium mb-2">Email</label>
+            <p className="text-sm text-[var(--muted)] mb-5">{t.body}</p>
+            <label className="block text-sm font-medium mb-2">{t.email}</label>
             <input
               type="email"
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="you@yourcompany.com"
+              placeholder={t.placeholderEmail}
               className="input mb-3"
             />
             <label className="block text-sm font-medium mb-2">
-              Organization <span className="text-[var(--muted)] font-normal">(optional)</span>
+              {t.organizationLabel}{" "}
+              <span className="text-[var(--muted)] font-normal">
+                {t.organizationOptional}
+              </span>
             </label>
             <input
               type="text"
               value={organization}
               onChange={(e) => setOrganization(e.target.value)}
-              placeholder="Acme, Inc."
+              placeholder={t.placeholderOrganization}
               className="input"
             />
             {error ? (
@@ -113,7 +119,7 @@ export function ApiCheckoutButton({ tier, label, highlight }: ApiCheckoutButtonP
                 disabled={loading}
                 className="btn-ghost text-sm h-10 px-4"
               >
-                Cancel
+                {t.cancel}
               </button>
               <button
                 type="submit"
@@ -121,7 +127,7 @@ export function ApiCheckoutButton({ tier, label, highlight }: ApiCheckoutButtonP
                 className="btn-primary text-sm h-10 px-4 disabled:opacity-60"
               >
                 {loading ? <Loader2 className="w-4 h-4 animate-spin" /> : null}
-                {loading ? "Redirecting…" : "Continue to checkout"}
+                {loading ? t.redirecting : t.continue}
               </button>
             </div>
           </form>

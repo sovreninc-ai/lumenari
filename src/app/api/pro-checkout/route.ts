@@ -54,11 +54,10 @@ export async function POST(req: Request) {
     const session = await stripe().checkout.sessions.create({
       mode,
       line_items: [{ price, quantity: 1 }],
-      currency: "cad",
       customer_email: email,
       allow_promotion_codes: true,
-      automatic_tax: { enabled: true },
-      tax_id_collection: { enabled: true },
+      automatic_tax: { enabled: process.env.STRIPE_AUTOMATIC_TAX === "true" },
+      ...(process.env.STRIPE_AUTOMATIC_TAX === "true" ? { tax_id_collection: { enabled: true } } : {}),
       billing_address_collection: "required",
       success_url: `${env.siteUrl}/thanks?session_id={CHECKOUT_SESSION_ID}&pro=1`,
       cancel_url: `${env.siteUrl}/pro?canceled=1`,
