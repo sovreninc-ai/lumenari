@@ -417,14 +417,29 @@ async function sendReceiptEmail(
   const html = receiptTemplate({ links, libraryUrl });
 
   try {
-    await resend().emails.send({
+    const result = await resend().emails.send({
       from: env.resendFrom,
       to: email,
       subject: "Your Lumenari kit is ready",
       html,
     });
+    if (result.error) {
+      console.error(
+        "[fulfillment] kit receipt email rejected by Resend:",
+        JSON.stringify({
+          from: env.resendFrom,
+          to: email,
+          error: result.error,
+        }),
+      );
+    } else {
+      console.log(
+        "[fulfillment] kit receipt email sent:",
+        JSON.stringify({ from: env.resendFrom, to: email, id: result.data?.id }),
+      );
+    }
   } catch (err) {
-    console.error("[fulfillment] kit receipt email failed:", err);
+    console.error("[fulfillment] kit receipt email threw:", err);
   }
 }
 
@@ -455,14 +470,29 @@ async function sendProWelcomeEmail(
 </body></html>`;
 
   try {
-    await resend().emails.send({
+    const result = await resend().emails.send({
       from: env.resendFrom,
       to: email,
       subject: "Welcome to Lumenari Pro+",
       html,
     });
+    if (result.error) {
+      console.error(
+        "[fulfillment] pro welcome email rejected by Resend:",
+        JSON.stringify({
+          from: env.resendFrom,
+          to: email,
+          error: result.error,
+        }),
+      );
+    } else {
+      console.log(
+        "[fulfillment] pro welcome email sent:",
+        JSON.stringify({ from: env.resendFrom, to: email, id: result.data?.id }),
+      );
+    }
   } catch (err) {
-    console.error("[fulfillment] pro welcome email failed:", err);
+    console.error("[fulfillment] pro welcome email threw:", err);
   }
 }
 
