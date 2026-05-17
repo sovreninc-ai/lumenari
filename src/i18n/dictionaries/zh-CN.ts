@@ -534,6 +534,9 @@ export const zhCN: Dictionary = {
       "我们已通过邮件发送了收据和下载链接。请在准备使用工具包的设备上打开。",
     openLibrary: "打开我的库",
     browseMore: "查看更多工具包",
+    emailedTo: "您的下载链接已发送到 {email}。",
+    proWelcomeSentTo: "您的 Pro+ 欢迎邮件已发送到 {email}。",
+    paymentPending: "付款仍在处理中。一旦完成,我们会立即将下载链接发送给您。",
   },
   thanks: {
     eyebrow: "购买成功",

@@ -521,6 +521,10 @@ export const pt: Dictionary = {
       "Acabamos de enviar por e-mail o recibo e um link de download. Abra na máquina onde vai usar o kit.",
     openLibrary: "Abrir biblioteca",
     browseMore: "Ver mais kits",
+    emailedTo: "Enviamos seu link de download para {email}.",
+    proWelcomeSentTo: "Enviamos seu e-mail de boas-vindas Pro+ para {email}.",
+    paymentPending:
+      "O pagamento ainda está em processamento. Enviaremos o link de download assim que for confirmado.",
   },
   thanks: {
     eyebrow: "Você está dentro",

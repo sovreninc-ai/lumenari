@@ -557,6 +557,10 @@ export const fr: Dictionary = {
       "Nous venons de vous envoyer le reçu et un lien de téléchargement par e-mail. Ouvrez-le sur la machine où vous utiliserez le kit.",
     openLibrary: "Ouvrir la bibliothèque",
     browseMore: "Parcourir d'autres kits",
+    emailedTo: "Votre lien de téléchargement a été envoyé à {email}.",
+    proWelcomeSentTo: "Votre e-mail de bienvenue Pro+ a été envoyé à {email}.",
+    paymentPending:
+      "Le paiement est encore en cours de traitement. Nous vous enverrons votre lien de téléchargement dès qu'il sera confirmé.",
   },
   thanks: {
     eyebrow: "C'est validé",

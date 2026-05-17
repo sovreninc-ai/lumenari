@@ -556,6 +556,10 @@ export const ja: Dictionary = {
       "領収書とダウンロードリンクをメールでお送りしました。キットを使う予定の端末で開いてください。",
     openLibrary: "ライブラリを開く",
     browseMore: "他のキットも見る",
+    emailedTo: "ダウンロードリンクを {email} にお送りしました。",
+    proWelcomeSentTo: "Pro+ のウェルカムメールを {email} にお送りしました。",
+    paymentPending:
+      "お支払いはまだ処理中です。確定次第、ダウンロードリンクをメールでお送りします。",
   },
   thanks: {
     eyebrow: "ご購入ありがとうございます",

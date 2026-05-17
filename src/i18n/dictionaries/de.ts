@@ -521,6 +521,10 @@ export const de: Dictionary = {
       "Wir haben Ihnen gerade die Quittung und einen Download-Link geschickt. Öffnen Sie ihn am besten auf dem Rechner, auf dem Sie das Kit einsetzen werden.",
     openLibrary: "Bibliothek öffnen",
     browseMore: "Weitere Kits ansehen",
+    emailedTo: "Wir haben Ihren Download-Link an {email} geschickt.",
+    proWelcomeSentTo: "Ihre Pro+ Willkommens-E-Mail wurde an {email} gesendet.",
+    paymentPending:
+      "Die Zahlung wird noch verarbeitet. Sobald sie bestätigt ist, schicken wir Ihren Download-Link.",
   },
   thanks: {
     eyebrow: "Sie sind drin",

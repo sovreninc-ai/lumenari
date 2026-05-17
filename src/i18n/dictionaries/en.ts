@@ -533,6 +533,10 @@ export const en = {
       "We just emailed your receipt and a download link. Open it on the machine you'll be using the kit on.",
     openLibrary: "Open library",
     browseMore: "Browse more kits",
+    emailedTo: "Your download link has been emailed to {email}.",
+    proWelcomeSentTo: "Your Pro+ welcome email has been sent to {email}.",
+    paymentPending:
+      "Payment is still processing. We'll email your download link the moment it settles.",
   },
   thanks: {
     eyebrow: "You're in",
