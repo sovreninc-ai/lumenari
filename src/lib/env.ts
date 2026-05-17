@@ -19,14 +19,24 @@ export const env = {
   siteUrl: process.env.NEXT_PUBLIC_SITE_URL ?? "https://lumenari.io",
 
   // Server-only — only call the getters from server code.
+  // Falls back to the NEXT_PUBLIC_-prefixed versions, since the same values
+  // are exposed there for client code and are what's set in Vercel.
   get supabaseUrl() {
-    return required("SUPABASE_URL");
+    return (
+      optional("SUPABASE_URL") ??
+      optional("NEXT_PUBLIC_SUPABASE_URL") ??
+      required("SUPABASE_URL")
+    );
   },
   get supabaseServiceKey() {
     return required("SUPABASE_SERVICE_ROLE_KEY");
   },
   get supabaseAnonKey() {
-    return required("SUPABASE_ANON_KEY");
+    return (
+      optional("SUPABASE_ANON_KEY") ??
+      optional("NEXT_PUBLIC_SUPABASE_ANON_KEY") ??
+      required("SUPABASE_ANON_KEY")
+    );
   },
   get stripeSecret() {
     return required("STRIPE_SECRET_KEY");
