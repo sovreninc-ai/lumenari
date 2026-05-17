@@ -158,7 +158,7 @@ export function OnboardingFunnel() {
   }
 
   const currentRoleTasks: string[] = role
-    ? (t.tasks as Record<RoleId, string[]>)[role.id] ?? []
+    ? [...((t.tasks as Partial<Record<RoleId, readonly string[]>>)[role.id] ?? [])]
     : [];
 
   return (

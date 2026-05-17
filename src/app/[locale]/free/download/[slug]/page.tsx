@@ -2,6 +2,8 @@ import Link from "next/link";
 import { Download } from "lucide-react";
 import { getKit } from "@/data/kits";
 import { notFound } from "next/navigation";
+import { isLocale, type Locale } from "@/i18n/locales";
+import { getDictionary } from "@/i18n/dictionaries";
 
 /**
  * `/free/download/[slug]` — landing page the welcome email links to.
@@ -26,7 +28,7 @@ export default async function FreeDownloadPage({
   params,
   searchParams,
 }: PageProps) {
-  const { slug } = await params;
+  const { locale, slug } = await params;
   const { lead } = await searchParams;
 
   if (!FREE_MAGNET_SLUGS.has(slug)) notFound();
@@ -34,12 +36,16 @@ export default async function FreeDownloadPage({
   const kit = getKit(slug);
   if (!kit) notFound();
 
+  const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
+  const t = dict.freeDownload;
+
   const leadQuery = lead ? `?lead=${encodeURIComponent(lead)}` : "";
   const downloadHref = `/api/lead-magnet/download/${slug}${leadQuery}`;
 
   return (
     <div className="mx-auto max-w-2xl px-6 py-20 text-center">
-      <span className="eyebrow">Your free kit</span>
+      <span className="eyebrow">{t.eyebrow}</span>
       <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">{kit.name}</h1>
       <p className="text-lg text-[var(--muted)] mb-10 max-w-xl mx-auto leading-relaxed">
         {kit.tagline}
@@ -49,18 +55,15 @@ export default async function FreeDownloadPage({
         className="btn-primary inline-flex justify-center"
       >
         <Download className="w-4 h-4" />
-        Download the kit (.md)
+        {t.downloadLabel}
       </a>
-      <p className="text-sm text-[var(--muted)] mt-10">
-        Drop the file into a Claude project — or paste the optimization pack
-        section into ChatGPT — and try the first prompt.
-      </p>
+      <p className="text-sm text-[var(--muted)] mt-10">{t.instruction}</p>
       <p className="mt-10">
         <Link
           href="/kits"
           className="text-sm font-medium hover:text-[var(--accent-strong)]"
         >
-          Browse the full catalog →
+          {t.browseCatalog}
         </Link>
       </p>
     </div>

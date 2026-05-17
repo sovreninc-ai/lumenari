@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
+import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { apiDocsMetadata } from "@/lib/seo";
 
 export function generateStaticParams() {
@@ -16,6 +17,8 @@ export async function generateMetadata({
   return apiDocsMetadata(safeLocale);
 }
 
+type ApiDocsDict = Dictionary["apiDocs"];
+
 /**
  * /api-docs — public API reference.
  *
@@ -26,53 +29,55 @@ export async function generateMetadata({
  * The visual difference is small at the docs sizes Lumenari needs; we can
  * upgrade to a syntax-highlighted version later without breaking the layout.
  */
-export default function ApiDocsPage() {
+export default async function ApiDocsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
+  const t = dict.apiDocs;
+
   return (
     <div className="mx-auto max-w-6xl px-6 py-16">
       <header className="mb-12">
-        <span className="eyebrow">API documentation</span>
-        <h1 className="display text-4xl sm:text-5xl mt-2 mb-3">Reference</h1>
-        <p className="text-[var(--muted)] text-lg max-w-2xl">
-          The Lumenari API exposes our kit recommendation engine as JSON
-          endpoints. Authenticate with a Bearer token. Same engine that powers
-          the storefront wizard.
-        </p>
+        <span className="eyebrow">{t.eyebrow}</span>
+        <h1 className="display text-4xl sm:text-5xl mt-2 mb-3">{t.title}</h1>
+        <p className="text-[var(--muted)] text-lg max-w-2xl">{t.intro}</p>
       </header>
 
       <div className="grid lg:grid-cols-[220px_1fr] gap-10">
-        <SideNav />
+        <SideNav t={t} />
         <main className="max-w-3xl space-y-16">
-          <Quickstart />
-          <Authentication />
-          <RateLimiting />
-          <Endpoints />
-          <ErrorCodes />
-          <WebhooksPlaceholder />
+          <Quickstart t={t} />
+          <Authentication t={t} />
+          <RateLimiting t={t} />
+          <Endpoints t={t} />
+          <ErrorCodes t={t} />
+          <WebhooksPlaceholder t={t} />
         </main>
       </div>
     </div>
   );
 }
 
-function SideNav() {
+function SideNav({ t }: { t: ApiDocsDict }) {
   const items: Array<{ href: string; label: string }> = [
-    { href: "#quickstart", label: "Quickstart" },
-    { href: "#authentication", label: "Authentication" },
-    { href: "#rate-limiting", label: "Rate limiting" },
-    { href: "#endpoints", label: "Endpoints" },
-    { href: "#recommend", label: "  · Recommend" },
-    { href: "#list-kits", label: "  · List kits" },
-    { href: "#get-kit", label: "  · Get kit" },
-    { href: "#download-kit", label: "  · Download kit" },
-    { href: "#usage", label: "  · Usage" },
-    { href: "#error-codes", label: "Error codes" },
-    { href: "#webhooks", label: "Webhooks" },
+    { href: "#quickstart", label: t.nav.quickstart },
+    { href: "#authentication", label: t.nav.authentication },
+    { href: "#rate-limiting", label: t.nav.rateLimiting },
+    { href: "#endpoints", label: t.nav.endpoints },
+    { href: "#recommend", label: t.nav.recommend },
+    { href: "#list-kits", label: t.nav.listKits },
+    { href: "#get-kit", label: t.nav.getKit },
+    { href: "#download-kit", label: t.nav.downloadKit },
+    { href: "#usage", label: t.nav.usage },
+    { href: "#error-codes", label: t.nav.errorCodes },
+    { href: "#webhooks", label: t.nav.webhooks },
   ];
   return (
-    <nav
-      aria-label="Docs navigation"
-      className="lg:sticky lg:top-24 self-start"
-    >
+    <nav aria-label={t.title} className="lg:sticky lg:top-24 self-start">
       <ul className="space-y-1.5 text-sm">
         {items.map((i) => (
           <li key={i.href}>
@@ -89,22 +94,25 @@ function SideNav() {
   );
 }
 
-function Quickstart() {
+function Quickstart({ t }: { t: ApiDocsDict }) {
+  const q = t.quickstart;
   return (
     <section id="quickstart">
-      <h2 className="display text-2xl sm:text-3xl mb-4">Quickstart</h2>
+      <h2 className="display text-2xl sm:text-3xl mb-4">{q.heading}</h2>
       <ol className="space-y-3 text-[var(--muted)] mb-6 list-decimal pl-5">
         <li>
+          {q.step1Prefix}
           <Link href="/account/api-keys" className="underline">
-            Sign in
-          </Link>{" "}
-          and generate an API key. You see the full key once — save it.
+            {q.step1Link}
+          </Link>
+          {q.step1Suffix}
         </li>
         <li>
-          Pass it as <CodeInline>Authorization: Bearer lmn_…</CodeInline> on
-          every request.
+          {q.step2Prefix}
+          <CodeInline>Authorization: Bearer lmn_…</CodeInline>
+          {q.step2Suffix}
         </li>
-        <li>Use the endpoints below. Free tier gives you 100 calls a month.</li>
+        <li>{q.step3}</li>
       </ol>
       <CodeSample
         languages={{
@@ -141,17 +149,18 @@ data = res.json()`,
   );
 }
 
-function Authentication() {
+function Authentication({ t }: { t: ApiDocsDict }) {
+  const a = t.authentication;
   return (
     <section id="authentication">
-      <h2 className="display text-2xl sm:text-3xl mb-4">Authentication</h2>
+      <h2 className="display text-2xl sm:text-3xl mb-4">{a.heading}</h2>
       <p className="text-[var(--muted)] mb-4">
-        All endpoints require a Bearer token. Keys are 36 characters and prefixed
-        with <CodeInline>lmn_</CodeInline>. Manage keys at{" "}
+        {a.bodyPrefix} <CodeInline>lmn_</CodeInline>
+        {a.bodyMiddle}{" "}
         <Link href="/account/api-keys" className="underline">
-          your dashboard
+          {a.bodyLink}
         </Link>
-        .
+        {a.bodySuffix}
       </p>
       <CodeSample
         languages={{
@@ -161,53 +170,62 @@ Authorization: Bearer lmn_a1b2c3d4e5f6...`,
           python: `headers={"Authorization": "Bearer lmn_a1b2c3d4..."}`,
         }}
       />
-      <p className="text-sm text-[var(--muted)] mt-4">
-        Keys are hashed at rest with SHA-256. We can&apos;t recover a lost key —
-        revoke it and generate a new one.
-      </p>
+      <p className="text-sm text-[var(--muted)] mt-4">{a.note}</p>
     </section>
   );
 }
 
-function RateLimiting() {
+function RateLimiting({ t }: { t: ApiDocsDict }) {
+  const r = t.rateLimiting;
   return (
     <section id="rate-limiting">
-      <h2 className="display text-2xl sm:text-3xl mb-4">Rate limiting</h2>
-      <p className="text-[var(--muted)] mb-4">
-        Each request returns three headers you can use to back off:
-      </p>
+      <h2 className="display text-2xl sm:text-3xl mb-4">{r.heading}</h2>
+      <p className="text-[var(--muted)] mb-4">{r.intro}</p>
       <ul className="space-y-2 mb-4 text-sm">
         <li>
-          <CodeInline>X-RateLimit-Limit</CodeInline> — monthly cap for your tier
-          (or <CodeInline>unlimited</CodeInline> on Enterprise)
+          {r.bullet1Prefix}
+          <CodeInline>X-RateLimit-Limit</CodeInline>
+          {r.bullet1Suffix}
+          <CodeInline>unlimited</CodeInline>
+          {r.bullet1Close}
         </li>
         <li>
-          <CodeInline>X-RateLimit-Remaining</CodeInline> — calls left this
-          billing period
+          {r.bullet2Prefix}
+          <CodeInline>X-RateLimit-Remaining</CodeInline>
+          {r.bullet2Suffix}
         </li>
         <li>
-          <CodeInline>X-RateLimit-Reset</CodeInline> — Unix timestamp when the
-          quota refills (1st of next month, UTC)
+          {r.bullet3Prefix}
+          <CodeInline>X-RateLimit-Reset</CodeInline>
+          {r.bullet3Suffix}
         </li>
       </ul>
       <p className="text-[var(--muted)] mb-4">
-        Hit the cap and you&apos;ll get HTTP 429 with a structured error body
-        and a <CodeInline>Retry-After</CodeInline> header (seconds).
+        {r.footerPrefix}
+        <CodeInline>Retry-After</CodeInline>
+        {r.footerSuffix}
       </p>
     </section>
   );
 }
 
-function Endpoints() {
+function Endpoints({ t }: { t: ApiDocsDict }) {
+  const e = t.endpoints;
   return (
     <section id="endpoints">
-      <h2 className="display text-2xl sm:text-3xl mb-6">Endpoints</h2>
+      <h2 className="display text-2xl sm:text-3xl mb-6">{e.heading}</h2>
 
       <Endpoint
         id="recommend"
         method="POST"
         path="/api/v1/recommend"
-        summary="Get kit recommendations for an AI platform + use case."
+        summary={e.recommendSummary}
+        labels={{
+          queryParameters: e.queryParameters,
+          requestBody: e.requestBody,
+          example: e.example,
+          response: e.response,
+        }}
         body={`{
   "ai_platform": "claude",   // or chatgpt | codex | gemini | cursor | any
   "use_case": "shipping a SaaS on Next.js",
@@ -258,18 +276,18 @@ function Endpoints() {
         id="list-kits"
         method="GET"
         path="/api/v1/kits"
-        summary="Paginated list of every kit in the catalog."
+        summary={e.listKitsSummary}
+        labels={{
+          queryParameters: e.queryParameters,
+          requestBody: e.requestBody,
+          example: e.example,
+          response: e.response,
+        }}
         query={[
-          { name: "limit", desc: "Page size, default 50, max 100" },
-          { name: "offset", desc: "Pagination offset" },
-          {
-            name: "ai_target",
-            desc: "Filter to a single AI target — claude / chatgpt / etc.",
-          },
-          {
-            name: "keyword",
-            desc: "Substring match against name + keywords",
-          },
+          { name: "limit", desc: e.query.limit },
+          { name: "offset", desc: e.query.offset },
+          { name: "ai_target", desc: e.query.ai_target },
+          { name: "keyword", desc: e.query.keyword },
         ]}
         response={`{
   "kits": [
@@ -309,7 +327,13 @@ function Endpoints() {
         id="get-kit"
         method="GET"
         path="/api/v1/kits/{id_or_slug}"
-        summary="Full metadata for a single kit, including deliverable file list."
+        summary={e.getKitSummary}
+        labels={{
+          queryParameters: e.queryParameters,
+          requestBody: e.requestBody,
+          example: e.example,
+          response: e.response,
+        }}
         response={`{
   "kit": {
     "id": "ts-next-production",
@@ -337,8 +361,14 @@ function Endpoints() {
         id="download-kit"
         method="GET"
         path="/api/v1/kits/{id_or_slug}/download"
-        summary="Concatenated kit content as markdown. Pro tier and above only."
-        notes="Free tier returns 402 with code `tier_required`. Pro / Business / Enterprise return the full markdown body inline."
+        summary={e.downloadKitSummary}
+        notes={e.downloadKitNotes}
+        labels={{
+          queryParameters: e.queryParameters,
+          requestBody: e.requestBody,
+          example: e.example,
+          response: e.response,
+        }}
         languages={{
           curl: `curl https://lumenari.io/api/v1/kits/ts-next-production/download \\
   -H "Authorization: Bearer lmn_..." \\
@@ -360,7 +390,13 @@ markdown = r.text`,
         id="usage"
         method="GET"
         path="/api/v1/usage"
-        summary="Calling account's current-month usage + 30-day daily breakdown."
+        summary={e.usageSummary}
+        labels={{
+          queryParameters: e.queryParameters,
+          requestBody: e.requestBody,
+          example: e.example,
+          response: e.response,
+        }}
         response={`{
   "tier": "pro",
   "tier_name": "Pro",
@@ -390,24 +426,29 @@ markdown = r.text`,
   );
 }
 
-function ErrorCodes() {
-  const rows: Array<{ status: number; code: string; meaning: string }> = [
-    { status: 400, code: "invalid_request", meaning: "Body or params failed validation." },
-    { status: 401, code: "missing_api_key", meaning: "No Authorization header." },
-    { status: 401, code: "invalid_api_key", meaning: "Key is malformed, unknown, or revoked." },
-    { status: 402, code: "subscription_inactive", meaning: "Paid subscription is past_due or canceled." },
-    { status: 402, code: "tier_required", meaning: "Endpoint needs Pro tier or above." },
-    { status: 404, code: "not_found", meaning: "Kit id/slug doesn't exist." },
-    { status: 429, code: "rate_limit_exceeded", meaning: "Monthly call cap hit. Retry after period reset." },
-    { status: 500, code: "internal_error", meaning: "Lumenari-side failure. Try again." },
-    { status: 500, code: "content_unavailable", meaning: "Kit content missing on server (please report)." },
+function ErrorCodes({ t }: { t: ApiDocsDict }) {
+  const e = t.errorCodes;
+  // Status + code are technical identifiers and stay English. Only `meaning`
+  // localizes, sourced from the dictionary's `rows` array.
+  const technical: Array<{ status: number; code: string }> = [
+    { status: 400, code: "invalid_request" },
+    { status: 401, code: "missing_api_key" },
+    { status: 401, code: "invalid_api_key" },
+    { status: 402, code: "subscription_inactive" },
+    { status: 402, code: "tier_required" },
+    { status: 404, code: "not_found" },
+    { status: 429, code: "rate_limit_exceeded" },
+    { status: 500, code: "internal_error" },
+    { status: 500, code: "content_unavailable" },
   ];
+  const rows = technical.map((tech, i) => ({
+    ...tech,
+    meaning: e.rows[i]?.meaning ?? "",
+  }));
   return (
     <section id="error-codes">
-      <h2 className="display text-2xl sm:text-3xl mb-4">Error codes</h2>
-      <p className="text-[var(--muted)] mb-4">
-        Every error response has the same shape:
-      </p>
+      <h2 className="display text-2xl sm:text-3xl mb-4">{e.heading}</h2>
+      <p className="text-[var(--muted)] mb-4">{e.intro}</p>
       <CodeSample
         languages={{
           curl: `{
@@ -422,9 +463,15 @@ function ErrorCodes() {
         <table className="w-full text-sm">
           <thead className="bg-[var(--surface)]">
             <tr>
-              <th className="text-left font-semibold px-4 py-3 w-20">HTTP</th>
-              <th className="text-left font-semibold px-4 py-3 w-56">Code</th>
-              <th className="text-left font-semibold px-4 py-3">Meaning</th>
+              <th className="text-left font-semibold px-4 py-3 w-20">
+                {e.header_http}
+              </th>
+              <th className="text-left font-semibold px-4 py-3 w-56">
+                {e.header_code}
+              </th>
+              <th className="text-left font-semibold px-4 py-3">
+                {e.header_meaning}
+              </th>
             </tr>
           </thead>
           <tbody>
@@ -442,21 +489,21 @@ function ErrorCodes() {
   );
 }
 
-function WebhooksPlaceholder() {
+function WebhooksPlaceholder({ t }: { t: ApiDocsDict }) {
+  const w = t.webhooks;
   return (
     <section id="webhooks">
-      <h2 className="display text-2xl sm:text-3xl mb-4">Webhooks</h2>
+      <h2 className="display text-2xl sm:text-3xl mb-4">{w.heading}</h2>
       <div className="rounded-2xl border border-[var(--hairline)] bg-[var(--surface)] p-5">
         <p className="text-sm text-[var(--muted)]">
-          Coming soon. Subscribe to{" "}
+          {w.bodyPrefix}
           <a
             href="mailto:hello@lumenari.io?subject=Lumenari%20API%20webhooks%20interest"
             className="underline text-[var(--foreground)]"
           >
             hello@lumenari.io
-          </a>{" "}
-          to be notified when webhooks ship (catalog updates, usage thresholds,
-          new kits).
+          </a>
+          {w.bodySuffix}
         </p>
       </div>
     </section>
@@ -477,6 +524,12 @@ interface EndpointProps {
   response?: string;
   notes?: string;
   languages: Record<string, string>;
+  labels: {
+    queryParameters: string;
+    requestBody: string;
+    example: string;
+    response: string;
+  };
 }
 
 function Endpoint({
@@ -489,6 +542,7 @@ function Endpoint({
   response,
   notes,
   languages,
+  labels,
 }: EndpointProps) {
   return (
     <article id={id} className="mb-12 scroll-mt-24">
@@ -507,7 +561,7 @@ function Endpoint({
       <p className="text-[var(--muted)] mb-5">{summary}</p>
       {query ? (
         <div className="mb-5">
-          <h4 className="text-sm font-semibold mb-2">Query parameters</h4>
+          <h4 className="text-sm font-semibold mb-2">{labels.queryParameters}</h4>
           <ul className="space-y-1.5 text-sm">
             {query.map((q) => (
               <li key={q.name}>
@@ -520,17 +574,17 @@ function Endpoint({
       ) : null}
       {body ? (
         <div className="mb-5">
-          <h4 className="text-sm font-semibold mb-2">Request body</h4>
+          <h4 className="text-sm font-semibold mb-2">{labels.requestBody}</h4>
           <CodeSample languages={{ json: body }} />
         </div>
       ) : null}
       <div className="mb-5">
-        <h4 className="text-sm font-semibold mb-2">Example</h4>
+        <h4 className="text-sm font-semibold mb-2">{labels.example}</h4>
         <CodeSample languages={languages} />
       </div>
       {response ? (
         <div>
-          <h4 className="text-sm font-semibold mb-2">Response</h4>
+          <h4 className="text-sm font-semibold mb-2">{labels.response}</h4>
           <CodeSample languages={{ json: response }} />
         </div>
       ) : null}

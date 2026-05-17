@@ -1,4 +1,5 @@
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
+import { getDictionary } from "@/i18n/dictionaries";
 import { getKit } from "@/data/kits";
 import { siteUrl } from "@/lib/seo";
 import { LeadMagnetClaimForm } from "@/components/lead-magnet-claim-form";
@@ -48,29 +49,29 @@ export default async function FreeLandingPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  await params;
+  const { locale } = await params;
+  const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
+  const t = dict.free;
   const kit = getKit(FREE_KIT_SLUG);
+
+  const bullets = kit?.whatsInside ?? t.defaultBullets;
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-20 sm:py-24">
-      <span className="eyebrow">Free kit</span>
-      <h1 className="display text-4xl sm:text-5xl mt-2 mb-5">
-        A free AI kit for your job search.
-      </h1>
+      <span className="eyebrow">{t.eyebrow}</span>
+      <h1 className="display text-4xl sm:text-5xl mt-2 mb-5">{t.title}</h1>
       <p className="text-lg text-[var(--muted)] leading-relaxed mb-10 max-w-2xl">
-        Drop-in prompts, a SKILL.md for Claude, an optimization pack for
-        ChatGPT, and a Custom GPT instruction file — all in one download.
-        Tailored résumés, outreach that lands, interview prep that doesn&apos;t
-        sound rehearsed.
+        {t.intro}
       </p>
 
       <div className="rounded-3xl border border-[var(--hairline)] bg-white p-7 sm:p-9 mb-12">
         <LeadMagnetClaimForm kitSlug={FREE_KIT_SLUG} />
       </div>
 
-      <h2 className="display text-2xl mb-5">What&apos;s inside</h2>
+      <h2 className="display text-2xl mb-5">{t.whatsInside}</h2>
       <ul className="space-y-3 mb-12">
-        {(kit?.whatsInside ?? defaultWhatsInside()).map((b) => (
+        {bullets.map((b) => (
           <li
             key={b}
             className="flex items-start gap-3 leading-relaxed text-[1.02rem]"
@@ -84,28 +85,14 @@ export default async function FreeLandingPage({
         ))}
       </ul>
 
-      <h2 className="display text-2xl mb-3">How it works</h2>
+      <h2 className="display text-2xl mb-3">{t.howItWorks}</h2>
       <ol className="space-y-3 mb-10 list-decimal pl-5 text-[var(--muted)]">
-        <li>Enter your email. The kit lands in your inbox within a minute.</li>
-        <li>Drag the SKILL.md into a Claude project, or paste the optimization pack into ChatGPT.</li>
-        <li>Run any of the included prompts. Adjust to your situation. Send.</li>
+        <li>{t.step1}</li>
+        <li>{t.step2}</li>
+        <li>{t.step3}</li>
       </ol>
 
-      <p className="text-sm text-[var(--muted)]">
-        Over the next week you&apos;ll get a few short notes from Chris (the
-        founder) — what to do with the kit, how the SKILL.md format works, and
-        a couple of examples from real users. Unsubscribe anytime.
-      </p>
+      <p className="text-sm text-[var(--muted)]">{t.followup}</p>
     </div>
   );
-}
-
-function defaultWhatsInside(): string[] {
-  return [
-    "Résumé tailoring prompts that survive ATS filters",
-    "Cold-outreach templates for hiring managers + recruiters",
-    "Interview prep — STAR stories, common questions, salary talk",
-    "Follow-up + thank-you note patterns",
-    "A Custom GPT prompt you can paste into ChatGPT today",
-  ];
 }

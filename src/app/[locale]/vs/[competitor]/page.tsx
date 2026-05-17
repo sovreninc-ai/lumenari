@@ -2,6 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Check, X, ArrowRight } from "lucide-react";
 import { LOCALES, type Locale, isLocale } from "@/i18n/locales";
+import { getDictionary } from "@/i18n/dictionaries";
 import { COMPETITORS, getCompetitor } from "@/data/comparisons";
 import { comparisonMetadata, siteUrl } from "@/lib/seo";
 import {
@@ -44,17 +45,20 @@ export async function generateMetadata({ params }: PageProps) {
 export default async function ComparisonPage({ params }: PageProps) {
   const { locale, competitor } = await params;
   const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
+  const t = dict.vs;
   const c = getCompetitor(competitor);
   if (!c) notFound();
 
   const base = siteUrl();
   const localePath = safeLocale === "en" ? "" : `/${safeLocale}`;
+  const titleLabel = `${t.titlePrefix} ${c.name}`;
 
   const breadcrumb = BreadcrumbListSchema([
     { name: "Lumenari", url: `${base}${localePath}/` },
-    { name: "Compare", url: `${base}${localePath}/kits` },
+    { name: dict.kits.eyebrowShelf, url: `${base}${localePath}/kits` },
     {
-      name: `Lumenari vs ${c.name}`,
+      name: titleLabel,
       url: `${base}${localePath}/vs/${c.slug}`,
     },
   ]);
@@ -66,28 +70,26 @@ export default async function ComparisonPage({ params }: PageProps) {
 
       <nav className="text-sm text-[var(--muted)] mb-6">
         <Link href="/kits" className="hover:text-[var(--foreground)]">
-          All kits
+          {t.allKits}
         </Link>
         <span className="mx-2">/</span>
-        <span>Lumenari vs {c.name}</span>
+        <span>{titleLabel}</span>
       </nav>
 
-      <span className="eyebrow">Honest comparison</span>
-      <h1 className="display text-4xl sm:text-5xl mt-2 mb-5">
-        Lumenari vs {c.name}
-      </h1>
+      <span className="eyebrow">{t.eyebrow}</span>
+      <h1 className="display text-4xl sm:text-5xl mt-2 mb-5">{titleLabel}</h1>
       <p className="text-lg text-[var(--muted)] leading-relaxed mb-12 max-w-2xl">
         {c.positioning}
       </p>
 
       {/* Feature table */}
-      <section aria-label="Feature comparison" className="mb-16">
+      <section aria-label={t.featureColumn} className="mb-16">
         <div className="rounded-2xl border border-[var(--hairline)] overflow-hidden">
           <table className="w-full text-sm">
             <thead className="bg-[var(--surface)]">
               <tr>
                 <th className="text-left font-semibold px-4 py-3 w-1/3">
-                  Feature
+                  {t.featureColumn}
                 </th>
                 <th className="text-left font-semibold px-4 py-3 w-1/3">
                   Lumenari
@@ -118,7 +120,7 @@ export default async function ComparisonPage({ params }: PageProps) {
       {/* Pros / advantages */}
       <section className="grid md:grid-cols-2 gap-8 mb-16">
         <div>
-          <h2 className="display text-2xl mb-5">Where Lumenari wins</h2>
+          <h2 className="display text-2xl mb-5">{t.whereLumenariWins}</h2>
           <ul className="space-y-3">
             {c.lumenariAdvantages.map((adv) => (
               <li key={adv} className="flex items-start gap-2.5">
@@ -129,7 +131,9 @@ export default async function ComparisonPage({ params }: PageProps) {
           </ul>
         </div>
         <div>
-          <h2 className="display text-2xl mb-5">Where {c.name} wins</h2>
+          <h2 className="display text-2xl mb-5">
+            {t.whereCompetitorWinsPrefix} {c.name} {t.whereCompetitorWinsSuffix}
+          </h2>
           <ul className="space-y-3">
             {c.competitorStrengths.map((s) => (
               <li key={s} className="flex items-start gap-2.5">
@@ -144,8 +148,8 @@ export default async function ComparisonPage({ params }: PageProps) {
       </section>
 
       {/* FAQs */}
-      <section aria-label="FAQ" className="mb-14">
-        <h2 className="display text-2xl mb-6">Common questions</h2>
+      <section aria-label={t.faq} className="mb-14">
+        <h2 className="display text-2xl mb-6">{t.faq}</h2>
         <div className="space-y-6">
           {c.faqs.map((f) => (
             <div key={f.q}>
@@ -162,16 +166,14 @@ export default async function ComparisonPage({ params }: PageProps) {
       <section className="rounded-3xl bg-spectrum p-[1px]">
         <div className="rounded-3xl bg-white p-8 sm:p-10 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="display text-2xl mb-1">See the catalog yourself.</h2>
-            <p className="text-[var(--muted)]">
-              20+ kits, 6 bundles, four formats per kit.
-            </p>
+            <h2 className="display text-2xl mb-1">{t.finalCtaTitle}</h2>
+            <p className="text-[var(--muted)]">{t.finalCtaBody}</p>
           </div>
           <Link
             href="/kits"
             className="inline-flex items-center justify-center gap-2 px-6 h-12 rounded-full bg-[var(--foreground)] text-white font-medium hover:bg-black transition-colors flex-shrink-0"
           >
-            Browse all kits <ArrowRight className="w-4 h-4" />
+            {t.finalCtaButton} <ArrowRight className="w-4 h-4" />
           </Link>
         </div>
       </section>

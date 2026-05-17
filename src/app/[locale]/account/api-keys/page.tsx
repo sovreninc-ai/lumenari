@@ -5,6 +5,7 @@ import { supabaseService } from "@/lib/supabase";
 import { AccountSignIn } from "@/components/AccountSignIn";
 import { ApiKeysManager } from "@/components/ApiKeysManager";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
+import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { accountMetadata } from "@/lib/seo";
 
 export const dynamic = "force-dynamic";
@@ -45,17 +46,18 @@ interface ApiKeyRow {
   revoked_at: string | null;
 }
 
-export default async function ApiAccountPage({ searchParams }: PageProps) {
+export default async function ApiAccountPage({ params, searchParams }: PageProps) {
+  const { locale } = await params;
   const { a, t } = await searchParams;
+  const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
 
   if (!a || !t) {
-    return <SignInView />;
+    return <SignInView dict={dict} />;
   }
   const account = await resolveAccount(a, t);
   if (!account) {
-    return (
-      <SignInView notice="That link is expired or invalid. Enter your email below for a fresh one." />
-    );
+    return <SignInView dict={dict} notice={dict.accountApi.signInNoticeFallback} />;
   }
 
   const db = supabaseService();
@@ -85,23 +87,28 @@ export default async function ApiAccountPage({ searchParams }: PageProps) {
   const unlimited = limit === -1;
   const pct = unlimited ? 0 : Math.min(100, Math.round((callsUsed / limit) * 100));
 
+  const tApi = dict.accountApi;
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <span className="eyebrow">API account</span>
+      <span className="eyebrow">{tApi.eyebrow}</span>
       <h1 className="display text-4xl sm:text-5xl mt-2 mb-3">
         {account.organization_name ?? account.email.split("@")[0]}
       </h1>
       <p className="text-[var(--muted)] mb-10">
-        Signed in as <span className="text-[var(--foreground)] font-medium">{account.email}</span>
+        {tApi.signedInAs}{" "}
+        <span className="text-[var(--foreground)] font-medium">
+          {account.email}
+        </span>
       </p>
 
       {/* Tier + usage card */}
       <section className="mb-12 rounded-3xl border border-[var(--hairline)] bg-white p-6 sm:p-7">
         <div className="flex items-start justify-between gap-4 mb-5">
           <div>
-            <span className="eyebrow">Current tier</span>
+            <span className="eyebrow">{tApi.currentTier}</span>
             <h2 className="text-2xl font-semibold mt-1 flex items-center gap-2">
-              {tier?.name ?? "Free"}
+              {tier?.name ?? tApi.tierFreeFallback}
               {tier?.id === "business" || tier?.id === "enterprise" ? (
                 <Crown className="w-5 h-5 text-[var(--accent-strong)]" />
               ) : null}
@@ -112,17 +119,17 @@ export default async function ApiAccountPage({ searchParams }: PageProps) {
               href="/api-platform"
               className="inline-flex items-center gap-2 rounded-full border border-[var(--hairline)] bg-white px-4 py-2 text-sm font-medium hover:bg-[var(--surface)] transition-colors flex-shrink-0"
             >
-              {tier?.id === "free" ? "Upgrade" : "Change plan"}
+              {tier?.id === "free" ? tApi.upgrade : tApi.changePlan}
             </Link>
           ) : null}
         </div>
 
         <div className="mb-2 flex items-baseline justify-between text-sm">
-          <span className="text-[var(--muted)]">This month</span>
+          <span className="text-[var(--muted)]">{tApi.thisMonth}</span>
           <span className="font-medium">
             {callsUsed.toLocaleString()}{" "}
             <span className="text-[var(--muted)]">
-              / {unlimited ? "∞" : limit.toLocaleString()} calls
+              / {unlimited ? "∞" : limit.toLocaleString()} {tApi.callsSuffix}
             </span>
           </span>
         </div>
@@ -135,8 +142,8 @@ export default async function ApiAccountPage({ searchParams }: PageProps) {
         </div>
         {!unlimited && pct >= 80 ? (
           <p className="mt-3 text-xs text-amber-700">
-            You&apos;ve used {pct}% of your monthly quota. Consider upgrading
-            before you hit the limit.
+            {tApi.quotaWarningPrefix} {pct}
+            {tApi.quotaWarningSuffix}
           </p>
         ) : null}
       </section>
@@ -158,10 +165,8 @@ export default async function ApiAccountPage({ searchParams }: PageProps) {
         >
           <BookOpen className="w-5 h-5 text-[var(--accent-strong)] mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold mb-1">API documentation</p>
-            <p className="text-sm text-[var(--muted)]">
-              Endpoints, examples, rate limits.
-            </p>
+            <p className="font-semibold mb-1">{tApi.apiDocsTitle}</p>
+            <p className="text-sm text-[var(--muted)]">{tApi.apiDocsBody}</p>
           </div>
         </Link>
         <Link
@@ -170,10 +175,8 @@ export default async function ApiAccountPage({ searchParams }: PageProps) {
         >
           <Code2 className="w-5 h-5 text-[var(--accent-strong)] mt-0.5 flex-shrink-0" />
           <div>
-            <p className="font-semibold mb-1">Pricing & tiers</p>
-            <p className="text-sm text-[var(--muted)]">
-              Compare Free, Pro, Business, Enterprise.
-            </p>
+            <p className="font-semibold mb-1">{tApi.pricingTitle}</p>
+            <p className="text-sm text-[var(--muted)]">{tApi.pricingBody}</p>
           </div>
         </Link>
       </section>
@@ -181,16 +184,19 @@ export default async function ApiAccountPage({ searchParams }: PageProps) {
   );
 }
 
-function SignInView({ notice }: { notice?: string } = {}) {
+function SignInView({
+  dict,
+  notice,
+}: {
+  dict: Dictionary;
+  notice?: string;
+}) {
+  const t = dict.accountApi;
   return (
     <div className="mx-auto max-w-xl px-6 py-20">
-      <span className="eyebrow">API account</span>
-      <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">
-        Sign in to manage your keys.
-      </h1>
-      <p className="text-lg text-[var(--muted)] mb-8">
-        Enter your email and we&apos;ll send a one-click sign-in link.
-      </p>
+      <span className="eyebrow">{t.eyebrow}</span>
+      <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">{t.signInTitle}</h1>
+      <p className="text-lg text-[var(--muted)] mb-8">{t.signInBody}</p>
       {notice ? (
         <div className="mb-6 rounded-xl border border-amber-300 bg-amber-50 px-4 py-3 text-sm text-amber-900">
           {notice}

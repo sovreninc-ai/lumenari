@@ -1,4 +1,5 @@
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
+import { getDictionary } from "@/i18n/dictionaries";
 import { siteUrl } from "@/lib/seo";
 
 const LAST_UPDATED = "2026-05-15";
@@ -23,107 +24,73 @@ export async function generateMetadata({
   };
 }
 
-export default async function RefundsPage() {
+export default async function RefundsPage({
+  params,
+}: {
+  params: Promise<{ locale: string }>;
+}) {
+  const { locale } = await params;
+  const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
+  const t = dict.refunds;
+
   return (
     <article className="mx-auto max-w-3xl px-6 py-16">
-      <span className="eyebrow">Legal</span>
-      <h1 className="display text-4xl sm:text-5xl mt-2 mb-2">Refund Policy</h1>
+      <span className="eyebrow">{t.eyebrow}</span>
+      <h1 className="display text-4xl sm:text-5xl mt-2 mb-2">{t.title}</h1>
       <p className="text-sm text-[var(--muted)] mb-10">
-        Last updated: {LAST_UPDATED}
+        {t.lastUpdatedPrefix} {LAST_UPDATED}
       </p>
 
-      <p className="lead leading-relaxed text-[1.05rem]">
-        We want you to be happy with your purchase. If a kit isn&apos;t
-        working for you, here&apos;s how we handle refunds.
-      </p>
+      {t.legalDisclaimer ? (
+        <p className="text-sm text-[var(--muted)] italic mb-6">
+          {t.legalDisclaimer}
+        </p>
+      ) : null}
 
-      <Section title="One-time kit and bundle purchases">
+      <p className="lead leading-relaxed text-[1.05rem]">{t.intro}</p>
+
+      <Section title={t.s1.title}>
         <ul>
-          <li><strong>14-day full refund</strong> if you haven&apos;t
-            downloaded the kit. Email{" "}
-            <a href="mailto:hello@lumenari.io">hello@lumenari.io</a> with
-            the email you used at checkout. We process it within 5
-            business days; Stripe takes another 5-10 to settle on your
-            card statement.</li>
-          <li><strong>14-day partial refund</strong> if you&apos;ve
-            downloaded the kit but it didn&apos;t fit your workflow.
-            We&apos;ll refund up to 50%, case-by-case. The point of this
-            band is to keep the policy honest while keeping us from
-            being a free preview channel for the catalog.</li>
-          <li><strong>After 14 days</strong>, refunds are at our
-            discretion. We almost always honor a polite request when
-            the underlying complaint is fair (e.g. the kit content
-            wasn&apos;t what was promised on the kit page). We
-            rarely honor it when the complaint is &ldquo;I bought it
-            and forgot.&rdquo;</li>
+          <li>{t.s1.b1}</li>
+          <li>{t.s1.b2}</li>
+          <li>{t.s1.b3}</li>
         </ul>
       </Section>
 
-      <Section title="Pro+ subscriptions">
+      <Section title={t.s2.title}>
         <ul>
-          <li>You can cancel a Pro+ subscription at any time from{" "}
-            <code>/library</code> or by replying to any Pro+ email.
-            Cancellation takes effect at the end of the current billing
-            period — you keep access until then.</li>
-          <li><strong>Within the first 7 days of a brand-new
-            subscription</strong>: full refund of the current period
-            on request, no questions asked.</li>
-          <li><strong>After 7 days</strong>: no refund of the current
-            period; we stop future billing.</li>
-          <li>Pro+ Lifetime: 14-day refund if you haven&apos;t
-            downloaded any kit. After 14 days or after any kit is
-            downloaded, no refund. (We make exceptions for genuinely
-            unusual situations — just email us.)</li>
+          <li>{t.s2.b1}</li>
+          <li>{t.s2.b2}</li>
+          <li>{t.s2.b3}</li>
+          <li>{t.s2.b4}</li>
         </ul>
       </Section>
 
-      <Section title="API platform tiers">
+      <Section title={t.s3.title}>
         <ul>
-          <li>Pro tier: refundable within 7 days if your usage was less
-            than 100 API calls. After that, no refund of the current
-            month; we stop future billing on cancel.</li>
-          <li>Business / Scale: refundable on a case-by-case basis. The
-            account manager (currently Chris) is the contact.</li>
-          <li>Free tier: no money involved; no refund applies.</li>
+          <li>{t.s3.b1}</li>
+          <li>{t.s3.b2}</li>
+          <li>{t.s3.b3}</li>
         </ul>
       </Section>
 
-      <Section title="Chargebacks">
-        <p>
-          If you initiate a chargeback rather than email us first, your
-          access to the Service is suspended immediately. We respond to
-          the dispute with the full purchase + access history. We
-          reserve the right to permanently ban a customer who initiates
-          a fraudulent chargeback. Honest disputes get a polite phone
-          call (or email reply) and an offer to refund directly without
-          fees.
-        </p>
+      <Section title={t.s4.title}>
+        <p>{t.s4.p1}</p>
       </Section>
 
-      <Section title="How to request a refund">
-        <p>
-          Send an email to{" "}
-          <a href="mailto:hello@lumenari.io">hello@lumenari.io</a> with:
-        </p>
+      <Section title={t.s5.title}>
+        <p>{t.s5.intro}</p>
         <ul>
-          <li>The email you used at checkout;</li>
-          <li>The kit slug or bundle slug (e.g. <code>sales-outreach-pro</code>);</li>
-          <li>What you wanted that the kit didn&apos;t deliver. Honest
-            feedback helps us fix the kit — it doesn&apos;t hurt your
-            refund.</li>
+          <li>{t.s5.b1}</li>
+          <li>{t.s5.b2}</li>
+          <li>{t.s5.b3}</li>
         </ul>
-        <p>
-          We don&apos;t make you fill out a form. We don&apos;t route you
-          through a support bot. A real human reads it.
-        </p>
+        <p>{t.s5.outro}</p>
       </Section>
 
-      <Section title="Contact">
-        <p>
-          Questions before you buy? Email us — we&apos;d rather answer
-          than have you regret the purchase.{" "}
-          <a href="mailto:hello@lumenari.io">hello@lumenari.io</a>.
-        </p>
+      <Section title={t.s6.title}>
+        <p>{t.s6.p1}</p>
       </Section>
     </article>
   );

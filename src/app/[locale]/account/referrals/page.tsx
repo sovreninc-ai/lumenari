@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Copy, Gift } from "lucide-react";
 import { LOCALES, type Locale, isLocale } from "@/i18n/locales";
+import { getDictionary } from "@/i18n/dictionaries";
 import { supabaseService } from "@/lib/supabase";
 import { siteUrl } from "@/lib/seo";
 import { LibraryLookup } from "@/components/LibraryLookup";
@@ -48,19 +49,17 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
   const { p, t } = await searchParams;
   const { locale } = await params;
   const safeLocale: Locale = isLocale(locale) ? locale : "en";
-  void safeLocale;
+  const dict = getDictionary(safeLocale);
+  const r = dict.referralsPage;
 
   if (!p || !t) {
     return (
       <div className="mx-auto max-w-2xl px-6 py-20">
-        <span className="eyebrow">Your referrals</span>
+        <span className="eyebrow">{r.eyebrow}</span>
         <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">
-          Sign in to see your code.
+          {r.signInTitle}
         </h1>
-        <p className="text-lg text-[var(--muted)] mb-10">
-          Enter the email you used at checkout — we&apos;ll email you a fresh
-          link to this page.
-        </p>
+        <p className="text-lg text-[var(--muted)] mb-10">{r.signInBody}</p>
         <LibraryLookup />
       </div>
     );
@@ -70,13 +69,11 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
   if (!purchase || !purchase.referral_code) {
     return (
       <div className="mx-auto max-w-2xl px-6 py-20">
-        <span className="eyebrow">Your referrals</span>
+        <span className="eyebrow">{r.eyebrow}</span>
         <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">
-          That link is expired.
+          {r.expiredTitle}
         </h1>
-        <p className="text-lg text-[var(--muted)] mb-10">
-          Enter your email and we&apos;ll send you a fresh one.
-        </p>
+        <p className="text-lg text-[var(--muted)] mb-10">{r.expiredBody}</p>
         <LibraryLookup />
       </div>
     );
@@ -99,7 +96,7 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
   const referrals: ReferralRow[] = (refRes.data as ReferralRow[] | null) ?? [];
   const credits: CreditRow[] = (creditRes.data as CreditRow[] | null) ?? [];
 
-  const creditedCount = referrals.filter((r) => r.credited).length;
+  const creditedCount = referrals.filter((rr) => rr.credited).length;
   const totalCount = referrals.length;
   const REFERRALS_FOR_FREE_KIT = 3;
   const remainingToUnlock = Math.max(
@@ -108,42 +105,36 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
   );
   const shareUrl = `${siteUrl()}/?ref=${purchase.referral_code}`;
 
+  const dateLocale = safeLocale === "en" ? "en-CA" : safeLocale;
+
   return (
     <div className="mx-auto max-w-3xl px-6 py-16">
-      <span className="eyebrow">Your referrals</span>
-      <h1 className="display text-4xl sm:text-5xl mt-2 mb-3">
-        Share Lumenari. Earn kits.
-      </h1>
-      <p className="text-lg text-[var(--muted)] mb-12 max-w-xl">
-        Send your link to anyone who could use a Claude / ChatGPT / Cursor kit.
-        After 3 paid referrals you unlock a free kit.
-      </p>
+      <span className="eyebrow">{r.eyebrow}</span>
+      <h1 className="display text-4xl sm:text-5xl mt-2 mb-3">{r.title}</h1>
+      <p className="text-lg text-[var(--muted)] mb-12 max-w-xl">{r.subtitle}</p>
 
       {/* Share card */}
       <section
-        aria-label="Your referral link"
+        aria-label={r.yourLink}
         className="rounded-3xl border border-[var(--hairline)] bg-white p-6 sm:p-7 mb-10"
       >
-        <span className="eyebrow">Your link</span>
+        <span className="eyebrow">{r.yourLink}</span>
         <div className="mt-3 mb-2">
           <ReferralLinkCopy shareUrl={shareUrl} />
         </div>
-        <p className="text-sm text-[var(--muted)]">
-          Anyone who buys a Lumenari kit through this link counts as a referral.
-          The cookie lasts 30 days.
-        </p>
+        <p className="text-sm text-[var(--muted)]">{r.linkExplainer}</p>
       </section>
 
       {/* Progress */}
       <section
-        aria-label="Referral progress"
+        aria-label={r.progress}
         className="rounded-3xl border border-[var(--hairline)] bg-white p-6 sm:p-7 mb-10"
       >
         <div className="flex items-start justify-between gap-4 mb-5">
           <div>
-            <span className="eyebrow">Progress</span>
+            <span className="eyebrow">{r.progress}</span>
             <h2 className="text-2xl font-semibold mt-1.5">
-              {creditedCount} / {REFERRALS_FOR_FREE_KIT} paid referrals
+              {creditedCount} / {REFERRALS_FOR_FREE_KIT} {r.paidReferralsSuffix}
             </h2>
           </div>
           <Gift className="w-7 h-7 text-[var(--accent-strong)]" />
@@ -159,30 +150,30 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
         </div>
         <p className="text-sm text-[var(--muted)]">
           {remainingToUnlock === 0
-            ? "Free kit unlocked. Check your credits below."
-            : `${remainingToUnlock} more paid referral${remainingToUnlock === 1 ? "" : "s"} to unlock a free kit.`}
+            ? r.unlocked
+            : r.remainingTemplate
+                .replace("{count}", String(remainingToUnlock))
+                .replace("{plural}", remainingToUnlock === 1 ? "" : "s")}
         </p>
       </section>
 
       {/* Activity */}
-      <section aria-label="Activity" className="mb-10">
-        <h2 className="display text-2xl mb-4">Activity</h2>
+      <section aria-label={r.activity} className="mb-10">
+        <h2 className="display text-2xl mb-4">{r.activity}</h2>
         {totalCount === 0 ? (
-          <p className="text-[var(--muted)] py-4">
-            No referrals yet. Share your link above to get started.
-          </p>
+          <p className="text-[var(--muted)] py-4">{r.noReferrals}</p>
         ) : (
           <ul className="space-y-3">
-            {referrals.map((r) => (
+            {referrals.map((rr) => (
               <li
-                key={r.id}
+                key={rr.id}
                 className="rounded-xl border border-[var(--hairline)] bg-white p-4 flex items-center justify-between gap-4 text-sm"
               >
                 <div className="flex items-center gap-3">
                   <span className="w-2 h-2 rounded-full bg-emerald-500" />
                   <span>
-                    Referral on{" "}
-                    {new Date(r.created_at).toLocaleDateString("en-CA", {
+                    {r.referralOnPrefix}{" "}
+                    {new Date(rr.created_at).toLocaleDateString(dateLocale, {
                       year: "numeric",
                       month: "short",
                       day: "numeric",
@@ -191,12 +182,12 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
                 </div>
                 <span
                   className={`text-xs px-2.5 py-1 rounded-full ${
-                    r.credited
+                    rr.credited
                       ? "bg-emerald-100 text-emerald-900"
                       : "bg-[var(--surface)] text-[var(--muted)]"
                   }`}
                 >
-                  {r.credited ? "Credited" : "Pending"}
+                  {rr.credited ? r.credited : r.pending}
                 </span>
               </li>
             ))}
@@ -206,8 +197,8 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
 
       {/* Credits */}
       {credits.length > 0 ? (
-        <section aria-label="Credits" className="mb-10">
-          <h2 className="display text-2xl mb-4">Your credits</h2>
+        <section aria-label={r.yourCredits} className="mb-10">
+          <h2 className="display text-2xl mb-4">{r.yourCredits}</h2>
           <ul className="space-y-3">
             {credits.map((c) => (
               <li
@@ -215,10 +206,10 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
                 className="rounded-xl border border-[var(--hairline)] bg-white p-4 flex items-center justify-between gap-4"
               >
                 <div className="text-sm">
-                  <p className="font-medium">Free kit credit</p>
+                  <p className="font-medium">{r.freeKitCredit}</p>
                   <p className="text-[var(--muted)] text-xs mt-0.5">
                     {c.reason} ·{" "}
-                    {new Date(c.created_at).toLocaleDateString("en-CA")}
+                    {new Date(c.created_at).toLocaleDateString(dateLocale)}
                   </p>
                 </div>
                 <span
@@ -228,27 +219,27 @@ export default async function ReferralsPage({ searchParams, params }: PageProps)
                       : "bg-amber-100 text-amber-900"
                   }`}
                 >
-                  {c.redeemed_at ? "Redeemed" : "Ready to use"}
+                  {c.redeemed_at ? r.redeemed : r.readyToUse}
                 </span>
               </li>
             ))}
           </ul>
           <p className="text-xs text-[var(--muted)] mt-4">
-            Email{" "}
+            {r.redeemBodyPrefix}{" "}
             <a
               className="underline"
               href="mailto:hello@lumenari.io?subject=Redeem%20free%20kit"
             >
               hello@lumenari.io
             </a>{" "}
-            to redeem a credit. (Self-serve redemption is coming soon.)
+            {r.redeemBodySuffix}
           </p>
         </section>
       ) : null}
 
       <p className="text-sm text-[var(--muted)]">
         <Link href="/library" className="underline">
-          ← Back to library
+          {r.backToLibrary}
         </Link>
       </p>
     </div>

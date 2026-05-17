@@ -1,5 +1,6 @@
 import { Wizard } from "@/components/Wizard";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
+import { getDictionary } from "@/i18n/dictionaries";
 import { siteUrl } from "@/lib/seo";
 
 /**
@@ -23,10 +24,10 @@ export async function generateMetadata({
   const { locale } = await params;
   const safeLocale: Locale = isLocale(locale) ? locale : "en";
   const localePath = safeLocale === "en" ? "" : `/${safeLocale}`;
+  const dict = getDictionary(safeLocale);
   return {
-    title: "Find your kit — Lumenari recommender",
-    description:
-      "Describe what you're working on in plain English. Lumenari recommends the closest-fit kit from the catalog.",
+    title: dict.wizardPage.titleTag,
+    description: dict.wizardPage.descTag,
     alternates: { canonical: `${siteUrl()}${localePath}/wizard` },
     robots: "noindex, follow",
   };
@@ -37,11 +38,14 @@ export default async function WizardPage({
 }: {
   params: Promise<{ locale: string }>;
 }) {
-  await params;
+  const { locale } = await params;
+  const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
+
   return (
     <div className="mx-auto max-w-4xl px-6 pt-12">
       <div className="text-center mb-2">
-        <span className="eyebrow">Recommender · classic</span>
+        <span className="eyebrow">{dict.wizardClassic.eyebrow}</span>
       </div>
       <Wizard />
     </div>

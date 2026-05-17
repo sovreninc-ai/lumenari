@@ -47,7 +47,7 @@ export default async function ProPage({
     { name: "Lumenari", url: `${base}/` },
     { name: "Pro+", url: `${base}/pro` },
   ]);
-  const faqSchema = FAQPageSchema(t.faq);
+  const faqSchema = FAQPageSchema([...t.faq]);
   const annualSavings = `${t.annualSavingsPrefix} ${formatCAD(PRO_PLUS.monthly_cents * 12 - PRO_PLUS.annual_cents)} ${t.annualSavingsSuffix}`;
 
   const ctaLabel = (tier: ProTier): string => {

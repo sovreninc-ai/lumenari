@@ -4,12 +4,7 @@ import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
 import { formatCAD, type Kit } from "@/data/kits";
-
-interface KitCardProps {
-  kit: Kit;
-  reason?: string;
-  index?: number;
-}
+import { useDictionary } from "@/i18n/use-dictionary";
 
 const aiLabel: Record<string, string> = {
   "claude-code": "Claude Code",
@@ -21,7 +16,14 @@ const aiLabel: Record<string, string> = {
   any: "Any AI",
 };
 
+interface KitCardProps {
+  kit: Kit;
+  reason?: string;
+  index?: number;
+}
+
 export function KitCard({ kit, reason, index = 0 }: KitCardProps) {
+  const dict = useDictionary();
   return (
     <motion.div
       initial={{ opacity: 0, y: 12 }}
@@ -43,7 +45,7 @@ export function KitCard({ kit, reason, index = 0 }: KitCardProps) {
 
       {reason ? (
         <div className="mt-4 rounded-xl bg-[var(--surface)] border border-[var(--hairline)] p-3 text-sm text-[var(--foreground)]">
-          <span className="eyebrow block mb-1 text-[10px]">Why this kit</span>
+          <span className="eyebrow block mb-1 text-[10px]">{dict.useCaseLanding.whyThisKit}</span>
           {reason}
         </div>
       ) : null}
@@ -56,7 +58,7 @@ export function KitCard({ kit, reason, index = 0 }: KitCardProps) {
           href={`/kits/${kit.slug}`}
           className="inline-flex items-center gap-1 text-sm font-medium hover:text-[var(--accent-strong)]"
         >
-          See what&apos;s inside
+          {dict.kits.seeWhatsInside}
           <ArrowRight className="w-4 h-4" />
         </Link>
       </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { LOCALES, type Locale, isLocale } from "@/i18n/locales";
+import { getDictionary } from "@/i18n/dictionaries";
 import { listBlogPosts } from "@/lib/blog";
 import { blogIndexMetadata } from "@/lib/seo";
 import { JsonLd, BreadcrumbListSchema } from "@/lib/structured-data";
@@ -27,26 +28,25 @@ export default async function BlogIndexPage({
 }) {
   const { locale } = await params;
   const safeLocale: Locale = isLocale(locale) ? locale : "en";
+  const dict = getDictionary(safeLocale);
+  const t = dict.blog;
   const posts = listBlogPosts();
 
   const base = siteUrl();
   const localePath = safeLocale === "en" ? "" : `/${safeLocale}`;
   const breadcrumb = BreadcrumbListSchema([
     { name: "Lumenari", url: `${base}${localePath}/` },
-    { name: "Blog", url: `${base}${localePath}/blog` },
+    { name: t.eyebrow, url: `${base}${localePath}/blog` },
   ]);
+
+  const dateLocale = safeLocale === "en" ? "en-CA" : safeLocale;
 
   return (
     <div className="mx-auto max-w-3xl px-6 py-20">
       <JsonLd schema={breadcrumb} />
-      <span className="eyebrow">Blog</span>
-      <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">
-        Tactics, deep-dives, and case studies.
-      </h1>
-      <p className="text-lg text-[var(--muted)] mb-12 max-w-xl">
-        Getting more out of Claude, ChatGPT, Cursor, and the rest of the AI
-        stack — without the consultant-speak.
-      </p>
+      <span className="eyebrow">{t.eyebrow}</span>
+      <h1 className="display text-4xl sm:text-5xl mt-2 mb-4">{t.title}</h1>
+      <p className="text-lg text-[var(--muted)] mb-12 max-w-xl">{t.subtitle}</p>
 
       <ul className="space-y-6">
         {posts.map((p) => (
@@ -60,7 +60,7 @@ export default async function BlogIndexPage({
             >
               <div className="flex items-center gap-3 text-xs text-[var(--muted)] mb-2">
                 <time dateTime={p.publishedAt}>
-                  {new Date(p.publishedAt).toLocaleDateString("en-CA", {
+                  {new Date(p.publishedAt).toLocaleDateString(dateLocale, {
                     year: "numeric",
                     month: "short",
                     day: "numeric",
@@ -76,7 +76,7 @@ export default async function BlogIndexPage({
                 {p.description}
               </p>
               <span className="inline-flex items-center gap-1 text-sm font-medium text-[var(--foreground)]">
-                Read post <ArrowRight className="w-4 h-4" />
+                {t.readPost} <ArrowRight className="w-4 h-4" />
               </span>
             </Link>
           </li>
