@@ -91,11 +91,12 @@ export async function fulfillProSubscription(
     return { kind: "skipped", reason: "not a Pro+ subscription price" };
   }
 
-  const email = await resolveCustomerEmail(sub.customer);
-  if (!email) {
+  const rawEmail = await resolveCustomerEmail(sub.customer);
+  if (!rawEmail) {
     console.warn("[fulfillment] no email for subscription", sub.id);
     return { kind: "skipped", reason: "no email on subscription customer" };
   }
+  const email = rawEmail.trim().toLowerCase();
 
   const proStatus = mapStripeStatusToProStatus(sub.status);
   const isActive = proStatus === "active" || proStatus === "trialing";
@@ -161,12 +162,13 @@ export async function fulfillProSubscription(
 async function fulfillKitPurchase(
   session: Stripe.Checkout.Session,
 ): Promise<FulfillmentResult> {
-  const email =
+  const rawEmail =
     session.customer_details?.email ?? session.customer_email ?? null;
-  if (!email) {
+  if (!rawEmail) {
     console.warn("[fulfillment] no buyer email on session", session.id);
     return { kind: "skipped", reason: "no buyer email on session" };
   }
+  const email = rawEmail.trim().toLowerCase();
 
   const meta = session.metadata ?? {};
   const slugCsv = meta.kit_slugs ?? "";
@@ -242,12 +244,13 @@ async function fulfillKitPurchase(
 async function fulfillProLifetime(
   session: Stripe.Checkout.Session,
 ): Promise<FulfillmentResult> {
-  const email =
+  const rawEmail =
     session.customer_details?.email ?? session.customer_email ?? null;
-  if (!email) {
+  if (!rawEmail) {
     console.warn("[fulfillment] no Pro+ lifetime buyer email", session.id);
     return { kind: "skipped", reason: "no buyer email on session" };
   }
+  const email = rawEmail.trim().toLowerCase();
 
   const db = supabaseService();
 
