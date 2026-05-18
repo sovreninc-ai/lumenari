@@ -3,7 +3,23 @@ import { createReadStream } from "node:fs";
 import { readFile, stat } from "node:fs/promises";
 import path from "node:path";
 import { PassThrough } from "node:stream";
-import archiver from "archiver";
+// archiver v8 is pure ESM and exports named classes only — no default export
+// and no `archiver("zip", opts)` factory. The @types package is still on v7
+// (which declares only the old factory), so we re-type the named import.
+// @ts-expect-error: @types/archiver v7 doesn't declare v8's named exports
+import { ZipArchive as ZipArchiveRaw } from "archiver";
+type ZipArchiveInstance = {
+  on(event: "warning" | "error", cb: (err: Error) => void): void;
+  pipe(dest: NodeJS.WritableStream): void;
+  append(
+    source: NodeJS.ReadableStream | Buffer | string,
+    data: { name: string },
+  ): void;
+  finalize(): Promise<void>;
+};
+const ZipArchive = ZipArchiveRaw as unknown as new (opts?: {
+  zlib?: { level?: number };
+}) => ZipArchiveInstance;
 import { supabaseService } from "@/lib/supabase";
 import { getBundle, getKit, type Kit } from "@/data/kits";
 import { isLocale, DEFAULT_LOCALE, type Locale } from "@/i18n/locales";
@@ -121,15 +137,15 @@ export async function GET(req: Request, { params }: Params) {
   // Build the archive. We stream-pipe into a PassThrough so we can hand
   // the response a Web ReadableStream.
   const passthrough = new PassThrough();
-  const archive = archiver("zip", { zlib: { level: 9 } });
+  const archive = new ZipArchive({ zlib: { level: 9 } });
 
   let servedLocale: Locale = DEFAULT_LOCALE;
   let archiveError: Error | null = null;
 
-  archive.on("warning", (err) => {
+  archive.on("warning", (err: Error) => {
     console.warn("[download] archive warning:", err);
   });
-  archive.on("error", (err) => {
+  archive.on("error", (err: Error) => {
     archiveError = err;
     console.error("[download] archive error:", err);
   });
