@@ -119,7 +119,7 @@ export const hi: Dictionary = {
     why: "क्यों:",
     proNudgePrefix:
       "सबकुछ एक साथ चाहिए? Pro+ से हर किट अनलॉक होती है, सिर्फ़",
-    proNudgeSuffix: "CAD/महीना में।",
+    proNudgeSuffix: "USD/महीना में।",
     proNudgeLink: "Pro+ देखें →",
     errorPickRoleAndTask:
       "कृपया एक भूमिका और कम से कम एक काम चुनिए।",
@@ -365,7 +365,7 @@ export const hi: Dictionary = {
       "क्लाइंट डिलीवरेबल में recommendation engine को white-label कीजिए। Business और Enterprise टियर पर Lumenari ब्रांडिंग हटा दी जाती है।",
     pricingHeading: "प्राइसिंग",
     pricingFooter:
-      "सभी पेड टियर हर महीने CAD में बिल होते हैं। कभी भी कैंसल कीजिए।",
+      "सभी पेड टियर हर महीने USD में बिल होते हैं। कभी भी कैंसल कीजिए।",
     quickstartHeading: "बस दो लाइन कोड।",
     quickstartSubPrefix: "बदलिए",
     quickstartSubSuffix: "को अपनी key से और आप लाइव हैं।",

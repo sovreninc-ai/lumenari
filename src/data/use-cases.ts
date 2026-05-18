@@ -60,7 +60,7 @@ export const USE_CASES: UseCase[] = [
       },
       {
         q: "What's the price?",
-        a: "$14 CAD, one-time. Lifetime access to the kit and every update we ship to it.",
+        a: "$14 USD, one-time. Lifetime access to the kit and every update we ship to it.",
       },
     ],
   },
@@ -288,7 +288,7 @@ export const USE_CASES: UseCase[] = [
     primaryKitSlug: "solopreneur-toolkit",
     secondaryKitSlugs: ["support-templates", "brand-voice"],
     pain:
-      "Small businesses lose more time to admin than to actual work. Customer comms, proposals, late-invoice chases, support tickets — all of it is repeatable, and all of it eats the week.\n\nThe Solopreneur Toolkit plus Support Templates plus Brand Voice covers the entire admin spine of a small business in under $50 CAD.",
+      "Small businesses lose more time to admin than to actual work. Customer comms, proposals, late-invoice chases, support tickets — all of it is repeatable, and all of it eats the week.\n\nThe Solopreneur Toolkit plus Support Templates plus Brand Voice covers the entire admin spine of a small business in under $50 USD.",
     faqs: [
       {
         q: "Can I buy multiple kits together?",

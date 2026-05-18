@@ -10,7 +10,7 @@
 
 import { env } from "./env";
 import { renderEmail } from "./email-automation";
-import { formatCAD, getKit } from "@/data/kits";
+import { formatUSD, getKit } from "@/data/kits";
 
 const FREE_KIT_SLUG = "resume-job-search";
 
@@ -166,8 +166,8 @@ Catalog: ${env.siteUrl}/kits
 export function welcomeDay7() {
   const body = `
     <p>You've had a week with one free kit. If it landed, here's the upgrade math.</p>
-    <p>Pro+ is <strong>$19 CAD a month</strong> and unlocks every current kit (100+) and every future one. If you'd reach for two more kits this year — say one for sales outreach and one for SEO content — you've already paid for the year.</p>
-    <p>Annual is $149 CAD (saves $79 vs paying monthly). Lifetime is $399 CAD if you'd rather never see the renewal again.</p>
+    <p>Pro+ is <strong>$19 USD a month</strong> and unlocks every current kit (100+) and every future one. If you'd reach for two more kits this year — say one for sales outreach and one for SEO content — you've already paid for the year.</p>
+    <p>Annual is $149 USD (saves $79 vs paying monthly). Lifetime is $399 USD if you'd rather never see the renewal again.</p>
     <p>No pressure. If the free kit was enough, the free kit was enough.</p>
   `;
   return {
@@ -178,7 +178,7 @@ export function welcomeDay7() {
       body,
       cta: { label: "See Pro+", url: proUrl() },
     }),
-    text: `Pro+ is $19 CAD/mo and unlocks every current + future kit (100+).
+    text: `Pro+ is $19 USD/mo and unlocks every current + future kit (100+).
 
 Two more kits this year = it's paid for itself.
 
@@ -304,18 +304,18 @@ Apply at ${proUrl()} within 7 days.
 export function proAnnualUpgradeNudge({ annualSaveCents }: { annualSaveCents: number }) {
   const body = `
     <p>You've been on Pro+ monthly for five months — thanks for sticking around.</p>
-    <p>If you'd rather not see the renewal email every month, the annual plan saves you <strong>${formatCAD(annualSaveCents)}</strong> a year. Same access, one charge, done.</p>
+    <p>If you'd rather not see the renewal email every month, the annual plan saves you <strong>${formatUSD(annualSaveCents)}</strong> a year. Same access, one charge, done.</p>
     <p>Click below and switch — Stripe handles the proration so you only pay the difference.</p>
   `;
   return {
-    subject: `Save ${formatCAD(annualSaveCents)} — switch to annual?`,
+    subject: `Save ${formatUSD(annualSaveCents)} — switch to annual?`,
     html: renderEmail({
       preheader: "Same access. One charge. Saves $79.",
       heading: "Switch to annual?",
       body,
       cta: { label: "Switch to annual", url: proUrl() },
     }),
-    text: `Annual Pro+ saves you ${formatCAD(annualSaveCents)}/year vs monthly. Same access, one charge.
+    text: `Annual Pro+ saves you ${formatUSD(annualSaveCents)}/year vs monthly. Same access, one charge.
 
 ${proUrl()}
 
@@ -335,7 +335,7 @@ export function proOneTimeBuyerUpsell({
   const body = `
     <p>You've grabbed a couple of kits — thanks. Here's the upgrade math:</p>
     <ul style="margin:0 0 16px;padding:0 0 0 18px;color:#475569;">${list}</ul>
-    <p><strong>Pro+ is $19 CAD a month and unlocks every kit (100+) plus future ones.</strong> If you'd reach for two or three more kits in the next year, Pro+ is the cheaper path.</p>
+    <p><strong>Pro+ is $19 USD a month and unlocks every kit (100+) plus future ones.</strong> If you'd reach for two or three more kits in the next year, Pro+ is the cheaper path.</p>
     <p>No pressure — but the math is there.</p>
   `;
   return {
@@ -371,17 +371,17 @@ export function wishlistPriceDrop({
   const name = kit?.name ?? "A kit you saved";
   const body = `
     <p>The kit you saved — <strong>${name}</strong> — just dropped in price.</p>
-    <p>Was ${formatCAD(oldCents)}, now ${formatCAD(newCents)}.</p>
+    <p>Was ${formatUSD(oldCents)}, now ${formatUSD(newCents)}.</p>
   `;
   return {
-    subject: `${name} just dropped to ${formatCAD(newCents)}`,
+    subject: `${name} just dropped to ${formatUSD(newCents)}`,
     html: renderEmail({
-      preheader: `Saved kit price drop — was ${formatCAD(oldCents)}.`,
+      preheader: `Saved kit price drop — was ${formatUSD(oldCents)}.`,
       heading: "Your saved kit just dropped in price.",
       body,
       cta: { label: "See the kit", url: kitUrl(kitSlug) },
     }),
-    text: `${name} dropped from ${formatCAD(oldCents)} to ${formatCAD(newCents)}.
+    text: `${name} dropped from ${formatUSD(oldCents)} to ${formatUSD(newCents)}.
 
 ${kitUrl(kitSlug)}
 

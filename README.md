@@ -51,7 +51,7 @@ Then visit http://localhost:3000.
 ## Chris-side TODO before the site is live
 
 1. **Create a new Supabase project** at supabase.com. Apply `supabase/migrations/0001_init.sql` from the SQL editor (or via `supabase db push` from the CLI).
-2. **Stripe dashboard:** create 6 one-time products + 1 bundle product. Paste their Price IDs into `.env.local` (`STRIPE_PRICE_*`). Mode: payment, currency: CAD.
+2. **Stripe dashboard:** create 6 one-time products + 1 bundle product. Paste their Price IDs into `.env.local` (`STRIPE_PRICE_*`). Mode: payment, currency: USD.
 3. **Stripe webhook:** in the dashboard, add a webhook endpoint pointing to `https://lumenari.io/api/webhook/stripe`. Subscribe to `checkout.session.completed`. Copy the signing secret to `STRIPE_WEBHOOK_SECRET`.
 4. **Anthropic API key** at console.anthropic.com → paste into `ANTHROPIC_API_KEY`.
 5. **Resend** at resend.com → verify `lumenari.io` as a sending domain, paste the API key into `RESEND_API_KEY`.

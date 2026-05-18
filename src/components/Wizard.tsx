@@ -7,7 +7,7 @@ import {
   KITS,
   BUNDLES,
   bundleSavings,
-  formatCAD,
+  formatUSD,
   type Kit,
 } from "@/data/kits";
 import { KitCard } from "./KitCard";
@@ -205,7 +205,7 @@ export function Wizard() {
                     kit={kit}
                     reason={r.reason}
                     index={i}
-                    label={`${t.getThisKitPrefix} · ${formatCAD(kit.priceCents)}`}
+                    label={`${t.getThisKitPrefix} · ${formatUSD(kit.priceCents)}`}
                     key={kit.slug}
                   />
                 );
@@ -284,16 +284,16 @@ function FeaturedBundles({
                 {b.tagline}
               </p>
               <p className="text-sm mt-2">
-                <strong>{formatCAD(b.priceCents)}</strong>
+                <strong>{formatUSD(b.priceCents)}</strong>
                 <span className="text-[var(--muted)]">
                   {" "}
-                  · {savesLabel} {formatCAD(bundleSavings(b))}
+                  · {savesLabel} {formatUSD(bundleSavings(b))}
                 </span>
               </p>
             </div>
             <BuyButton
               slugs={[b.slug]}
-              label={`${getBundlePrefix} · ${formatCAD(b.priceCents)}`}
+              label={`${getBundlePrefix} · ${formatUSD(b.priceCents)}`}
               className="md:w-64"
             />
           </div>

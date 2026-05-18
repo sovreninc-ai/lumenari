@@ -39,6 +39,6 @@ export const post: BlogPost = {
     },
   ],
   outro: [
-    "If you're writing more than two listings a week, the Real Estate Pro kit pays for itself in the first day. It's $14 CAD, one-time. Lifetime access, four formats (Claude / ChatGPT / Custom GPT / per-platform quick start), and updates as we sharpen the prompts against real agent feedback.",
+    "If you're writing more than two listings a week, the Real Estate Pro kit pays for itself in the first day. It's $14 USD, one-time. Lifetime access, four formats (Claude / ChatGPT / Custom GPT / per-platform quick start), and updates as we sharpen the prompts against real agent feedback.",
   ],
 };

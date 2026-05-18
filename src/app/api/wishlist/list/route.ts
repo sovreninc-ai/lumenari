@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
 import { supabaseService } from "@/lib/supabase";
-import { getKit, getBundle, formatCAD } from "@/data/kits";
+import { getKit, getBundle, formatUSD } from "@/data/kits";
 
 /**
  * GET /api/wishlist/list?email=... OR  ?lead=<uuid>
@@ -83,9 +83,9 @@ export async function GET(req: Request) {
       name: kit?.name ?? bundle?.name ?? r.kit_slug,
       tagline: kit?.tagline ?? bundle?.tagline ?? "",
       price: kit
-        ? formatCAD(kit.priceCents)
+        ? formatUSD(kit.priceCents)
         : bundle
-          ? formatCAD(bundle.priceCents)
+          ? formatUSD(bundle.priceCents)
           : null,
       kind: kit ? "kit" : bundle ? "bundle" : "unknown",
       savedAt: r.created_at,

@@ -2,7 +2,7 @@ import { redirect } from "next/navigation";
 import Link from "next/link";
 import { getAdminEmail } from "@/lib/admin-auth";
 import { loadAdminStats } from "@/lib/admin-stats";
-import { formatCAD } from "@/data/kits";
+import { formatUSD } from "@/data/kits";
 import { AdminLineChart, AdminBarChart } from "@/components/admin-charts";
 
 /**
@@ -57,12 +57,12 @@ export default async function AdminPage() {
         aria-label="Top metrics"
         className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4"
       >
-        <KPI label="Today's revenue" value={formatCAD(kpis.revenueTodayCents)} />
-        <KPI label="This month" value={formatCAD(kpis.revenueMonthCents)} />
-        <KPI label="This year" value={formatCAD(kpis.revenueYearCents)} />
+        <KPI label="Today's revenue" value={formatUSD(kpis.revenueTodayCents)} />
+        <KPI label="This month" value={formatUSD(kpis.revenueMonthCents)} />
+        <KPI label="This year" value={formatUSD(kpis.revenueYearCents)} />
         <KPI label="Customers" value={kpis.totalCustomers.toLocaleString()} />
         <KPI label="Active Pro+" value={kpis.activeProPlus.toLocaleString()} />
-        <KPI label="Pro+ MRR" value={formatCAD(kpis.proPlusMRRCents)} />
+        <KPI label="Pro+ MRR" value={formatUSD(kpis.proPlusMRRCents)} />
         <KPI label="Newsletter" value={kpis.newsletterListSize.toLocaleString()} />
         <KPI
           label="Conv. 30d"
@@ -85,7 +85,7 @@ export default async function AdminPage() {
               x: p.date,
               y: p.cents / 100,
             }))}
-            yLabel="CAD"
+            yLabel="USD"
           />
         </ChartCard>
         <ChartCard title="New customers — last 90 days">
@@ -102,7 +102,7 @@ export default async function AdminPage() {
             data={stats.topKits30d.map((k) => ({
               label: k.name,
               value: k.saleCount,
-              sublabel: formatCAD(k.revenueCents),
+              sublabel: formatUSD(k.revenueCents),
             }))}
           />
         </ChartCard>
@@ -134,7 +134,7 @@ export default async function AdminPage() {
                   </td>
                   <td className="px-4 py-2 text-right">{k.saleCount}</td>
                   <td className="px-4 py-2 text-right">
-                    {formatCAD(k.revenueCents)}
+                    {formatUSD(k.revenueCents)}
                   </td>
                 </tr>
               ))}
@@ -167,7 +167,7 @@ export default async function AdminPage() {
                   <td className="px-4 py-2 truncate max-w-[14rem]">{p.email}</td>
                   <td className="px-4 py-2 capitalize">{p.tier}</td>
                   <td className="px-4 py-2 text-right">
-                    {formatCAD(p.mrrCents)}
+                    {formatUSD(p.mrrCents)}
                   </td>
                 </tr>
               ))}
@@ -201,7 +201,7 @@ export default async function AdminPage() {
                     {p.kitIds.length > 2 ? ` +${p.kitIds.length - 2}` : ""}
                   </td>
                   <td className="px-4 py-2 text-right">
-                    {p.amountCents !== null ? formatCAD(p.amountCents) : "—"}
+                    {p.amountCents !== null ? formatUSD(p.amountCents) : "—"}
                   </td>
                   <td className="px-4 py-2 text-right text-[var(--muted)]">
                     {formatRelative(p.createdAt)}

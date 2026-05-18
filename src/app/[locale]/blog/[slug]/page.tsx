@@ -4,7 +4,7 @@ import { ArrowLeft } from "lucide-react";
 import { LOCALES, type Locale, isLocale } from "@/i18n/locales";
 import { getDictionary } from "@/i18n/dictionaries";
 import { allBlogSlugs, getBlogPost } from "@/lib/blog";
-import { getKit, formatCAD } from "@/data/kits";
+import { getKit, formatUSD } from "@/data/kits";
 import { blogPostMetadata, siteUrl } from "@/lib/seo";
 import {
   JsonLd,
@@ -148,7 +148,7 @@ export default async function BlogPostPage({ params }: PageProps) {
             </div>
             <div className="flex flex-col items-end gap-1 flex-shrink-0">
               <div className="text-xl font-semibold">
-                {formatCAD(kit.priceCents)}
+                {formatUSD(kit.priceCents)}
               </div>
               <BuyButton
                 slugs={[kit.slug]}

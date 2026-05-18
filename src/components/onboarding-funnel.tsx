@@ -3,7 +3,7 @@
 import { useState, useTransition } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ArrowRight, Loader2, RotateCcw, Check } from "lucide-react";
-import { KITS, formatCAD } from "@/data/kits";
+import { KITS, formatUSD } from "@/data/kits";
 import { KitCard } from "./KitCard";
 import { useDictionary } from "@/i18n/use-dictionary";
 import type { Dictionary } from "@/i18n/dictionaries";
@@ -405,7 +405,7 @@ function RecsView({
             ) : null,
           )}
           <p className="text-xs text-[var(--muted)] pt-2">
-            {t.proNudgePrefix} {formatCAD(1900)} {t.proNudgeSuffix}{" "}
+            {t.proNudgePrefix} {formatUSD(1900)} {t.proNudgeSuffix}{" "}
             <a
               href="/pro"
               className="underline hover:text-[var(--foreground)]"

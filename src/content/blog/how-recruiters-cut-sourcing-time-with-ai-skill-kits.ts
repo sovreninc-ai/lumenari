@@ -57,10 +57,10 @@ export const post: BlogPost = {
     {
       heading: "The kits the top recruiters reach for",
       paragraphs: [
-        "The Lumenari Recruiter Pro is the obvious starting point — it's purpose-built for sourcing, outreach, and screening note structure across technical and non-technical roles. The kit is $14 CAD once, lifetime access, ships in four formats. For a recruiter doing two or more searches a month, the time savings pay for it on day one.",
+        "The Lumenari Recruiter Pro is the obvious starting point — it's purpose-built for sourcing, outreach, and screening note structure across technical and non-technical roles. The kit is $14 USD once, lifetime access, ships in four formats. For a recruiter doing two or more searches a month, the time savings pay for it on day one.",
         "Recruiters running high-volume cold outreach often pair it with the Sales Outreach Pro kit — the persuasion mechanics there transfer cleanly to candidate outreach, especially for passive senior hires. The two kits together are about $28, or you pick up the Career Pack bundle which covers both for $35.",
         "If you're an in-house TA leader, the Talent Acquisition kit covers the upstream work — calibration calls with hiring managers, role brief templates, scorecards, and interview loop structure. It's another $14 and shows up everywhere your team's process touches the hiring manager.",
-        "For solo recruiters or agency principals, the Pro+ subscription ($19 CAD/mo) unlocks every kit on Lumenari plus future ones. If you'd reach for two or three different kits a year — and most recruiters working across role families would — Pro+ is the buy.",
+        "For solo recruiters or agency principals, the Pro+ subscription ($19 USD/mo) unlocks every kit on Lumenari plus future ones. If you'd reach for two or three different kits a year — and most recruiters working across role families would — Pro+ is the buy.",
       ],
     },
     {
@@ -90,7 +90,7 @@ export const post: BlogPost = {
     },
   ],
   outro: [
-    "The 2026 recruiting playbook is settled, and AI skill kits are now table stakes for any recruiter who wants to keep up. The Recruiter Pro at $14 is the lowest-friction starting point. Pro+ at $19 CAD/mo is the move if you'd buy two or three kits this year. Either way, the time savings show up in the first week and compound from there.",
+    "The 2026 recruiting playbook is settled, and AI skill kits are now table stakes for any recruiter who wants to keep up. The Recruiter Pro at $14 is the lowest-friction starting point. Pro+ at $19 USD/mo is the move if you'd buy two or three kits this year. Either way, the time savings show up in the first week and compound from there.",
     "Browse the full catalog at /kits — Recruiter Pro, Talent Acquisition, Internal Recruiter, Sales Outreach Pro, and the Career Pack bundle all live there.",
   ],
 };

@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { motion } from "framer-motion";
 import { ArrowRight, Sparkles } from "lucide-react";
-import { formatCAD, type Kit } from "@/data/kits";
+import { formatUSD, type Kit } from "@/data/kits";
 import { useDictionary } from "@/i18n/use-dictionary";
 
 const aiLabel: Record<string, string> = {
@@ -52,7 +52,7 @@ export function KitCard({ kit, reason, index = 0 }: KitCardProps) {
 
       <div className="mt-6 pt-5 border-t border-[var(--hairline)] flex items-center justify-between">
         <span className="text-lg font-semibold">
-          {formatCAD(kit.priceCents)}
+          {formatUSD(kit.priceCents)}
         </span>
         <Link
           href={`/kits/${kit.slug}`}

@@ -4,7 +4,7 @@ import { ArrowRight, Check } from "lucide-react";
 import { LOCALES, type Locale, isLocale } from "@/i18n/locales";
 import { getDictionary } from "@/i18n/dictionaries";
 import { USE_CASES, getUseCase } from "@/data/use-cases";
-import { getKit, formatCAD, type Kit } from "@/data/kits";
+import { getKit, formatUSD, type Kit } from "@/data/kits";
 import { BuyButton } from "@/components/BuyButton";
 import { useCaseLandingMetadata, siteUrl } from "@/lib/seo";
 import {
@@ -122,7 +122,7 @@ export default async function UseCaseLandingPage({ params }: PageProps) {
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pt-5 border-t border-[var(--hairline)]">
             <div>
               <div className="text-2xl font-semibold">
-                {formatCAD(primaryKit.priceCents)}
+                {formatUSD(primaryKit.priceCents)}
               </div>
               <div className="text-sm text-[var(--muted)]">
                 {t.oneTimeLifetime}

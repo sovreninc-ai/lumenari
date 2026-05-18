@@ -117,7 +117,7 @@ export const ja: Dictionary = {
       "うまくキットを選定できませんでした — カタログを直接ご覧ください。",
     why: "理由:",
     proNudgePrefix: "全部使い放題がいいですか? Pro+なら、すべてのキットが",
-    proNudgeSuffix: "CAD/月でご利用いただけます。",
+    proNudgeSuffix: "USD/月でご利用いただけます。",
     proNudgeLink: "Pro+を見る →",
     errorPickRoleAndTask:
       "役割と少なくとも1つのタスクを選択してください。",
@@ -363,7 +363,7 @@ export const ja: Dictionary = {
       "推薦エンジンをホワイトラベルでクライアント向け納品物に組み込めます。Business・Enterpriseプランでは Lumenariブランディングを外せます。",
     pricingHeading: "料金",
     pricingFooter:
-      "有料プランはすべて月額、CADでの請求です。いつでも解約できます。",
+      "有料プランはすべて月額、USDでの請求です。いつでも解約できます。",
     quickstartHeading: "コードはたった2行。",
     quickstartSubPrefix: "",
     quickstartSubSuffix: "をご自分のキーに置き換えれば、すぐに動きます。",

@@ -38,6 +38,6 @@ export const post: BlogPost = {
     },
   ],
   outro: [
-    "The Recruiter Pro kit is $14 CAD. If it saves a single hour a week — and the working recruiter who described this workflow said it saved her six — it pays for itself in under a day. Lifetime access, four formats, and updates as the kit gets sharpened against real feedback.",
+    "The Recruiter Pro kit is $14 USD. If it saves a single hour a week — and the working recruiter who described this workflow said it saved her six — it pays for itself in under a day. Lifetime access, four formats, and updates as the kit gets sharpened against real feedback.",
   ],
 };

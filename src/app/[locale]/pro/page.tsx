@@ -1,6 +1,6 @@
 import { Check } from "lucide-react";
 import { PRO_PLUS, type ProTier } from "@/data/subscription-tiers";
-import { formatCAD } from "@/data/kits";
+import { formatUSD } from "@/data/kits";
 import { ProCheckoutButton } from "@/components/ProCheckoutButton";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
 import { getDictionary } from "@/i18n/dictionaries";
@@ -48,7 +48,7 @@ export default async function ProPage({
     { name: "Pro+", url: `${base}/pro` },
   ]);
   const faqSchema = FAQPageSchema([...t.faq]);
-  const annualSavings = `${t.annualSavingsPrefix} ${formatCAD(PRO_PLUS.monthly_cents * 12 - PRO_PLUS.annual_cents)} ${t.annualSavingsSuffix}`;
+  const annualSavings = `${t.annualSavingsPrefix} ${formatUSD(PRO_PLUS.monthly_cents * 12 - PRO_PLUS.annual_cents)} ${t.annualSavingsSuffix}`;
 
   const ctaLabel = (tier: ProTier): string => {
     switch (tier) {
@@ -193,7 +193,7 @@ function PricingCard({
       <span className="eyebrow">{eyebrow}</span>
       <div className="mt-4 mb-1 flex items-baseline gap-2">
         <span className="text-4xl sm:text-5xl font-semibold tracking-tight">
-          {formatCAD(price)}
+          {formatUSD(price)}
         </span>
         <span className="text-sm text-[var(--muted)]">{cadence}</span>
       </div>

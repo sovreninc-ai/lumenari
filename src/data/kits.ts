@@ -2243,10 +2243,10 @@ export function bundleSavings(bundle: Bundle): number {
   return Math.max(0, bundleStandaloneTotal(bundle) - bundle.priceCents);
 }
 
-export function formatCAD(cents: number): string {
-  return new Intl.NumberFormat("en-CA", {
+export function formatUSD(cents: number): string {
+  return new Intl.NumberFormat("en-US", {
     style: "currency",
-    currency: "CAD",
+    currency: "USD",
     maximumFractionDigits: 0,
   }).format(cents / 100);
 }

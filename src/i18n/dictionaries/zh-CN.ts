@@ -116,7 +116,7 @@ export const zhCN: Dictionary = {
       "我们暂时无法精准推荐——欢迎直接浏览目录。",
     why: "原因:",
     proNudgePrefix: "想要全部解锁?Pro+ 每月仅需",
-    proNudgeSuffix: "CAD,即可使用所有工具包。",
+    proNudgeSuffix: "USD,即可使用所有工具包。",
     proNudgeLink: "了解 Pro+ →",
     errorPickRoleAndTask: "请选择一个角色和至少一项任务。",
     errorFetch: "无法获取推荐结果。",
@@ -360,7 +360,7 @@ export const zhCN: Dictionary = {
     useCase3Body:
       "将推荐引擎白标嵌入交付物。Business 与 Enterprise 套餐去除 Lumenari 品牌标识。",
     pricingHeading: "定价",
-    pricingFooter: "所有付费套餐均以 CAD 按月计费。可随时取消。",
+    pricingFooter: "所有付费套餐均以 USD 按月计费。可随时取消。",
     quickstartHeading: "两行代码搞定。",
     quickstartSubPrefix: "把",
     quickstartSubSuffix: "替换成您的密钥即可生效。",

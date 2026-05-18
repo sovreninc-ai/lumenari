@@ -110,7 +110,7 @@ export const post: BlogPost = {
         "Spend the next 25 minutes on the Patterns block — three to seven patterns with one code example each. Skip the philosophy; show the canonical case.",
         "Spend 10 minutes on the Identifier, Purpose, and When-to-stop blocks. They should be quick — they're plumbing, not value.",
         "Spend the last 10 minutes testing. Open a fresh Claude project, drop in the SKILL.md, and run two practice tasks. If the model follows the constraints without prompting, ship the skill. If not, identify which constraint isn't sticking and sharpen it.",
-        "If you'd rather start with a tested kit instead of authoring blind, the Lumenari catalog has 21 dev-specific kits — Next.js + Supabase production, Supabase RLS, Stripe Connect, Python data, iOS SwiftUI, Go backend, Node backend, Rails, GraphQL design, Security engineer, Postgres DBA, and more — each one a tested SKILL.md plus the supporting files. Pro+ unlocks the whole catalog for $19 CAD/mo.",
+        "If you'd rather start with a tested kit instead of authoring blind, the Lumenari catalog has 21 dev-specific kits — Next.js + Supabase production, Supabase RLS, Stripe Connect, Python data, iOS SwiftUI, Go backend, Node backend, Rails, GraphQL design, Security engineer, Postgres DBA, and more — each one a tested SKILL.md plus the supporting files. Pro+ unlocks the whole catalog for $19 USD/mo.",
       ],
     },
   ],

@@ -1,5 +1,5 @@
 import { ImageResponse } from "next/og";
-import { getKit, getBundle, formatCAD } from "@/data/kits";
+import { getKit, getBundle, formatUSD } from "@/data/kits";
 
 export const runtime = "nodejs";
 
@@ -143,7 +143,7 @@ export async function GET(_req: Request, { params }: Params) {
                 fontWeight: 600,
               }}
             >
-              {price > 0 ? `${formatCAD(price)} CAD` : "Bundle"}
+              {price > 0 ? `${formatUSD(price)} USD` : "Bundle"}
             </span>
           </div>
           <span style={{ fontSize: 20, opacity: 0.8 }}>lumenari.io</span>

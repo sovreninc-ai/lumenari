@@ -298,7 +298,7 @@ function Endpoints({ t }: { t: ApiDocsDict }) {
       "tagline": "RLS-aware App Router patterns...",
       "description": "...",
       "price_cents": 1900,
-      "currency": "cad",
+      "currency": "usd",
       "ai_targets": ["claude-code", "claude", "cursor"],
       "personas": [...],
       "keywords": [...],

@@ -7,7 +7,7 @@ import {
   getKit,
   getBundle,
   bundleSavings,
-  formatCAD,
+  formatUSD,
   type Bundle,
 } from "@/data/kits";
 import { BuyButton } from "@/components/BuyButton";
@@ -92,7 +92,7 @@ export default async function KitDetailPage({ params }: PageProps) {
           {dict.kitDetail.optimizedForPrefix} {kit.aiTargets.join(" · ")}
         </span>
         <span className="rounded-full bg-[var(--surface)] border border-[var(--hairline)] px-3 py-1.5">
-          {dict.kitDetail.oneTimePrefix} {formatCAD(kit.priceCents)}
+          {dict.kitDetail.oneTimePrefix} {formatUSD(kit.priceCents)}
         </span>
       </div>
 
@@ -120,7 +120,7 @@ export default async function KitDetailPage({ params }: PageProps) {
 
       <div className="rounded-2xl bg-[var(--surface)] border border-[var(--hairline)] p-6 sm:p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
-          <p className="text-2xl font-semibold">{formatCAD(kit.priceCents)}</p>
+          <p className="text-2xl font-semibold">{formatUSD(kit.priceCents)}</p>
           <p className="text-sm text-[var(--muted)]">
             {dict.kitDetail.lifetimeAccess}
           </p>
@@ -199,10 +199,10 @@ function BundlePage({
         <div className="rounded-3xl bg-white p-8 flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
             <p className="text-3xl font-semibold">
-              {formatCAD(bundle.priceCents)}
+              {formatUSD(bundle.priceCents)}
             </p>
             <p className="text-sm text-[var(--muted)]">
-              {dict.bundleDetail.savesPrefix} {formatCAD(bundleSavings(bundle))}{" "}
+              {dict.bundleDetail.savesPrefix} {formatUSD(bundleSavings(bundle))}{" "}
               {dict.bundleDetail.savesSuffix}
             </p>
           </div>
@@ -249,10 +249,10 @@ function BundleNudges({
         {dict.kitDetail.bundleNudgeMiddle} {nudge.kitSlugs.length}{" "}
         {dict.kitDetail.bundleNudgeKitsFor}{" "}
         <strong className="text-[var(--foreground)]">
-          {formatCAD(nudge.priceCents)}
+          {formatUSD(nudge.priceCents)}
         </strong>{" "}
         {dict.kitDetail.bundleNudgeSaves}
-        {formatCAD(bundleSavings(nudge))}
+        {formatUSD(bundleSavings(nudge))}
         {dict.kitDetail.bundleNudgeSavesClose}
       </span>
       <Link

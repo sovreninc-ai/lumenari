@@ -115,7 +115,7 @@ export const en = {
       "We couldn't pick a kit cleanly — try browsing the catalog directly.",
     why: "Why:",
     proNudgePrefix: "Prefer the all-access route? Pro+ unlocks every kit for",
-    proNudgeSuffix: "CAD/month.",
+    proNudgeSuffix: "USD/month.",
     proNudgeLink: "See Pro+ →",
     errorPickRoleAndTask: "Please pick a role and at least one task.",
     errorFetch: "Couldn't fetch recommendations.",
@@ -359,7 +359,7 @@ export const en = {
     useCase3Body:
       "White-label the recommendation engine into deliverables for clients. Business and Enterprise tiers strip Lumenari branding.",
     pricingHeading: "Pricing",
-    pricingFooter: "All paid tiers billed monthly in CAD. Cancel anytime.",
+    pricingFooter: "All paid tiers billed monthly in USD. Cancel anytime.",
     quickstartHeading: "Two lines of code.",
     quickstartSubPrefix: "Replace",
     quickstartSubSuffix: "with your key and you're live.",

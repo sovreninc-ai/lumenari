@@ -59,7 +59,7 @@ export const COMPETITORS: Competitor[] = [
       { feature: "Bundles", lumenari: "6 bundles, save 30-50%", competitor: "Single-kit purchases" },
       { feature: "Subscription option", lumenari: "Pro+ all-access", competitor: "Per-kit only" },
       { feature: "Catalog size", lumenari: "20+ and scaling to 100", competitor: "Larger long-tail" },
-      { feature: "Price range", lumenari: "$14–$29 CAD", competitor: "Varies widely" },
+      { feature: "Price range", lumenari: "$14–$29 USD", competitor: "Varies widely" },
     ],
     faqs: [
       {
@@ -100,7 +100,7 @@ export const COMPETITORS: Competitor[] = [
       { feature: "Subscription tier", lumenari: "Pro+ all-access", competitor: "Limited" },
       { feature: "Embeddable API", lumenari: "Yes — Free/Pro/Business", competitor: "Limited" },
       { feature: "Multi-locale storefront", lumenari: "6 languages", competitor: "Primarily English" },
-      { feature: "Price range", lumenari: "$14–$29 CAD", competitor: "Varies" },
+      { feature: "Price range", lumenari: "$14–$29 USD", competitor: "Varies" },
     ],
     faqs: [
       {
@@ -134,7 +134,7 @@ export const COMPETITORS: Competitor[] = [
       "Native function calling and code interpreter access.",
     ],
     rows: [
-      { feature: "Price", lumenari: "$14–$29 CAD per kit (or Pro+ subscription)", competitor: "Mostly free with ChatGPT Plus" },
+      { feature: "Price", lumenari: "$14–$29 USD per kit (or Pro+ subscription)", competitor: "Mostly free with ChatGPT Plus" },
       { feature: "AI tool support", lumenari: "Claude, ChatGPT, Cursor, Gemini, any", competitor: "ChatGPT only" },
       { feature: "Quality control", lumenari: "Every kit curated in-house", competitor: "Anyone can publish" },
       { feature: "Offline / portable", lumenari: "You own the files", competitor: "Lives inside ChatGPT" },
@@ -177,7 +177,7 @@ export const COMPETITORS: Competitor[] = [
       "You can study the prompts and learn the patterns directly.",
     ],
     rows: [
-      { feature: "Price", lumenari: "$14–$29 CAD per kit", competitor: "Free" },
+      { feature: "Price", lumenari: "$14–$29 USD per kit", competitor: "Free" },
       { feature: "Curation", lumenari: "Every kit tested in-house", competitor: "Unmoderated" },
       { feature: "Updates", lumenari: "Maintained — you get updates", competitor: "Repo-dependent" },
       { feature: "Multi-AI delivery", lumenari: "4 formats per kit", competitor: "Mostly SKILL.md only" },
@@ -228,7 +228,7 @@ export const COMPETITORS: Competitor[] = [
       { feature: "Curated prompts", lumenari: "Yes — every kit tested in-house", competitor: "Built-in summarize/draft buttons" },
       { feature: "Workspace context", lumenari: "Whatever you paste in", competitor: "Reads your Notion pages directly" },
       { feature: "Portability", lumenari: "Files you own", competitor: "Tied to Notion subscription" },
-      { feature: "Pricing", lumenari: "$14–$29 CAD per kit or Pro+ $19/mo", competitor: "$10 USD/mo on top of Notion" },
+      { feature: "Pricing", lumenari: "$14–$29 USD per kit or Pro+ $19/mo", competitor: "$10 USD/mo on top of Notion" },
       { feature: "Multi-AI portability", lumenari: "Same kit across every AI", competitor: "Notion AI only" },
       { feature: "Update cadence", lumenari: "Refresh pushed when models change", competitor: "Notion's roadmap" },
     ],
@@ -282,7 +282,7 @@ export const COMPETITORS: Competitor[] = [
     rows: [
       { feature: "Product shape", lumenari: "Portable kits + recommendation wizard", competitor: "Full marketing platform" },
       { feature: "AI tool support", lumenari: "Claude, ChatGPT, Cursor, Gemini, any", competitor: "Jasper-hosted models" },
-      { feature: "Pricing model", lumenari: "Per kit / Pro+ $19 CAD/mo", competitor: "Per seat, $39–$59 USD/mo and up" },
+      { feature: "Pricing model", lumenari: "Per kit / Pro+ $19 USD/mo", competitor: "Per seat, $39–$59 USD/mo and up" },
       { feature: "Brand-voice management", lumenari: "Brand-voice kit + per-kit voice presets", competitor: "First-class workspace feature" },
       { feature: "Team collaboration", lumenari: "Files you share like any doc", competitor: "Built-in review + roles" },
       { feature: "Specialization breadth", lumenari: "100+ role-specific kits", competitor: "Marketing + adjacent" },
@@ -308,7 +308,7 @@ export const COMPETITORS: Competitor[] = [
       },
       {
         q: "What's the pricing math at a small-team level?",
-        a: "Three-person marketing team with Jasper: roughly $120-180 USD per month at minimum, scaling as you add seats. Same three people on Pro+ Lumenari: $57 CAD per month total, with every kit unlocked for each person. The trade is platform features for portability and per-kit depth. If your team mostly produces content inside Claude or ChatGPT anyway, the math swings hard toward Lumenari.",
+        a: "Three-person marketing team with Jasper: roughly $120-180 USD per month at minimum, scaling as you add seats. Same three people on Pro+ Lumenari: $57 USD per month total, with every kit unlocked for each person. The trade is platform features for portability and per-kit depth. If your team mostly produces content inside Claude or ChatGPT anyway, the math swings hard toward Lumenari.",
       },
     ],
   },
@@ -340,7 +340,7 @@ export const COMPETITORS: Competitor[] = [
       { feature: "Where it runs", lumenari: "Cursor, Claude Code, ChatGPT, any AI", competitor: "Cursor only" },
       { feature: "Stack specialization", lumenari: "Next.js, Supabase, Stripe, RLS, Python, Go, etc.", competitor: "General coding rules" },
       { feature: "Setup", lumenari: "Drop the SKILL.md into the project", competitor: "Author your own .cursorrules" },
-      { feature: "Cost", lumenari: "$19 CAD per dev kit or Pro+", competitor: "Included with Cursor" },
+      { feature: "Cost", lumenari: "$19 USD per dev kit or Pro+", competitor: "Included with Cursor" },
       { feature: "Multi-AI portability", lumenari: "Same kit across tools", competitor: "Cursor-only" },
       { feature: "Maintained", lumenari: "Updates pushed", competitor: "DIY" },
       { feature: "Companion files", lumenari: "memory.md, voice presets, quick starts", competitor: "Single rules file" },
@@ -394,7 +394,7 @@ export const COMPETITORS: Competitor[] = [
       "Active GitHub community around the repo — discussions, issues, and forks reveal real patterns of how the format is being adopted in practice.",
     ],
     rows: [
-      { feature: "Price", lumenari: "$14–$29 CAD per kit or Pro+ $19/mo", competitor: "Free" },
+      { feature: "Price", lumenari: "$14–$29 USD per kit or Pro+ $19/mo", competitor: "Free" },
       { feature: "Catalog scope", lumenari: "100+ role + stack kits", competitor: "Reference / canonical examples" },
       { feature: "Multi-AI delivery", lumenari: "Claude, ChatGPT, Cursor, Gemini, any", competitor: "Claude-first" },
       { feature: "Updates", lumenari: "Maintained — pull included", competitor: "Anthropic's release cadence" },
@@ -451,7 +451,7 @@ export const COMPETITORS: Competitor[] = [
       "Live signal on what's working — high-upvote prompts are surfacing real demand, which is useful market intelligence even if you don't end up using the specific prompt.",
     ],
     rows: [
-      { feature: "Price", lumenari: "$14–$29 CAD per kit", competitor: "Free" },
+      { feature: "Price", lumenari: "$14–$29 USD per kit", competitor: "Free" },
       { feature: "Curation", lumenari: "Every kit tested in-house", competitor: "Crowd-sourced" },
       { feature: "Coverage per topic", lumenari: "Full kit (4 formats per role)", competitor: "Single prompts, often partial" },
       { feature: "Maintenance", lumenari: "Updated as models change", competitor: "Posts go stale" },
@@ -508,7 +508,7 @@ export const COMPETITORS: Competitor[] = [
       "Forces you to actually understand your own workflow — the act of authoring a prompt is itself useful diagnostic work for figuring out what you actually want the AI to do.",
     ],
     rows: [
-      { feature: "Price", lumenari: "$14–$29 CAD per kit", competitor: "Free" },
+      { feature: "Price", lumenari: "$14–$29 USD per kit", competitor: "Free" },
       { feature: "Time to first useful output", lumenari: "~2 minutes", competitor: "Hours to days, iterating" },
       { feature: "Customization ceiling", lumenari: "Edit anything inside the kit", competitor: "Unlimited" },
       { feature: "Maintenance burden", lumenari: "Updates included", competitor: "You" },

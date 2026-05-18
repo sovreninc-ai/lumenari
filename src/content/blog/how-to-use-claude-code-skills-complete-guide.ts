@@ -84,7 +84,7 @@ export const post: BlogPost = {
       heading: "Should you author your own or use a curated kit?",
       paragraphs: [
         "If you've got a strong opinion on your stack and an hour of evening time, author your own. The exercise of writing the constraints clarifies what your team actually believes, and a hand-rolled skill is always going to outperform a generic one in the specific corners of your codebase.",
-        "If you'd rather start with something that already works, the Lumenari kit catalog has 21 dev-specific kits — Next.js + Supabase production, Stripe Connect, Supabase RLS, iOS SwiftUI, Python data, Go backend, Rails backend, Node backend, Postgres DBA, GraphQL design, REST API design, Security engineer, and more. Each one is a tested SKILL.md plus the supporting files. The Developer Mega Stack bundles the lot for $199 CAD (saves $181 vs buying individually).",
+        "If you'd rather start with something that already works, the Lumenari kit catalog has 21 dev-specific kits — Next.js + Supabase production, Stripe Connect, Supabase RLS, iOS SwiftUI, Python data, Go backend, Rails backend, Node backend, Postgres DBA, GraphQL design, REST API design, Security engineer, and more. Each one is a tested SKILL.md plus the supporting files. The Developer Mega Stack bundles the lot for $199 USD (saves $181 vs buying individually).",
         "Honestly, the right move for most builders is a hybrid: buy the kit for your stack as a starting point, then edit it down to fit your team's conventions. The constraint block almost never needs touching; the patterns block always does. Five minutes of editing buys you a skill calibrated to your team in less time than authoring one from scratch.",
       ],
     },
@@ -107,6 +107,6 @@ export const post: BlogPost = {
   ],
   outro: [
     "Skills are the highest-leverage thing you can ship into your AI tooling in 2026. The format is simple, the craft is harder, and the gap between a working skill and a bad one is the difference between a senior teammate and a confused intern. Whether you author your own or grab a Lumenari kit as a starting point, the move is the same: get a SKILL.md in place this week, test it, edit it, and watch your AI start to do the job instead of just demoing it.",
-    "The Lumenari dev kit shelf is at /kits — 21 dev-specific kits, every one with a tested SKILL.md, memory.md template, and the four-format delivery. Pro+ unlocks the whole catalog plus future kits for $19 CAD/mo if you'd reach for two or three a year anyway.",
+    "The Lumenari dev kit shelf is at /kits — 21 dev-specific kits, every one with a tested SKILL.md, memory.md template, and the four-format delivery. Pro+ unlocks the whole catalog plus future kits for $19 USD/mo if you'd reach for two or three a year anyway.",
   ],
 };

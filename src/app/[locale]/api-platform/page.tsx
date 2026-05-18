@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Check, Code2, ArrowRight } from "lucide-react";
 import { API_TIER_LIST, type ApiTierConfig } from "@/data/subscription-tiers";
-import { formatCAD } from "@/data/kits";
+import { formatUSD } from "@/data/kits";
 import { ApiCheckoutButton } from "@/components/ApiCheckoutButton";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
 import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
@@ -223,7 +223,7 @@ function PricingCard({ tier, dict }: { tier: ApiTierConfig; dict: Dictionary }) 
           {tier.monthly_price_cents > 0 ? (
             <>
               <span className="text-3xl sm:text-4xl font-semibold tracking-tight">
-                {formatCAD(tier.monthly_price_cents)}
+                {formatUSD(tier.monthly_price_cents)}
               </span>
               <span className="text-xs text-[var(--muted)]">{t.perMonth}</span>
             </>

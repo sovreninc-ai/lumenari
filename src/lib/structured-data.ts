@@ -14,7 +14,7 @@
 
 import React from "react";
 import { siteUrl, SITE_NAME } from "./seo";
-import { formatCAD, type Kit, type Bundle } from "@/data/kits";
+import { formatUSD, type Kit, type Bundle } from "@/data/kits";
 
 type SchemaObject = Record<string, unknown>;
 
@@ -89,7 +89,7 @@ export function ProductSchema(kit: Kit): SchemaObject {
     offers: {
       "@type": "Offer",
       price: (kit.priceCents / 100).toFixed(2),
-      priceCurrency: "CAD",
+      priceCurrency: "USD",
       availability: "https://schema.org/InStock",
       url: `${base}/kits/${kit.slug}`,
       priceValidUntil: futureYearEnd(),
@@ -111,7 +111,7 @@ export function BundleProductSchema(bundle: Bundle): SchemaObject {
     offers: {
       "@type": "Offer",
       price: (bundle.priceCents / 100).toFixed(2),
-      priceCurrency: "CAD",
+      priceCurrency: "USD",
       availability: "https://schema.org/InStock",
       url: `${base}/kits/${bundle.slug}`,
       priceValidUntil: futureYearEnd(),
@@ -203,7 +203,7 @@ export function SoftwareApplicationSchema(): SchemaObject {
       "@type": "AggregateOffer",
       lowPrice: "0",
       highPrice: "499.00",
-      priceCurrency: "CAD",
+      priceCurrency: "USD",
       offerCount: "4",
     },
     publisher: {
@@ -215,7 +215,7 @@ export function SoftwareApplicationSchema(): SchemaObject {
 
 // Used by the formatted price/currency display in the product schema —
 // no behavioural impact on the page.
-export { formatCAD };
+export { formatUSD };
 
 function futureYearEnd(): string {
   const now = new Date();

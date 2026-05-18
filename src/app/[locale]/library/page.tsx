@@ -2,7 +2,7 @@ import Link from "next/link";
 import { Bookmark, Crown, Download, Sparkles } from "lucide-react";
 import { LibraryLookup } from "@/components/LibraryLookup";
 import { supabaseService } from "@/lib/supabase";
-import { KITS, getKit, getBundle, formatCAD, type Kit } from "@/data/kits";
+import { KITS, getKit, getBundle, formatUSD, type Kit } from "@/data/kits";
 import { env } from "@/lib/env";
 import { isLocale, type Locale } from "@/i18n/locales";
 import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
@@ -42,9 +42,9 @@ async function loadWishlistForEmail(email: string): Promise<WishlistItem[]> {
         name: kit?.name ?? bundle?.name ?? r.kit_slug,
         tagline: kit?.tagline ?? bundle?.tagline ?? "",
         price: kit
-          ? formatCAD(kit.priceCents)
+          ? formatUSD(kit.priceCents)
           : bundle
-            ? formatCAD(bundle.priceCents)
+            ? formatUSD(bundle.priceCents)
             : null,
         kind: kit ? "kit" : "bundle",
       },

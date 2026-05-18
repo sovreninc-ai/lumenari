@@ -4,7 +4,7 @@ import {
   KITS,
   BUNDLES,
   bundleSavings,
-  formatCAD,
+  formatUSD,
 } from "@/data/kits";
 import { KitCard } from "@/components/KitCard";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
@@ -125,10 +125,10 @@ function BundleCard({
         <div className="mt-auto pt-4 border-t border-[var(--hairline)] flex items-center justify-between">
           <div>
             <div className="text-xl font-semibold">
-              {formatCAD(bundle.priceCents)}
+              {formatUSD(bundle.priceCents)}
             </div>
             <div className="text-xs text-[var(--muted)]">
-              {savesLabel} {formatCAD(bundleSavings(bundle))}
+              {savesLabel} {formatUSD(bundleSavings(bundle))}
             </div>
           </div>
           <Link

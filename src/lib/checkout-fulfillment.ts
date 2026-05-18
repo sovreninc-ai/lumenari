@@ -138,7 +138,7 @@ export async function fulfillProSubscription(
       stripe_subscription_id: sub.id,
       stripe_customer_id:
         typeof sub.customer === "string" ? sub.customer : null,
-      currency: sub.currency ?? "cad",
+      currency: sub.currency ?? "usd",
       pro: isActive,
       pro_tier: tier,
       pro_status: proStatus,
@@ -211,7 +211,7 @@ async function fulfillKitPurchase(
         stripe_customer_id:
           typeof session.customer === "string" ? session.customer : null,
         amount_cents: session.amount_total ?? null,
-        currency: session.currency ?? "cad",
+        currency: session.currency ?? "usd",
       })
       .select("id, access_token")
       .single();
@@ -286,7 +286,7 @@ async function fulfillProLifetime(
       stripe_customer_id:
         typeof session.customer === "string" ? session.customer : null,
       amount_cents: session.amount_total ?? null,
-      currency: session.currency ?? "cad",
+      currency: session.currency ?? "usd",
       pro: true,
       pro_tier: "lifetime",
       pro_status: "active",

@@ -38,7 +38,7 @@ export const post: BlogPost = {
       heading: "Why save them in a kit instead of a notes app",
       paragraphs: [
         "Notes apps lose prompts the day after you write them. A SKILL.md or Custom GPT lives inside the AI tool itself — every new conversation starts informed, no copy-paste step.",
-        "If you're running more than two client engagements at once, the Solopreneur Toolkit consolidates these (and dozens more) into a single drop-in kit. $14 CAD, lifetime access.",
+        "If you're running more than two client engagements at once, the Solopreneur Toolkit consolidates these (and dozens more) into a single drop-in kit. $14 USD, lifetime access.",
       ],
     },
   ],

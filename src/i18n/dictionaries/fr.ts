@@ -116,7 +116,7 @@ export const fr: Dictionary = {
     why: "Pourquoi :",
     proNudgePrefix:
       "Vous préférez l'accès complet ? Pro+ débloque tous les kits pour",
-    proNudgeSuffix: "CAD/mois.",
+    proNudgeSuffix: "USD/mois.",
     proNudgeLink: "Voir Pro+ →",
     errorPickRoleAndTask:
       "Veuillez choisir un métier et au moins une tâche.",
@@ -362,7 +362,7 @@ export const fr: Dictionary = {
       "White-labelisez le moteur de recommandation dans vos livrables clients. Les paliers Business et Enterprise retirent la marque Lumenari.",
     pricingHeading: "Tarifs",
     pricingFooter:
-      "Tous les paliers payants sont facturés mensuellement en CAD. Annulable à tout moment.",
+      "Tous les paliers payants sont facturés mensuellement en USD. Annulable à tout moment.",
     quickstartHeading: "Deux lignes de code.",
     quickstartSubPrefix: "Remplacez",
     quickstartSubSuffix: "par votre clé et c'est en ligne.",

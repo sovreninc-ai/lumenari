@@ -13,7 +13,7 @@
 
 import type { Metadata } from "next";
 import { LOCALES, type Locale } from "@/i18n/locales";
-import { getKit, getBundle, type Kit, type Bundle, formatCAD } from "@/data/kits";
+import { getKit, getBundle, type Kit, type Bundle, formatUSD } from "@/data/kits";
 
 export const SITE_NAME = "Lumenari";
 export const TWITTER_HANDLE = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@lumenari";
@@ -192,7 +192,7 @@ export function kitMetadata(kit: Kit, locale: Locale): Metadata {
   const description =
     kit.tagline.length > 155
       ? kit.tagline.slice(0, 152) + "..."
-      : `${kit.tagline} ${formatCAD(kit.priceCents)} CAD, one-time.`.slice(0, 158);
+      : `${kit.tagline} ${formatUSD(kit.priceCents)} USD, one-time.`.slice(0, 158);
   return buildMetadata({
     title: `${kit.name} · Lumenari`,
     description,

@@ -103,7 +103,7 @@ export const pt: Dictionary = {
       "Não conseguimos escolher um kit com clareza — tente navegar direto pelo catálogo.",
     why: "Por quê:",
     proNudgePrefix: "Prefere o caminho de acesso total? Pro+ destrava todos os kits por",
-    proNudgeSuffix: "CAD/mês.",
+    proNudgeSuffix: "USD/mês.",
     proNudgeLink: "Ver Pro+ →",
     errorPickRoleAndTask: "Por favor, escolha uma função e pelo menos uma tarefa.",
     errorFetch: "Não conseguimos buscar as recomendações.",
@@ -347,7 +347,7 @@ export const pt: Dictionary = {
     useCase3Body:
       "Faça white-label do motor de recomendação dentro de entregas para clientes. Os planos Business e Enterprise removem a marca Lumenari.",
     pricingHeading: "Pricing",
-    pricingFooter: "Todos os planos pagos são cobrados mensalmente em CAD. Cancele quando quiser.",
+    pricingFooter: "Todos os planos pagos são cobrados mensalmente em USD. Cancele quando quiser.",
     quickstartHeading: "Duas linhas de código.",
     quickstartSubPrefix: "Substitua",
     quickstartSubSuffix: "pela sua key e está no ar.",

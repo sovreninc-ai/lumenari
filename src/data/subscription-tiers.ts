@@ -2,9 +2,9 @@
  * Lumenari Pro+ subscription definition.
  *
  * One product, three pricing buckets:
- *   - monthly  → Stripe subscription, $19/mo CAD
- *   - annual   → Stripe subscription, $149/yr CAD (~35% off vs monthly)
- *   - lifetime → Stripe one-time payment, $399 CAD (~2.7× annual)
+ *   - monthly  → Stripe subscription, $19/mo USD
+ *   - annual   → Stripe subscription, $149/yr USD (~35% off vs monthly)
+ *   - lifetime → Stripe one-time payment, $399 USD (~2.7× annual)
  *
  * Stripe price IDs come from env vars so the dashboard remains the source
  * of truth (same convention as kits in `kits.ts`).

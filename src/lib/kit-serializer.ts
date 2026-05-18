@@ -13,7 +13,7 @@ export function serializeKit(k: Kit) {
     tagline: k.tagline,
     description: k.description,
     price_cents: k.priceCents,
-    currency: "cad",
+    currency: "usd",
     ai_targets: k.aiTargets,
     personas: k.personas,
     keywords: k.keywords,
