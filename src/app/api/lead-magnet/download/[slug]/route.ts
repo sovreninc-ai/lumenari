@@ -20,7 +20,10 @@ export const runtime = "nodejs";
 export const dynamic = "force-dynamic";
 
 // Allow-list — only kits we explicitly distribute as free magnets.
-const FREE_MAGNET_SLUGS = new Set<string>(["resume-job-search"]);
+const FREE_MAGNET_SLUGS = new Set<string>([
+  "resume-job-search",
+  "solopreneur-toolkit",
+]);
 
 const Query = z.object({
   lead: z.string().uuid().optional(),

@@ -9,12 +9,7 @@ import { getServerLocale } from "@/i18n/get-locale";
 import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import type { Locale } from "@/i18n/locales";
 import { LocaleProvider } from "@/i18n/use-dictionary";
-// Newsletter signup disabled until launch. Reactivate by uncommenting imports
-// + the <NewsletterFooterForm /> + <ExitIntentNewsletterModal /> renders below.
-// import {
-//   NewsletterFooterForm,
-//   ExitIntentNewsletterModal,
-// } from "@/components/newsletter-signup";
+import { NewsletterFooterForm } from "@/components/newsletter-signup";
 import {
   JsonLd,
   OrganizationSchema,
@@ -90,7 +85,6 @@ export default async function RootLayout({
           <SiteHeader locale={locale} dict={dict} />
           <main className="flex-1">{children}</main>
           <SiteFooter dict={dict} />
-          {/* <ExitIntentNewsletterModal /> — disabled until newsletter is real */}
         </LocaleProvider>
       </body>
     </html>
@@ -156,8 +150,7 @@ function SiteFooter({ dict }: { dict: Dictionary }) {
       <div className="mx-auto max-w-6xl px-6 py-12">
         {/* Newsletter row */}
         <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 pb-8 border-b border-[var(--hairline)]">
-          {/* Newsletter signup disabled until newsletter is real. Reactivate this row + uncomment NewsletterFooterForm import. */}
-          {/* <div className="max-w-md">
+          <div className="max-w-md">
             <h3 className="font-semibold text-[var(--foreground)] mb-1">
               {dict.footer.newsletterHeading}
             </h3>
@@ -165,7 +158,7 @@ function SiteFooter({ dict }: { dict: Dictionary }) {
               {dict.footer.newsletterBody}
             </p>
           </div>
-          <NewsletterFooterForm /> */}
+          <NewsletterFooterForm />
         </div>
 
         {/* Bottom row */}

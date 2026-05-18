@@ -997,9 +997,24 @@ export const zhCN: Dictionary = {
       "订阅 Lumenari 邮件通讯,我们会在欢迎邮件中送您第一个免费工具包。每周一封有用邮件,绝不灌水。",
     fallbackError: "出错了。请稍后重试。",
     fallbackUnreachable: "无法连接服务器。请稍后重试。",
-    fallbackSuccess: "请查收邮箱——我们发送了一封确认邮件。",
+    fallbackSuccess: "You're in — check your inbox for the kit.",
+    fallbackAlreadySubscribed: "You're already on the list. We'll be in touch.",
+    join: "Join",
+    homepageTitle: "Get a free starter kit.",
+    homepageBody:
+      "Join the Lumenari list and we'll send a free starter kit (the Solopreneur Toolkit) to your inbox. One useful email a week — no fluff, no daily newsletters.",
+    homepageReassurance: "Free forever. Unsubscribe with one click.",
     close: "关闭",
     formAria: "订阅 Lumenari 邮件通讯",
+  },
+  unsubscribed: {
+    okTitle: "You're out.",
+    okBody:
+      "You've been removed from the Lumenari newsletter. No more emails from us — unless you change your mind.",
+    errorTitle: "That link looks off.",
+    errorBody:
+      "We couldn't unsubscribe you with that link. It may be expired or copied incorrectly. Email hello@lumenari.io and we'll take you off the list manually.",
+    backHome: "Back to lumenari.io",
   },
   referralLinkCopy: {
     aria: "您的推荐链接",

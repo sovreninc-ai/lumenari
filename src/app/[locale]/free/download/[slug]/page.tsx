@@ -17,7 +17,10 @@ import { getDictionary } from "@/i18n/dictionaries";
  * "downloading" the file before they actually meant to.
  */
 
-const FREE_MAGNET_SLUGS = new Set<string>(["resume-job-search"]);
+const FREE_MAGNET_SLUGS = new Set<string>([
+  "resume-job-search",
+  "solopreneur-toolkit",
+]);
 
 interface PageProps {
   params: Promise<{ locale: string; slug: string }>;

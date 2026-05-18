@@ -992,14 +992,29 @@ export const en = {
     subscribe: "Subscribe",
     subscribing: "Subscribing...",
     sendFreeKit: "Send my free kit",
+    join: "Join",
+    homepageTitle: "Get a free starter kit.",
+    homepageBody:
+      "Join the Lumenari list and we'll send a free starter kit (the Solopreneur Toolkit) to your inbox. One useful email a week — no fluff, no daily newsletters.",
+    homepageReassurance: "Free forever. Unsubscribe with one click.",
     exitTitle: "Get a free kit on us.",
     exitBody:
       "Subscribe to the Lumenari newsletter and we'll send your first kit free with the welcome email. One useful email a week, no fluff.",
     fallbackError: "Something went wrong. Please try again.",
     fallbackUnreachable: "Couldn't reach our server. Try again.",
-    fallbackSuccess: "Check your email — we sent a confirmation link.",
+    fallbackSuccess: "You're in — check your inbox for the kit.",
+    fallbackAlreadySubscribed: "You're already on the list. We'll be in touch.",
     close: "Close",
     formAria: "Subscribe to the Lumenari newsletter",
+  },
+  unsubscribed: {
+    okTitle: "You're out.",
+    okBody:
+      "You've been removed from the Lumenari newsletter. No more emails from us — unless you change your mind.",
+    errorTitle: "That link looks off.",
+    errorBody:
+      "We couldn't unsubscribe you with that link. It may be expired or copied incorrectly. Email hello@lumenari.io and we'll take you off the list manually.",
+    backHome: "Back to lumenari.io",
   },
   referralLinkCopy: {
     aria: "Your referral link",

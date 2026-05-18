@@ -1033,10 +1033,24 @@ export const hi: Dictionary = {
     fallbackError: "कुछ गड़बड़ हो गई। कृपया फिर try कीजिए।",
     fallbackUnreachable:
       "हमारे server तक नहीं पहुँच सके। फिर try कीजिए।",
-    fallbackSuccess:
-      "अपनी ईमेल देखिए — हमने एक confirmation link भेजा है।",
+    fallbackSuccess: "You're in — check your inbox for the kit.",
+    fallbackAlreadySubscribed: "You're already on the list. We'll be in touch.",
+    join: "Join",
+    homepageTitle: "Get a free starter kit.",
+    homepageBody:
+      "Join the Lumenari list and we'll send a free starter kit (the Solopreneur Toolkit) to your inbox. One useful email a week — no fluff, no daily newsletters.",
+    homepageReassurance: "Free forever. Unsubscribe with one click.",
     close: "बंद करें",
     formAria: "Lumenari newsletter subscribe करें",
+  },
+  unsubscribed: {
+    okTitle: "You're out.",
+    okBody:
+      "You've been removed from the Lumenari newsletter. No more emails from us — unless you change your mind.",
+    errorTitle: "That link looks off.",
+    errorBody:
+      "We couldn't unsubscribe you with that link. It may be expired or copied incorrectly. Email hello@lumenari.io and we'll take you off the list manually.",
+    backHome: "Back to lumenari.io",
   },
   referralLinkCopy: {
     aria: "आपका referral link",

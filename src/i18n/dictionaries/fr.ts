@@ -1026,10 +1026,24 @@ export const fr: Dictionary = {
       "Abonnez-vous à la newsletter Lumenari et nous vous offrons votre premier kit avec l'e-mail de bienvenue. Un e-mail utile par semaine, sans bla-bla.",
     fallbackError: "Une erreur s'est produite. Veuillez réessayer.",
     fallbackUnreachable: "Impossible de joindre notre serveur. Réessayez.",
-    fallbackSuccess:
-      "Vérifiez votre e-mail — nous avons envoyé un lien de confirmation.",
+    fallbackSuccess: "You're in — check your inbox for the kit.",
+    fallbackAlreadySubscribed: "You're already on the list. We'll be in touch.",
+    join: "Join",
+    homepageTitle: "Get a free starter kit.",
+    homepageBody:
+      "Join the Lumenari list and we'll send a free starter kit (the Solopreneur Toolkit) to your inbox. One useful email a week — no fluff, no daily newsletters.",
+    homepageReassurance: "Free forever. Unsubscribe with one click.",
     close: "Fermer",
     formAria: "S'abonner à la newsletter Lumenari",
+  },
+  unsubscribed: {
+    okTitle: "You're out.",
+    okBody:
+      "You've been removed from the Lumenari newsletter. No more emails from us — unless you change your mind.",
+    errorTitle: "That link looks off.",
+    errorBody:
+      "We couldn't unsubscribe you with that link. It may be expired or copied incorrectly. Email hello@lumenari.io and we'll take you off the list manually.",
+    backHome: "Back to lumenari.io",
   },
   referralLinkCopy: {
     aria: "Votre lien de parrainage",

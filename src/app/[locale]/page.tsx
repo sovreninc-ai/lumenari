@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { OnboardingFunnel } from "@/components/onboarding-funnel";
+import { NewsletterHomepageBlock } from "@/components/newsletter-signup";
 import { KITS } from "@/data/kits";
 import { KitCard } from "@/components/KitCard";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
@@ -38,6 +39,7 @@ export default async function LocaleHome({
     <>
       <Hero dict={dict} />
       <OnboardingFunnel />
+      <NewsletterHomepageBlock />
       <FeaturedCatalog dict={dict} />
     </>
   );
