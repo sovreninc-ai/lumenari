@@ -6,44 +6,82 @@ import { track } from "@/lib/analytics";
 import { useDictionary } from "@/i18n/use-dictionary";
 
 /**
- * Newsletter capture surfaces.
- *   - `NewsletterFooterForm` — small horizontal form for the site footer.
- *   - `ExitIntentNewsletterModal` — one-shot per session, fires on
- *     `mouseleave` (desktop) or scroll-up gesture (mobile).
+ * Newsletter capture surfaces. All three submit to POST /api/subscribe.
  *
- * Both POST to `/api/newsletter/subscribe`.
+ *   - `NewsletterFooterForm`     — small horizontal form rendered in the
+ *                                  site footer on every page.
+ *   - `NewsletterHomepageBlock`  — larger card for the homepage, rendered
+ *                                  between the wizard and the kit grid.
+ *   - `ExitIntentNewsletterModal` — one-shot per session, fires on mouse-
+ *                                  leave or fast scroll-up gesture. Not
+ *                                  currently rendered in layout.tsx — kept
+ *                                  here for the future, gated behind the
+ *                                  same /api/subscribe endpoint.
+ *
+ * The API returns:
+ *   { ok: true }                       — fresh insert, welcome email fired
+ *   { ok: true, already_subscribed: true } — email already on file
+ *   { error: string }                  — bad input or server failure
  */
 
 const SESSION_FLAG = "lumenari_exit_intent_shown";
 
+interface FallbackCopy {
+  error: string;
+  unreachable: string;
+  success: string;
+  alreadySubscribed: string;
+}
+
 async function submit(
   email: string,
-  fallback: { error: string; success: string; unreachable: string },
-): Promise<{ ok: boolean; message: string }> {
+  source: string,
+  fallback: FallbackCopy,
+): Promise<{ ok: boolean; alreadySubscribed: boolean; message: string }> {
   try {
-    const res = await fetch("/api/newsletter/subscribe", {
+    const res = await fetch("/api/subscribe", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ email }),
+      body: JSON.stringify({ email, source }),
     });
     const data = (await res.json().catch(() => ({}))) as {
       ok?: boolean;
-      message?: string;
+      already_subscribed?: boolean;
       error?: string;
     };
     if (!res.ok) {
       return {
         ok: false,
+        alreadySubscribed: false,
         message: data.error ?? fallback.error,
+      };
+    }
+    if (data.already_subscribed) {
+      return {
+        ok: true,
+        alreadySubscribed: true,
+        message: fallback.alreadySubscribed,
       };
     }
     return {
       ok: true,
-      message: data.message ?? fallback.success,
+      alreadySubscribed: false,
+      message: fallback.success,
     };
   } catch {
-    return { ok: false, message: fallback.unreachable };
+    return { ok: false, alreadySubscribed: false, message: fallback.unreachable };
   }
+}
+
+function useFallbacks(): FallbackCopy {
+  const dict = useDictionary();
+  const t = dict.newsletter;
+  return {
+    error: t.fallbackError,
+    unreachable: t.fallbackUnreachable,
+    success: t.fallbackSuccess,
+    alreadySubscribed: t.fallbackAlreadySubscribed,
+  };
 }
 
 // =====================================================================
@@ -52,6 +90,7 @@ async function submit(
 export function NewsletterFooterForm() {
   const dict = useDictionary();
   const t = dict.newsletter;
+  const fallback = useFallbacks();
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">(
     "idle",
@@ -63,15 +102,14 @@ export function NewsletterFooterForm() {
     if (!email.trim()) return;
     setStatus("loading");
     setMessage(null);
-    const result = await submit(email.trim(), {
-      error: t.fallbackError,
-      success: t.fallbackSuccess,
-      unreachable: t.fallbackUnreachable,
-    });
+    const result = await submit(email.trim(), "footer", fallback);
     setStatus(result.ok ? "ok" : "err");
     setMessage(result.message);
     if (result.ok) {
-      track("newsletter_signup", { source: "footer" });
+      track("newsletter_signup", {
+        source: "footer",
+        already_subscribed: result.alreadySubscribed,
+      });
       setEmail("");
     }
   }
@@ -108,7 +146,7 @@ export function NewsletterFooterForm() {
         disabled={status === "loading"}
         className="inline-flex items-center justify-center h-10 px-5 rounded-full bg-[var(--foreground)] text-white text-sm font-medium hover:bg-black transition-colors disabled:opacity-50 flex-shrink-0"
       >
-        {status === "loading" ? t.subscribing : t.subscribe}
+        {status === "loading" ? t.subscribing : t.join}
       </button>
       {message ? (
         <p
@@ -125,11 +163,108 @@ export function NewsletterFooterForm() {
 }
 
 // =====================================================================
-// Exit-intent modal
+// Homepage block — larger surface, rendered between the wizard and the
+// kit grid. Same API call as the footer, different `source`.
+// =====================================================================
+export function NewsletterHomepageBlock() {
+  const dict = useDictionary();
+  const t = dict.newsletter;
+  const fallback = useFallbacks();
+  const [email, setEmail] = useState("");
+  const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">(
+    "idle",
+  );
+  const [message, setMessage] = useState<string | null>(null);
+
+  async function onSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    if (!email.trim()) return;
+    setStatus("loading");
+    setMessage(null);
+    const result = await submit(email.trim(), "homepage", fallback);
+    setStatus(result.ok ? "ok" : "err");
+    setMessage(result.message);
+    if (result.ok) {
+      track("newsletter_signup", {
+        source: "homepage",
+        already_subscribed: result.alreadySubscribed,
+      });
+      setEmail("");
+    }
+  }
+
+  return (
+    <section className="mx-auto max-w-3xl px-6 py-16">
+      <div className="rounded-3xl bg-[var(--surface)] border border-[var(--hairline)] p-8 sm:p-10 text-center">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-gradient-to-r from-amber-300 to-orange-400 mb-4">
+          <Sparkles className="w-6 h-6 text-white" />
+        </div>
+        <h2 className="display text-2xl sm:text-3xl mb-3">
+          {t.homepageTitle}
+        </h2>
+        <p className="text-[var(--muted)] leading-relaxed max-w-xl mx-auto mb-6">
+          {t.homepageBody}
+        </p>
+        <form
+          onSubmit={onSubmit}
+          className="flex flex-col sm:flex-row gap-2 max-w-md mx-auto"
+          aria-label={t.formAria}
+        >
+          <label className="sr-only" htmlFor="newsletter-email-home">
+            {t.emailLabel}
+          </label>
+          <div className="relative flex-1">
+            <Mail
+              aria-hidden
+              className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[var(--muted)]"
+            />
+            <input
+              id="newsletter-email-home"
+              name="email"
+              type="email"
+              required
+              autoComplete="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder={t.placeholder}
+              className="w-full pl-9 pr-3 h-11 rounded-full border border-[var(--hairline)] bg-white text-sm focus:outline-none focus:border-[var(--accent-strong)]"
+              disabled={status === "loading"}
+            />
+          </div>
+          <button
+            type="submit"
+            disabled={status === "loading"}
+            className="inline-flex items-center justify-center h-11 px-6 rounded-full bg-[var(--foreground)] text-white text-sm font-medium hover:bg-black transition-colors disabled:opacity-50 flex-shrink-0"
+          >
+            {status === "loading" ? t.subscribing : t.sendFreeKit}
+          </button>
+        </form>
+        {message ? (
+          <p
+            role="status"
+            className={`mt-4 text-sm ${
+              status === "err" ? "text-red-700" : "text-emerald-700"
+            }`}
+          >
+            {message}
+          </p>
+        ) : (
+          <p className="mt-4 text-xs text-[var(--muted)]">
+            {t.homepageReassurance}
+          </p>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// =====================================================================
+// Exit-intent modal — kept for future activation. Not wired into layout.
 // =====================================================================
 export function ExitIntentNewsletterModal() {
   const dict = useDictionary();
   const t = dict.newsletter;
+  const fallback = useFallbacks();
   const [open, setOpen] = useState(false);
   const [email, setEmail] = useState("");
   const [status, setStatus] = useState<"idle" | "loading" | "ok" | "err">(
@@ -151,8 +286,6 @@ export function ExitIntentNewsletterModal() {
     }
 
     function onMouseLeave(e: MouseEvent) {
-      // Only fire when the cursor leaves the top edge — that's the
-      // "they're about to close the tab" signal.
       if (e.clientY <= 0) show();
     }
 
@@ -160,7 +293,6 @@ export function ExitIntentNewsletterModal() {
       const y = window.scrollY;
       const dy = lastScrollRef.current - y;
       lastScrollRef.current = y;
-      // Fire on a fast scroll-up gesture (mobile). Tuned conservatively.
       if (dy > 60 && y < 200) show();
     }
 
@@ -177,15 +309,13 @@ export function ExitIntentNewsletterModal() {
     if (!email.trim()) return;
     setStatus("loading");
     setMessage(null);
-    const result = await submit(email.trim(), {
-      error: t.fallbackError,
-      success: t.fallbackSuccess,
-      unreachable: t.fallbackUnreachable,
-    });
+    const result = await submit(email.trim(), "exit-intent", fallback);
     setStatus(result.ok ? "ok" : "err");
     setMessage(result.message);
     if (result.ok) {
-      track("exit_intent_modal_signup");
+      track("exit_intent_modal_signup", {
+        already_subscribed: result.alreadySubscribed,
+      });
       setEmail("");
     }
   }

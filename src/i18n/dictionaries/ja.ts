@@ -1023,9 +1023,24 @@ export const ja: Dictionary = {
       "Lumenari ニュースレターにご登録いただくと、ウェルカムメールで最初のキットを無料でお送りします。週に1通、役立つメールを。中身のないメールは送りません。",
     fallbackError: "問題が発生しました。もう一度お試しください。",
     fallbackUnreachable: "サーバーに接続できませんでした。もう一度お試しください。",
-    fallbackSuccess: "メールをご確認ください — 認証リンクをお送りしました。",
+    fallbackSuccess: "You're in — check your inbox for the kit.",
+    fallbackAlreadySubscribed: "You're already on the list. We'll be in touch.",
+    join: "Join",
+    homepageTitle: "Get a free starter kit.",
+    homepageBody:
+      "Join the Lumenari list and we'll send a free starter kit (the Solopreneur Toolkit) to your inbox. One useful email a week — no fluff, no daily newsletters.",
+    homepageReassurance: "Free forever. Unsubscribe with one click.",
     close: "閉じる",
     formAria: "Lumenari ニュースレターに登録する",
+  },
+  unsubscribed: {
+    okTitle: "You're out.",
+    okBody:
+      "You've been removed from the Lumenari newsletter. No more emails from us — unless you change your mind.",
+    errorTitle: "That link looks off.",
+    errorBody:
+      "We couldn't unsubscribe you with that link. It may be expired or copied incorrectly. Email hello@lumenari.io and we'll take you off the list manually.",
+    backHome: "Back to lumenari.io",
   },
   referralLinkCopy: {
     aria: "あなたの紹介リンク",
