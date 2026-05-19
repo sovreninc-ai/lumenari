@@ -121,6 +121,81 @@ function receiptCopyFor(locale: Locale) {
   return RECEIPT_COPY[locale] ?? RECEIPT_COPY[DEFAULT_LOCALE];
 }
 
+const PRO_WELCOME_COPY: Record<
+  Locale,
+  { subject: string; heading: string; intro: string; cta: string }
+> = {
+  en: {
+    subject: "Welcome to Lumenari Pro+",
+    heading: "Welcome to Lumenari Pro+.",
+    intro: "Your {tier} membership is active. Every kit — current and future — is yours.",
+    cta: "Open your library",
+  },
+  es: {
+    subject: "Bienvenido a Lumenari Pro+",
+    heading: "Bienvenido a Lumenari Pro+.",
+    intro: "Tu membresía {tier} está activa. Todos los kits — actuales y futuros — son tuyos.",
+    cta: "Abrir tu biblioteca",
+  },
+  pt: {
+    subject: "Bem-vindo ao Lumenari Pro+",
+    heading: "Bem-vindo ao Lumenari Pro+.",
+    intro: "A tua subscrição {tier} está ativa. Todos os kits — atuais e futuros — são teus.",
+    cta: "Abrir a tua biblioteca",
+  },
+  de: {
+    subject: "Willkommen bei Lumenari Pro+",
+    heading: "Willkommen bei Lumenari Pro+.",
+    intro: "Deine {tier}-Mitgliedschaft ist aktiv. Alle Kits — aktuelle und zukünftige — gehören dir.",
+    cta: "Bibliothek öffnen",
+  },
+  fr: {
+    subject: "Bienvenue sur Lumenari Pro+",
+    heading: "Bienvenue sur Lumenari Pro+.",
+    intro: "Votre abonnement {tier} est actif. Tous les kits — actuels et futurs — sont à vous.",
+    cta: "Ouvrir votre bibliothèque",
+  },
+  ja: {
+    subject: "Lumenari Pro+ へようこそ",
+    heading: "Lumenari Pro+ へようこそ。",
+    intro: "{tier} メンバーシップが有効になりました。現在・今後のすべてのキットをご利用いただけます。",
+    cta: "ライブラリを開く",
+  },
+  hi: {
+    subject: "Lumenari Pro+ में आपका स्वागत है",
+    heading: "Lumenari Pro+ में आपका स्वागत है।",
+    intro: "आपकी {tier} सदस्यता सक्रिय है। सभी किट — वर्तमान और भविष्य — आपके हैं।",
+    cta: "अपनी लाइब्रेरी खोलें",
+  },
+  "zh-CN": {
+    subject: "欢迎加入 Lumenari Pro+",
+    heading: "欢迎加入 Lumenari Pro+。",
+    intro: "你的{tier}会员资格已激活。所有套件 —— 现有的和未来的 —— 都属于你。",
+    cta: "打开你的资料库",
+  },
+};
+
+const PRO_TIER_LABEL: Record<Locale, Record<string, string>> = {
+  en:    { monthly: "Monthly", annual: "Annual", lifetime: "Lifetime" },
+  es:    { monthly: "Mensual", annual: "Anual", lifetime: "De por vida" },
+  pt:    { monthly: "Mensal", annual: "Anual", lifetime: "Vitalício" },
+  de:    { monthly: "Monatlich", annual: "Jährlich", lifetime: "Lebenslang" },
+  fr:    { monthly: "Mensuel", annual: "Annuel", lifetime: "À vie" },
+  ja:    { monthly: "月額", annual: "年額", lifetime: "永久" },
+  hi:    { monthly: "मासिक", annual: "वार्षिक", lifetime: "आजीवन" },
+  "zh-CN": { monthly: "月度", annual: "年度", lifetime: "终身" },
+};
+
+function proWelcomeCopyFor(locale: Locale, tier: ProTier) {
+  const copy = PRO_WELCOME_COPY[locale] ?? PRO_WELCOME_COPY[DEFAULT_LOCALE];
+  const tierLabel =
+    (PRO_TIER_LABEL[locale] ?? PRO_TIER_LABEL[DEFAULT_LOCALE])[tier] ?? tier;
+  return {
+    ...copy,
+    intro: copy.intro.replace("{tier}", tierLabel),
+  };
+}
+
 function readBuyerLocale(meta: Record<string, string> | undefined): Locale {
   const raw = meta?.buyer_locale;
   if (raw && isLocale(raw)) return raw;
@@ -180,6 +255,7 @@ export async function fulfillCheckoutSession(
 // =====================================================================
 export async function fulfillProSubscription(
   sub: Stripe.Subscription,
+  locale: Locale = DEFAULT_LOCALE,
 ): Promise<FulfillmentResult> {
   const priceId = sub.items.data[0]?.price?.id;
   if (!priceId) {
@@ -250,7 +326,7 @@ export async function fulfillProSubscription(
   if (error) throw error;
 
   if (isActive) {
-    await sendProWelcomeEmail(email, tier, inserted.id, inserted.access_token);
+    await sendProWelcomeEmail(email, tier, inserted.id, inserted.access_token, locale);
   }
 
   return { kind: "pro_subscription", email, tier, isNew: true };
@@ -405,7 +481,9 @@ async function fulfillProLifetime(
 
   if (insErr) throw insErr;
 
-  await sendProWelcomeEmail(email, "lifetime", inserted.id, inserted.access_token);
+  const meta = session.metadata ?? {};
+  const buyerLocale = readBuyerLocale(meta);
+  await sendProWelcomeEmail(email, "lifetime", inserted.id, inserted.access_token, buyerLocale);
 
   return { kind: "pro_lifetime", email, isNew: true };
 }
@@ -432,7 +510,8 @@ async function fulfillSubscriptionFromCheckout(
     return { kind: "skipped", reason: "subscription retrieve failed" };
   }
 
-  return fulfillProSubscription(sub);
+  const sessionLocale = readBuyerLocale(session.metadata ?? {});
+  return fulfillProSubscription(sub, sessionLocale);
 }
 
 // =====================================================================
@@ -573,21 +652,22 @@ async function sendProWelcomeEmail(
   tier: ProTier,
   purchaseId: string,
   accessToken: string,
+  locale: Locale = DEFAULT_LOCALE,
 ) {
-  const libraryUrl = `${env.siteUrl}/library?p=${purchaseId}&t=${accessToken}`;
-  const tierLabel =
-    tier === "monthly" ? "Monthly" : tier === "annual" ? "Annual" : "Lifetime";
+  const copy = proWelcomeCopyFor(locale, tier);
+  const localePathPrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+  const libraryUrl = `${env.siteUrl}${localePathPrefix}/library?p=${purchaseId}&t=${accessToken}`;
 
   const html = `<!doctype html>
 <html><body style="margin:0;padding:0;background:#fafafa;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',system-ui,sans-serif;color:#111418;">
 <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fafafa;padding:40px 16px;"><tr><td align="center">
 <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #ececec;border-radius:22px;overflow:hidden;">
   <tr><td style="padding:36px 36px 8px;">
-    <h1 style="margin:0 0 8px;font-size:28px;font-weight:600;letter-spacing:-0.02em;">Welcome to Lumenari Pro+.</h1>
-    <p style="margin:0;color:#6b7280;font-size:16px;line-height:1.55;">Your ${escapeHtml(tierLabel)} membership is active. Every kit — current and future — is yours.</p>
+    <h1 style="margin:0 0 8px;font-size:28px;font-weight:600;letter-spacing:-0.02em;">${escapeHtml(copy.heading)}</h1>
+    <p style="margin:0;color:#6b7280;font-size:16px;line-height:1.55;">${escapeHtml(copy.intro)}</p>
   </td></tr>
   <tr><td style="padding:24px 36px 36px;">
-    <p style="margin:0 0 14px;"><a href="${libraryUrl}" style="display:inline-block;padding:14px 22px;background:#111418;color:#ffffff;border-radius:999px;text-decoration:none;font-weight:500;font-size:15px;">Open your library</a></p>
+    <p style="margin:0 0 14px;"><a href="${libraryUrl}" style="display:inline-block;padding:14px 22px;background:#111418;color:#ffffff;border-radius:999px;text-decoration:none;font-weight:500;font-size:15px;">${escapeHtml(copy.cta)}</a></p>
     <p style="margin:18px 0 0;color:#9ca3af;font-size:12px;">© Lumenari · lumenari.io</p>
   </td></tr>
 </table>
@@ -598,7 +678,7 @@ async function sendProWelcomeEmail(
     const result = await resend().emails.send({
       from: env.resendFrom,
       to: email,
-      subject: "Welcome to Lumenari Pro+",
+      subject: copy.subject,
       html,
     });
     if (result.error) {
