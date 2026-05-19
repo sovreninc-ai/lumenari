@@ -10,6 +10,7 @@ import { KitCard } from "@/components/KitCard";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
 import { getDictionary } from "@/i18n/dictionaries";
 import { kitsIndexMetadata } from "@/lib/seo";
+import { localizeKit } from "@/lib/kit-i18n";
 
 export function generateStaticParams() {
   return LOCALES.map((locale) => ({ locale }));
@@ -36,8 +37,14 @@ export default async function KitsPage({
 
   const featured = BUNDLES.filter((b) => b.featured);
   const others = BUNDLES.filter((b) => !b.featured);
-  // Alphabetical by name, without mutating the source array.
-  const sortedKits = [...KITS].sort((a, b) => a.name.localeCompare(b.name));
+  // Apply translated name/tagline where one exists, then sort alphabetically
+  // by the locale-aware name so the catalog reads naturally in each language.
+  const localized = await Promise.all(
+    KITS.map((k) => localizeKit(k, safeLocale)),
+  );
+  const sortedKits = localized.sort((a, b) =>
+    a.name.localeCompare(b.name, safeLocale),
+  );
 
   return (
     <div className="mx-auto max-w-6xl px-6 py-20">

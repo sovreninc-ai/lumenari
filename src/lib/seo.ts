@@ -14,6 +14,7 @@
 import type { Metadata } from "next";
 import { LOCALES, type Locale } from "@/i18n/locales";
 import { getKit, getBundle, type Kit, type Bundle, formatUSD } from "@/data/kits";
+import { getLocalizedKitMeta } from "@/lib/kit-i18n";
 
 export const SITE_NAME = "Lumenari";
 export const TWITTER_HANDLE = process.env.NEXT_PUBLIC_TWITTER_HANDLE ?? "@lumenari";
@@ -188,13 +189,16 @@ export function kitsIndexMetadata(locale: Locale): Metadata {
   });
 }
 
-export function kitMetadata(kit: Kit, locale: Locale): Metadata {
+export async function kitMetadata(kit: Kit, locale: Locale): Promise<Metadata> {
+  const localized = await getLocalizedKitMeta(kit.slug, locale);
+  const name = localized?.name || kit.name;
+  const tagline = localized?.tagline || kit.tagline;
   const description =
-    kit.tagline.length > 155
-      ? kit.tagline.slice(0, 152) + "..."
-      : `${kit.tagline} ${formatUSD(kit.priceCents)} USD, one-time.`.slice(0, 158);
+    tagline.length > 155
+      ? tagline.slice(0, 152) + "..."
+      : `${tagline} ${formatUSD(kit.priceCents)} USD, one-time.`.slice(0, 158);
   return buildMetadata({
-    title: `${kit.name} · Lumenari`,
+    title: `${name} · Lumenari`,
     description,
     path: `/kits/${kit.slug}`,
     locale,
@@ -220,7 +224,10 @@ export function bundleMetadata(bundle: Bundle, locale: Locale): Metadata {
   });
 }
 
-export function kitOrBundleMetadata(slug: string, locale: Locale): Metadata {
+export async function kitOrBundleMetadata(
+  slug: string,
+  locale: Locale,
+): Promise<Metadata> {
   const bundle = getBundle(slug);
   if (bundle) return bundleMetadata(bundle, locale);
   const kit = getKit(slug);

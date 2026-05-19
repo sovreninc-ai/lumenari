@@ -26,6 +26,106 @@ import { supabaseService } from "@/lib/supabase";
 import { resend } from "@/lib/resend";
 import { KITS, BUNDLES, getKit } from "@/data/kits";
 import { tierForPriceId, type ProTier } from "@/data/subscription-tiers";
+import { isLocale, DEFAULT_LOCALE, type Locale } from "@/i18n/locales";
+import { getLocalizedKitMeta } from "@/lib/kit-i18n";
+
+/**
+ * Subject + body strings for the kit-receipt and Pro+ welcome emails.
+ *
+ * Kept inline here (rather than reaching into `src/i18n/dictionaries/*.ts`)
+ * because those dictionaries are bundle-targeted at the public client and
+ * include a lot of unrelated copy. This file runs in the webhook + /thanks
+ * server contexts, and an email is a self-contained surface — small inline
+ * map is easier to maintain than wiring a dictionary loader through the
+ * fulfillment pipeline.
+ *
+ * Falls back to English for any locale not listed.
+ */
+const RECEIPT_COPY: Record<
+  Locale,
+  {
+    subject: string;
+    heading: string;
+    intro: string;
+    downloadPrefix: string;
+    libraryPrefix: string;
+  }
+> = {
+  en: {
+    subject: "Your Lumenari kit is ready",
+    heading: "Your Lumenari kit is ready.",
+    intro:
+      "Thanks for picking up a kit. Your downloads are below. They'll also live in your library — no password, just your email.",
+    downloadPrefix: "Download",
+    libraryPrefix: "Or open your library anytime:",
+  },
+  es: {
+    subject: "Tu kit de Lumenari está listo",
+    heading: "Tu kit de Lumenari está listo.",
+    intro:
+      "Gracias por llevarte un kit. Tus descargas están abajo. También vivirán en tu biblioteca — sin contraseña, solo tu email.",
+    downloadPrefix: "Descargar",
+    libraryPrefix: "O abre tu biblioteca cuando quieras:",
+  },
+  pt: {
+    subject: "O teu kit Lumenari está pronto",
+    heading: "O teu kit Lumenari está pronto.",
+    intro:
+      "Obrigado por levares um kit. Os teus downloads estão abaixo. Também vão ficar na tua biblioteca — sem palavra-passe, só com o teu email.",
+    downloadPrefix: "Descarregar",
+    libraryPrefix: "Ou abre a tua biblioteca quando quiseres:",
+  },
+  de: {
+    subject: "Dein Lumenari-Kit ist bereit",
+    heading: "Dein Lumenari-Kit ist bereit.",
+    intro:
+      "Danke, dass du ein Kit gekauft hast. Deine Downloads findest du unten. Sie liegen außerdem in deiner Bibliothek — kein Passwort, nur deine E-Mail.",
+    downloadPrefix: "Herunterladen",
+    libraryPrefix: "Oder öffne deine Bibliothek jederzeit:",
+  },
+  fr: {
+    subject: "Votre kit Lumenari est prêt",
+    heading: "Votre kit Lumenari est prêt.",
+    intro:
+      "Merci d'avoir choisi un kit. Vos téléchargements sont ci-dessous. Ils resteront aussi dans votre bibliothèque — pas de mot de passe, juste votre e-mail.",
+    downloadPrefix: "Télécharger",
+    libraryPrefix: "Ou ouvrez votre bibliothèque à tout moment :",
+  },
+  ja: {
+    subject: "Lumenari キットの準備ができました",
+    heading: "Lumenari キットの準備ができました。",
+    intro:
+      "キットをご購入いただきありがとうございます。下記からダウンロードできます。あなたのライブラリにも保存されます — パスワード不要、メールアドレスだけで開けます。",
+    downloadPrefix: "ダウンロード",
+    libraryPrefix: "ライブラリはいつでも開けます：",
+  },
+  hi: {
+    subject: "आपका Lumenari किट तैयार है",
+    heading: "आपका Lumenari किट तैयार है।",
+    intro:
+      "किट खरीदने के लिए धन्यवाद। आपके डाउनलोड नीचे हैं। वे आपकी लाइब्रेरी में भी रहेंगे — कोई पासवर्ड नहीं, बस आपका ईमेल।",
+    downloadPrefix: "डाउनलोड करें",
+    libraryPrefix: "अपनी लाइब्रेरी कभी भी खोलें:",
+  },
+  "zh-CN": {
+    subject: "你的 Lumenari 套件已准备好",
+    heading: "你的 Lumenari 套件已准备好。",
+    intro:
+      "感谢购买。下载链接如下。它们也会保存在你的资料库里 —— 不需要密码，只需要你的邮箱。",
+    downloadPrefix: "下载",
+    libraryPrefix: "随时打开你的资料库：",
+  },
+};
+
+function receiptCopyFor(locale: Locale) {
+  return RECEIPT_COPY[locale] ?? RECEIPT_COPY[DEFAULT_LOCALE];
+}
+
+function readBuyerLocale(meta: Record<string, string> | undefined): Locale {
+  const raw = meta?.buyer_locale;
+  if (raw && isLocale(raw)) return raw;
+  return DEFAULT_LOCALE;
+}
 
 // =====================================================================
 // Result shape — lets the caller render confirmation UI on /thanks
@@ -184,6 +284,8 @@ async function fulfillKitPurchase(
     return { kind: "skipped", reason: "no resolvable kits for session" };
   }
 
+  const buyerLocale = readBuyerLocale(meta);
+
   const db = supabaseService();
 
   const { data: existing, error: selErr } = await db
@@ -232,7 +334,13 @@ async function fulfillKitPurchase(
   }
 
   if (isNew) {
-    await sendReceiptEmail(email, finalSlugs, purchaseId, accessToken);
+    await sendReceiptEmail(
+      email,
+      finalSlugs,
+      purchaseId,
+      accessToken,
+      buyerLocale,
+    );
   }
 
   return { kind: "kit", email, kitSlugs: finalSlugs, isNew };
@@ -406,24 +514,38 @@ async function sendReceiptEmail(
   slugs: string[],
   purchaseId: string,
   accessToken: string,
+  locale: Locale,
 ) {
-  const links = slugs
+  const copy = receiptCopyFor(locale);
+  const localeQuery =
+    locale === DEFAULT_LOCALE ? "" : `&locale=${encodeURIComponent(locale)}`;
+  const localePathPrefix = locale === DEFAULT_LOCALE ? "" : `/${locale}`;
+
+  const kits = slugs
     .map((s) => getKit(s))
-    .filter((k): k is NonNullable<ReturnType<typeof getKit>> => Boolean(k))
-    .map((k) => ({
-      name: k.name,
-      url: `${env.siteUrl}/api/download/${k.slug}?p=${purchaseId}&t=${accessToken}`,
-    }));
+    .filter((k): k is NonNullable<ReturnType<typeof getKit>> => Boolean(k));
 
-  const libraryUrl = `${env.siteUrl}/library?p=${purchaseId}&t=${accessToken}`;
+  // Use the localized kit name when one exists — the buyer just paid for the
+  // translated kit, the button should read in their language.
+  const links = await Promise.all(
+    kits.map(async (k) => {
+      const localized = await getLocalizedKitMeta(k.slug, locale);
+      return {
+        name: localized?.name || k.name,
+        url: `${env.siteUrl}/api/download/${k.slug}?p=${purchaseId}&t=${accessToken}${localeQuery}`,
+      };
+    }),
+  );
 
-  const html = receiptTemplate({ links, libraryUrl });
+  const libraryUrl = `${env.siteUrl}${localePathPrefix}/library?p=${purchaseId}&t=${accessToken}`;
+
+  const html = receiptTemplate({ links, libraryUrl, copy });
 
   try {
     const result = await resend().emails.send({
       from: env.resendFrom,
       to: email,
-      subject: "Your Lumenari kit is ready",
+      subject: copy.subject,
       html,
     });
     if (result.error) {
@@ -502,9 +624,11 @@ async function sendProWelcomeEmail(
 function receiptTemplate({
   links,
   libraryUrl,
+  copy,
 }: {
   links: { name: string; url: string }[];
   libraryUrl: string;
+  copy: (typeof RECEIPT_COPY)[Locale];
 }): string {
   return `<!doctype html>
 <html>
@@ -513,22 +637,22 @@ function receiptTemplate({
       <tr><td align="center">
         <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #ececec;border-radius:22px;overflow:hidden;">
           <tr><td style="padding:36px 36px 8px;">
-            <h1 style="margin:0 0 8px;font-size:28px;font-weight:600;letter-spacing:-0.02em;">Your Lumenari kit is ready.</h1>
-            <p style="margin:0;color:#6b7280;font-size:16px;line-height:1.55;">Thanks for picking up a kit. Your downloads are below. They'll also live in your library — no password, just your email.</p>
+            <h1 style="margin:0 0 8px;font-size:28px;font-weight:600;letter-spacing:-0.02em;">${escapeHtml(copy.heading)}</h1>
+            <p style="margin:0;color:#6b7280;font-size:16px;line-height:1.55;">${escapeHtml(copy.intro)}</p>
           </td></tr>
           <tr><td style="padding:24px 36px;">
             ${links
               .map(
                 (l) => `
               <p style="margin:0 0 14px;">
-                <a href="${l.url}" style="display:inline-block;padding:14px 20px;background:#111418;color:#ffffff;border-radius:999px;text-decoration:none;font-weight:500;font-size:15px;">Download ${escapeHtml(l.name)}</a>
+                <a href="${l.url}" style="display:inline-block;padding:14px 20px;background:#111418;color:#ffffff;border-radius:999px;text-decoration:none;font-weight:500;font-size:15px;">${escapeHtml(copy.downloadPrefix)} ${escapeHtml(l.name)}</a>
               </p>`,
               )
               .join("")}
           </td></tr>
           <tr><td style="padding:8px 36px 36px;">
             <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.55;">
-              Or open your library anytime: <a href="${libraryUrl}" style="color:#111418;">${libraryUrl}</a>
+              ${escapeHtml(copy.libraryPrefix)} <a href="${libraryUrl}" style="color:#111418;">${libraryUrl}</a>
             </p>
             <p style="margin:18px 0 0;color:#9ca3af;font-size:12px;">© Lumenari · lumenari.io</p>
           </td></tr>

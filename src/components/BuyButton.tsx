@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { Loader2 } from "lucide-react";
-import { useDictionary } from "@/i18n/use-dictionary";
+import { useDictionary, useLocale } from "@/i18n/use-dictionary";
 
 interface BuyButtonProps {
   slugs: string[];
@@ -22,6 +22,7 @@ export function BuyButton({
   emailPrefill,
 }: BuyButtonProps) {
   const dict = useDictionary();
+  const locale = useLocale();
   const t = dict.buyButton;
   const resolvedLabel = label ?? t.defaultLabel;
   const [loading, setLoading] = useState(false);
@@ -34,7 +35,7 @@ export function BuyButton({
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ slugs, email: emailPrefill }),
+        body: JSON.stringify({ slugs, email: emailPrefill, locale }),
       });
       const data = (await res.json()) as { url?: string; error?: string };
       if (!res.ok || !data.url) {

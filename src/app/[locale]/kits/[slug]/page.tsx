@@ -16,6 +16,7 @@ import { RecommendedTools } from "@/components/recommended-tools";
 import { LOCALES, isLocale, type Locale } from "@/i18n/locales";
 import { getDictionary, type Dictionary } from "@/i18n/dictionaries";
 import { kitOrBundleMetadata, siteUrl } from "@/lib/seo";
+import { localizeKit } from "@/lib/kit-i18n";
 import {
   JsonLd,
   ProductSchema,
@@ -55,6 +56,7 @@ export default async function KitDetailPage({ params }: PageProps) {
     return (
       <BundlePage
         bundle={bundle}
+        locale={safeLocale}
         localePath={localePath}
         base={base}
         dict={dict}
@@ -62,8 +64,9 @@ export default async function KitDetailPage({ params }: PageProps) {
     );
   }
 
-  const kit = getKit(slug);
-  if (!kit) notFound();
+  const rawKit = getKit(slug);
+  if (!rawKit) notFound();
+  const kit = await localizeKit(rawKit, safeLocale);
 
   const breadcrumb = BreadcrumbListSchema([
     { name: "Lumenari", url: `${base}${localePath}/` },
@@ -142,20 +145,25 @@ export default async function KitDetailPage({ params }: PageProps) {
   );
 }
 
-function BundlePage({
+async function BundlePage({
   bundle,
+  locale,
   localePath,
   base,
   dict,
 }: {
   bundle: Bundle;
+  locale: Locale;
   localePath: string;
   base: string;
   dict: Dictionary;
 }) {
-  const total = bundle.kitSlugs
-    .map((slug) => getKit(slug))
-    .filter((k): k is NonNullable<ReturnType<typeof getKit>> => Boolean(k));
+  const total = await Promise.all(
+    bundle.kitSlugs
+      .map((slug) => getKit(slug))
+      .filter((k): k is NonNullable<ReturnType<typeof getKit>> => Boolean(k))
+      .map((k) => localizeKit(k, locale)),
+  );
 
   const breadcrumb = BreadcrumbListSchema([
     { name: "Lumenari", url: `${base}${localePath}/` },
