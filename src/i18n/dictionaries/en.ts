@@ -490,9 +490,9 @@ export const en = {
   },
   freeDownload: {
     eyebrow: "Your free kit",
-    downloadLabel: "Download the kit (.md)",
+    downloadLabel: "Download the kit (.zip)",
     instruction:
-      "Drop the file into a Claude project — or paste the optimization pack section into ChatGPT — and try the first prompt.",
+      "Unzip it, drop SKILL.md into a Claude project — or paste the optimization pack into ChatGPT — and try the first prompt. The welcome PDF inside walks you through the rest.",
     browseCatalog: "Browse the full catalog →",
   },
   libraryPage: {
