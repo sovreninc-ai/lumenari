@@ -38,11 +38,11 @@ import path from "node:path";
 const TEST_KEY = process.env.STRIPE_TEST_SECRET_KEY;
 const LIVE_KEY = process.env.STRIPE_LIVE_SECRET_KEY;
 
-if (!TEST_KEY || !TEST_KEY.startsWith("sk_test_")) {
-  throw new Error("STRIPE_TEST_SECRET_KEY must be set to an sk_test_... key");
+if (!TEST_KEY || !(TEST_KEY.startsWith("sk_test_") || TEST_KEY.startsWith("rk_test_"))) {
+  throw new Error("STRIPE_TEST_SECRET_KEY must be sk_test_... or rk_test_...");
 }
-if (!LIVE_KEY || !LIVE_KEY.startsWith("sk_live_")) {
-  throw new Error("STRIPE_LIVE_SECRET_KEY must be set to an sk_live_... key");
+if (!LIVE_KEY || !(LIVE_KEY.startsWith("sk_live_") || LIVE_KEY.startsWith("rk_live_"))) {
+  throw new Error("STRIPE_LIVE_SECRET_KEY must be sk_live_... or rk_live_...");
 }
 
 const apiVersion = "2025-02-24.acacia";
