@@ -143,7 +143,12 @@ export async function POST(req: Request) {
 // =====================================================================
 async function sendWelcome(email: string): Promise<void> {
   const base = siteUrl();
-  const downloadUrl = `${base}/free/download/${FREE_KIT_SLUG}`;
+  // Pin the locale to `/en` — the welcome email body is English-only, so
+  // letting the middleware auto-detect via Accept-Language (e.g. clicking
+  // the link from a browser that prefers French) sends subscribers to a
+  // locale that doesn't match the email. Revisit when the welcome email
+  // gets translated per signup-locale.
+  const downloadUrl = `${base}/en/free/download/${FREE_KIT_SLUG}`;
   const unsubscribeToken = await makeUnsubscribeToken(email);
   const unsubscribeUrl = `${base}/api/unsubscribe?token=${encodeURIComponent(
     unsubscribeToken,
@@ -187,7 +192,7 @@ function welcomeHtml({
           <a href="${downloadUrl}" style="display:inline-block; background:#0f172a; color:white; padding:14px 28px; border-radius:999px; text-decoration:none; font-weight:500;">Grab the free kit</a>
         </p>
         <p style="font-size:15px; color:#475569; line-height:1.55; margin:0 0 24px;">
-          Want every kit we ship — including the next one? <a href="${siteUrl()}/pro" style="color:#0f172a; text-decoration:underline;">Lumenari Pro+</a> unlocks the whole catalog for the cost of a couple of one-off kits a year.
+          Want every kit we ship — including the next one? <a href="${siteUrl()}/en/pro" style="color:#0f172a; text-decoration:underline;">Lumenari Pro+</a> unlocks the whole catalog for the cost of a couple of one-off kits a year.
         </p>
         <p style="font-size:14px; color:#94a3b8; margin:32px 0 0;">— Chris &amp; the Lumenari team</p>
       </td></tr>
@@ -214,7 +219,7 @@ As a thank-you, here's a free starter kit: the ${FREE_KIT_NAME}.
 
 Grab it here: ${downloadUrl}
 
-Want every kit we ship? Lumenari Pro+ unlocks the whole catalog: ${siteUrl()}/pro
+Want every kit we ship? Lumenari Pro+ unlocks the whole catalog: ${siteUrl()}/en/pro
 
 — Chris & the Lumenari team
 
