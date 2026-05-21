@@ -388,6 +388,10 @@ async function fulfillKitPurchase(
         stripe_session_id: session.id,
         stripe_customer_id:
           typeof session.customer === "string" ? session.customer : null,
+        stripe_payment_intent_id:
+          typeof session.payment_intent === "string"
+            ? session.payment_intent
+            : null,
         amount_cents: session.amount_total ?? null,
         currency: session.currency ?? "usd",
       })
@@ -469,6 +473,10 @@ async function fulfillProLifetime(
       stripe_session_id: session.id,
       stripe_customer_id:
         typeof session.customer === "string" ? session.customer : null,
+      stripe_payment_intent_id:
+        typeof session.payment_intent === "string"
+          ? session.payment_intent
+          : null,
       amount_cents: session.amount_total ?? null,
       currency: session.currency ?? "usd",
       pro: true,

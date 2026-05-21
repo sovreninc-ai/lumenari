@@ -82,7 +82,7 @@ export async function GET(req: Request, { params }: Params) {
   const db = supabaseService();
   const { data: purchase, error } = await db
     .from("purchases")
-    .select("id, kit_ids, access_token, pro, pro_status")
+    .select("id, kit_ids, access_token, pro, pro_status, refunded_at")
     .eq("id", purchaseId)
     .maybeSingle();
 
@@ -91,6 +91,12 @@ export async function GET(req: Request, { params }: Params) {
   }
   if (purchase.access_token !== token) {
     return NextResponse.json({ error: "Bad token" }, { status: 403 });
+  }
+  if (purchase.refunded_at) {
+    return NextResponse.json(
+      { error: "This purchase has been refunded" },
+      { status: 403 },
+    );
   }
 
   // Pro+ members can download anything in the catalog. One-off buyers can

@@ -80,6 +80,9 @@ export async function POST(req: Request) {
       case "customer.subscription.deleted":
         await handleSubscriptionDeleted(event.data.object as Stripe.Subscription);
         break;
+      case "charge.refunded":
+        await handleChargeRefunded(event.data.object as Stripe.Charge);
+        break;
       default:
         // Acknowledge events we don't care about.
         break;
@@ -154,6 +157,112 @@ async function handleSubscriptionDeleted(sub: Stripe.Subscription) {
   if (row?.email) {
     await sendCancellationSaveEmail(row.email);
   }
+}
+
+// ===================================================================
+// Charge refunded — Stripe Dashboard or API refund (full or partial)
+//
+// Marks the matching `purchases` row as refunded so the download route
+// can deny future access. For Pro+ subscriptions and Pro+ Lifetime we
+// also flip `pro=false` and `pro_status='cancelled'` so the library
+// page locks immediately. One-off kit refunds set `refunded_at` only —
+// the downloaded markdown is already on the customer's machine, so this
+// is mostly bookkeeping + future-download lockout.
+//
+// Match strategy:
+//   1. stripe_payment_intent_id  — set at fulfillment for sessions in
+//      mode=payment (one-off kits + Pro+ Lifetime). Direct match.
+//   2. stripe_customer_id + pro=true — for Pro+ subscriptions, where
+//      individual charges come from invoices and the PI isn't stored
+//      on the purchase row.
+//
+// Idempotent: re-running with refunded_at already set is a no-op.
+// ===================================================================
+async function handleChargeRefunded(charge: Stripe.Charge) {
+  const paymentIntentId =
+    typeof charge.payment_intent === "string"
+      ? charge.payment_intent
+      : null;
+  const customerId =
+    typeof charge.customer === "string" ? charge.customer : null;
+
+  if (!paymentIntentId && !customerId) {
+    console.warn(
+      "[stripe webhook] charge.refunded has neither payment_intent nor customer",
+      charge.id,
+    );
+    return;
+  }
+
+  const db = supabaseService();
+  const nowIso = new Date().toISOString();
+
+  // 1. Direct match by payment_intent_id (one-off kits + Pro+ Lifetime).
+  if (paymentIntentId) {
+    const { data: row } = await db
+      .from("purchases")
+      .select("id, email, pro, kit_ids, refunded_at")
+      .eq("stripe_payment_intent_id", paymentIntentId)
+      .maybeSingle();
+
+    if (row) {
+      if (row.refunded_at) {
+        console.log(
+          "[stripe webhook] charge.refunded already processed for purchase",
+          row.id,
+        );
+        return;
+      }
+      const update: Record<string, unknown> = { refunded_at: nowIso };
+      if (row.pro) {
+        update.pro = false;
+        update.pro_status = "cancelled";
+      }
+      await db.from("purchases").update(update).eq("id", row.id);
+      console.log("[stripe webhook] charge.refunded", {
+        purchaseId: row.id,
+        email: row.email,
+        wasPro: row.pro,
+        kits: row.kit_ids,
+      });
+      return;
+    }
+  }
+
+  // 2. Fallback for Pro+ subscriptions (invoice → charge → no PI stored
+  // on the purchase row). Match the active Pro+ row by customer.
+  if (customerId) {
+    const { data: proRow } = await db
+      .from("purchases")
+      .select("id, email, refunded_at")
+      .eq("stripe_customer_id", customerId)
+      .eq("pro", true)
+      .is("refunded_at", null)
+      .order("created_at", { ascending: false })
+      .limit(1)
+      .maybeSingle();
+
+    if (proRow) {
+      await db
+        .from("purchases")
+        .update({
+          refunded_at: nowIso,
+          pro: false,
+          pro_status: "cancelled",
+        })
+        .eq("id", proRow.id);
+      console.log("[stripe webhook] charge.refunded (Pro+ via customer)", {
+        purchaseId: proRow.id,
+        email: proRow.email,
+      });
+      return;
+    }
+  }
+
+  console.warn(
+    "[stripe webhook] charge.refunded — no matching purchase row",
+    { paymentIntentId, customerId },
+  );
 }
 
 // ===================================================================

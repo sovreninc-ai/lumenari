@@ -247,12 +247,15 @@ async function loadPurchase(p: string, t: string): Promise<PurchaseRow | null> {
   const { data, error } = await db
     .from("purchases")
     .select(
-      "id, email, kit_ids, access_token, pro, pro_tier, pro_status",
+      "id, email, kit_ids, access_token, pro, pro_tier, pro_status, refunded_at",
     )
     .eq("id", p)
     .maybeSingle();
 
   if (error || !data) return null;
   if (data.access_token !== t) return null;
+  // Refunded purchases lose library access — the page renders an
+  // "expired/invalid link" state when we return null.
+  if (data.refunded_at) return null;
   return data as PurchaseRow;
 }

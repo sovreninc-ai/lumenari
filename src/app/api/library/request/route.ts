@@ -32,6 +32,7 @@ export async function POST(req: Request) {
     .from("purchases")
     .select("id, email, kit_ids, access_token, pro, pro_status, created_at")
     .ilike("email", email)
+    .is("refunded_at", null)
     .order("created_at", { ascending: false });
 
   if (error) {

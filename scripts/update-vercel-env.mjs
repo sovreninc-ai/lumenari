@@ -56,6 +56,11 @@ function parseArgs() {
 }
 
 function readToken() {
+  // 1. Env var wins — use a personal access token from
+  //    https://vercel.com/account/tokens
+  if (process.env.VERCEL_TOKEN) return process.env.VERCEL_TOKEN;
+  // 2. Fall back to the CLI's OAuth token (short-lived; re-`vercel login`
+  //    if it's expired).
   const cfg = JSON.parse(
     fs.readFileSync(
       path.join(
