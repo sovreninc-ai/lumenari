@@ -41,79 +41,209 @@ import { getLocalizedKitMeta } from "@/lib/kit-i18n";
  *
  * Falls back to English for any locale not listed.
  */
-const RECEIPT_COPY: Record<
-  Locale,
-  {
-    subject: string;
-    heading: string;
-    intro: string;
-    downloadPrefix: string;
-    libraryPrefix: string;
-  }
-> = {
+interface ReceiptCopy {
+  // Subject + headline
+  subject: string;          // "Your Lumenari receipt — Order #ABC12345" (after templating)
+  subjectPrefix: string;    // "Your Lumenari receipt"
+  receiptHeading: string;   // "Receipt"
+  thanksLine: string;       // "Thanks for your order. Your downloads are below."
+  // Header table
+  orderIdLabel: string;     // "Order"
+  dateLabel: string;        // "Date"
+  emailLabel: string;       // "Billed to"
+  // Items table
+  itemHeader: string;       // "Item"
+  amountHeader: string;     // "Amount"
+  // Totals
+  subtotalLabel: string;
+  taxLabel: string;
+  totalLabel: string;
+  // CTAs
+  downloadsHeading: string; // "Your downloads"
+  downloadPrefix: string;   // "Download"
+  libraryPrefix: string;    // "Or open your library anytime:"
+  // Footer
+  needHelpLine: string;     // "Need help with this order? Reply to this email or write to hello@lumenari.io."
+  refundPolicyLabel: string; // "Refund policy"
+  merchantLine: string;     // "Lumenari · Sovren Services Inc."
+}
+
+const RECEIPT_COPY: Record<Locale, ReceiptCopy> = {
   en: {
-    subject: "Your Lumenari kit is ready",
-    heading: "Your Lumenari kit is ready.",
-    intro:
-      "Thanks for picking up a kit. Your downloads are below. They'll also live in your library — no password, just your email.",
+    subject: "Your Lumenari receipt",
+    subjectPrefix: "Your Lumenari receipt",
+    receiptHeading: "Receipt",
+    thanksLine:
+      "Thanks for your order. Your downloads are below — they also live in your library, no password required.",
+    orderIdLabel: "Order",
+    dateLabel: "Date",
+    emailLabel: "Billed to",
+    itemHeader: "Item",
+    amountHeader: "Amount",
+    subtotalLabel: "Subtotal",
+    taxLabel: "Tax",
+    totalLabel: "Total",
+    downloadsHeading: "Your downloads",
     downloadPrefix: "Download",
     libraryPrefix: "Or open your library anytime:",
+    needHelpLine:
+      "Need help with this order? Reply to this email or write to hello@lumenari.io.",
+    refundPolicyLabel: "Refund policy",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
   es: {
-    subject: "Tu kit de Lumenari está listo",
-    heading: "Tu kit de Lumenari está listo.",
-    intro:
-      "Gracias por llevarte un kit. Tus descargas están abajo. También vivirán en tu biblioteca — sin contraseña, solo tu email.",
+    subject: "Tu recibo de Lumenari",
+    subjectPrefix: "Tu recibo de Lumenari",
+    receiptHeading: "Recibo",
+    thanksLine:
+      "Gracias por tu compra. Tus descargas están abajo — también viven en tu biblioteca, sin contraseña.",
+    orderIdLabel: "Pedido",
+    dateLabel: "Fecha",
+    emailLabel: "Facturado a",
+    itemHeader: "Artículo",
+    amountHeader: "Importe",
+    subtotalLabel: "Subtotal",
+    taxLabel: "Impuestos",
+    totalLabel: "Total",
+    downloadsHeading: "Tus descargas",
     downloadPrefix: "Descargar",
     libraryPrefix: "O abre tu biblioteca cuando quieras:",
+    needHelpLine:
+      "¿Necesitas ayuda con este pedido? Responde a este email o escribe a hello@lumenari.io.",
+    refundPolicyLabel: "Política de reembolso",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
   pt: {
-    subject: "O teu kit Lumenari está pronto",
-    heading: "O teu kit Lumenari está pronto.",
-    intro:
-      "Obrigado por levares um kit. Os teus downloads estão abaixo. Também vão ficar na tua biblioteca — sem palavra-passe, só com o teu email.",
+    subject: "O teu recibo da Lumenari",
+    subjectPrefix: "O teu recibo da Lumenari",
+    receiptHeading: "Recibo",
+    thanksLine:
+      "Obrigado pela tua encomenda. Os teus downloads estão abaixo — também ficam na tua biblioteca, sem palavra-passe.",
+    orderIdLabel: "Pedido",
+    dateLabel: "Data",
+    emailLabel: "Faturado a",
+    itemHeader: "Item",
+    amountHeader: "Valor",
+    subtotalLabel: "Subtotal",
+    taxLabel: "Imposto",
+    totalLabel: "Total",
+    downloadsHeading: "Os teus downloads",
     downloadPrefix: "Descarregar",
     libraryPrefix: "Ou abre a tua biblioteca quando quiseres:",
+    needHelpLine:
+      "Precisas de ajuda com esta encomenda? Responde a este email ou escreve para hello@lumenari.io.",
+    refundPolicyLabel: "Política de reembolso",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
   de: {
-    subject: "Dein Lumenari-Kit ist bereit",
-    heading: "Dein Lumenari-Kit ist bereit.",
-    intro:
-      "Danke, dass du ein Kit gekauft hast. Deine Downloads findest du unten. Sie liegen außerdem in deiner Bibliothek — kein Passwort, nur deine E-Mail.",
+    subject: "Deine Lumenari-Quittung",
+    subjectPrefix: "Deine Lumenari-Quittung",
+    receiptHeading: "Quittung",
+    thanksLine:
+      "Danke für deine Bestellung. Deine Downloads findest du unten — sie liegen auch in deiner Bibliothek, ohne Passwort.",
+    orderIdLabel: "Bestellung",
+    dateLabel: "Datum",
+    emailLabel: "Rechnung an",
+    itemHeader: "Artikel",
+    amountHeader: "Betrag",
+    subtotalLabel: "Zwischensumme",
+    taxLabel: "Steuer",
+    totalLabel: "Gesamt",
+    downloadsHeading: "Deine Downloads",
     downloadPrefix: "Herunterladen",
     libraryPrefix: "Oder öffne deine Bibliothek jederzeit:",
+    needHelpLine:
+      "Brauchst du Hilfe mit dieser Bestellung? Antworte auf diese E-Mail oder schreibe an hello@lumenari.io.",
+    refundPolicyLabel: "Rückerstattung",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
   fr: {
-    subject: "Votre kit Lumenari est prêt",
-    heading: "Votre kit Lumenari est prêt.",
-    intro:
-      "Merci d'avoir choisi un kit. Vos téléchargements sont ci-dessous. Ils resteront aussi dans votre bibliothèque — pas de mot de passe, juste votre e-mail.",
+    subject: "Votre reçu Lumenari",
+    subjectPrefix: "Votre reçu Lumenari",
+    receiptHeading: "Reçu",
+    thanksLine:
+      "Merci pour votre commande. Vos téléchargements sont ci-dessous — ils restent également dans votre bibliothèque, sans mot de passe.",
+    orderIdLabel: "Commande",
+    dateLabel: "Date",
+    emailLabel: "Facturé à",
+    itemHeader: "Article",
+    amountHeader: "Montant",
+    subtotalLabel: "Sous-total",
+    taxLabel: "Taxe",
+    totalLabel: "Total",
+    downloadsHeading: "Vos téléchargements",
     downloadPrefix: "Télécharger",
     libraryPrefix: "Ou ouvrez votre bibliothèque à tout moment :",
+    needHelpLine:
+      "Besoin d'aide pour cette commande ? Répondez à cet e-mail ou écrivez à hello@lumenari.io.",
+    refundPolicyLabel: "Politique de remboursement",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
   ja: {
-    subject: "Lumenari キットの準備ができました",
-    heading: "Lumenari キットの準備ができました。",
-    intro:
-      "キットをご購入いただきありがとうございます。下記からダウンロードできます。あなたのライブラリにも保存されます — パスワード不要、メールアドレスだけで開けます。",
+    subject: "Lumenari ご購入の領収書",
+    subjectPrefix: "Lumenari ご購入の領収書",
+    receiptHeading: "領収書",
+    thanksLine:
+      "ご購入ありがとうございます。下記からダウンロードいただけます。ライブラリにも保存されており、パスワードは不要です。",
+    orderIdLabel: "注文番号",
+    dateLabel: "日付",
+    emailLabel: "請求先",
+    itemHeader: "商品",
+    amountHeader: "金額",
+    subtotalLabel: "小計",
+    taxLabel: "税金",
+    totalLabel: "合計",
+    downloadsHeading: "ダウンロード",
     downloadPrefix: "ダウンロード",
     libraryPrefix: "ライブラリはいつでも開けます：",
+    needHelpLine:
+      "このご注文についてご質問がありましたら、このメールに返信するか hello@lumenari.io までご連絡ください。",
+    refundPolicyLabel: "返金ポリシー",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
   hi: {
-    subject: "आपका Lumenari किट तैयार है",
-    heading: "आपका Lumenari किट तैयार है।",
-    intro:
-      "किट खरीदने के लिए धन्यवाद। आपके डाउनलोड नीचे हैं। वे आपकी लाइब्रेरी में भी रहेंगे — कोई पासवर्ड नहीं, बस आपका ईमेल।",
+    subject: "आपकी Lumenari रसीद",
+    subjectPrefix: "आपकी Lumenari रसीद",
+    receiptHeading: "रसीद",
+    thanksLine:
+      "आपके ऑर्डर के लिए धन्यवाद। आपके डाउनलोड नीचे हैं — वे आपकी लाइब्रेरी में भी हैं, कोई पासवर्ड नहीं चाहिए।",
+    orderIdLabel: "ऑर्डर",
+    dateLabel: "तारीख",
+    emailLabel: "बिल",
+    itemHeader: "आइटम",
+    amountHeader: "राशि",
+    subtotalLabel: "उप-योग",
+    taxLabel: "टैक्स",
+    totalLabel: "कुल",
+    downloadsHeading: "आपके डाउनलोड",
     downloadPrefix: "डाउनलोड करें",
     libraryPrefix: "अपनी लाइब्रेरी कभी भी खोलें:",
+    needHelpLine:
+      "इस ऑर्डर के बारे में मदद चाहिए? इस ईमेल का जवाब दीजिए या hello@lumenari.io पर लिखिए।",
+    refundPolicyLabel: "रिफंड नीति",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
   "zh-CN": {
-    subject: "你的 Lumenari 套件已准备好",
-    heading: "你的 Lumenari 套件已准备好。",
-    intro:
-      "感谢购买。下载链接如下。它们也会保存在你的资料库里 —— 不需要密码，只需要你的邮箱。",
+    subject: "你的 Lumenari 收据",
+    subjectPrefix: "你的 Lumenari 收据",
+    receiptHeading: "收据",
+    thanksLine:
+      "感谢购买。下载链接如下，它们也保存在你的资料库里，无需密码。",
+    orderIdLabel: "订单号",
+    dateLabel: "日期",
+    emailLabel: "账单地址",
+    itemHeader: "商品",
+    amountHeader: "金额",
+    subtotalLabel: "小计",
+    taxLabel: "税金",
+    totalLabel: "合计",
+    downloadsHeading: "你的下载",
     downloadPrefix: "下载",
     libraryPrefix: "随时打开你的资料库：",
+    needHelpLine:
+      "对此订单有疑问？回复本邮件或发送至 hello@lumenari.io。",
+    refundPolicyLabel: "退款政策",
+    merchantLine: "Lumenari · Sovren Services Inc.",
   },
 };
 
@@ -414,13 +544,14 @@ async function fulfillKitPurchase(
   }
 
   if (isNew) {
-    await sendReceiptEmail(
+    await sendReceiptEmail({
+      session,
       email,
-      finalSlugs,
+      slugs: finalSlugs,
       purchaseId,
       accessToken,
-      buyerLocale,
-    );
+      locale: buyerLocale,
+    });
   }
 
   return { kind: "kit", email, kitSlugs: finalSlugs, isNew };
@@ -596,13 +727,21 @@ async function inferSlugsFromLineItems(sessionId: string): Promise<string[]> {
   return Array.from(new Set(out));
 }
 
-async function sendReceiptEmail(
-  email: string,
-  slugs: string[],
-  purchaseId: string,
-  accessToken: string,
-  locale: Locale,
-) {
+async function sendReceiptEmail({
+  session,
+  email,
+  slugs,
+  purchaseId,
+  accessToken,
+  locale,
+}: {
+  session: Stripe.Checkout.Session;
+  email: string;
+  slugs: string[];
+  purchaseId: string;
+  accessToken: string;
+  locale: Locale;
+}) {
   const copy = receiptCopyFor(locale);
   const localeQuery =
     locale === DEFAULT_LOCALE ? "" : `&locale=${encodeURIComponent(locale)}`;
@@ -612,27 +751,60 @@ async function sendReceiptEmail(
     .map((s) => getKit(s))
     .filter((k): k is NonNullable<ReturnType<typeof getKit>> => Boolean(k));
 
-  // Use the localized kit name when one exists — the buyer just paid for the
-  // translated kit, the button should read in their language.
-  const links = await Promise.all(
+  // Localized name + per-kit price for the receipt line items. The download
+  // URL doubles as the CTA.
+  const items = await Promise.all(
     kits.map(async (k) => {
       const localized = await getLocalizedKitMeta(k.slug, locale);
       return {
         name: localized?.name || k.name,
+        priceCents: k.priceCents,
         url: `${env.siteUrl}/api/download/${k.slug}?p=${purchaseId}&t=${accessToken}${localeQuery}`,
       };
     }),
   );
 
   const libraryUrl = `${env.siteUrl}${localePathPrefix}/library?p=${purchaseId}&t=${accessToken}`;
+  const refundPolicyUrl = `${env.siteUrl}${localePathPrefix}/refunds`;
 
-  const html = receiptTemplate({ links, libraryUrl, copy });
+  // Stripe gives us the canonical paid amounts. Fall back to summed item
+  // prices if any of these are absent (shouldn't happen for completed
+  // sessions, but defensive).
+  const currency = (session.currency ?? "usd").toUpperCase();
+  const itemsSubtotal = items.reduce((sum, i) => sum + i.priceCents, 0);
+  const subtotalCents = session.amount_subtotal ?? itemsSubtotal;
+  const totalCents = session.amount_total ?? itemsSubtotal;
+  const taxCents = session.total_details?.amount_tax ?? 0;
+
+  // Order ID — short, human-readable. First 8 hex chars of the UUID, uppercase.
+  const shortOrderId = purchaseId.replace(/-/g, "").slice(0, 8).toUpperCase();
+
+  // Date — locale-aware, from the Stripe session timestamp.
+  const dateMs = (session.created ?? Math.floor(Date.now() / 1000)) * 1000;
+  const dateStr = new Intl.DateTimeFormat(intlLocaleFor(locale), {
+    dateStyle: "long",
+  }).format(new Date(dateMs));
+
+  const subject = `${copy.subjectPrefix} — #${shortOrderId}`;
+  const html = receiptTemplate({
+    copy,
+    shortOrderId,
+    dateStr,
+    email,
+    items,
+    currency,
+    subtotalCents,
+    taxCents,
+    totalCents,
+    libraryUrl,
+    refundPolicyUrl,
+  });
 
   try {
     const result = await resend().emails.send({
       from: env.resendFrom,
       to: email,
-      subject: copy.subject,
+      subject,
       html,
     });
     if (result.error) {
@@ -647,12 +819,39 @@ async function sendReceiptEmail(
     } else {
       console.log(
         "[fulfillment] kit receipt email sent:",
-        JSON.stringify({ from: env.resendFrom, to: email, id: result.data?.id }),
+        JSON.stringify({
+          from: env.resendFrom,
+          to: email,
+          id: result.data?.id,
+          orderId: shortOrderId,
+        }),
       );
     }
   } catch (err) {
     console.error("[fulfillment] kit receipt email threw:", err);
   }
+}
+
+// Map our internal locale codes to BCP-47 codes Intl.DateTimeFormat
+// understands. Most pass through; en goes to en-US for "May 20, 2026".
+function intlLocaleFor(locale: Locale): string {
+  switch (locale) {
+    case "en":
+      return "en-US";
+    case "zh-CN":
+      return "zh-CN";
+    default:
+      return locale;
+  }
+}
+
+function formatMoney(cents: number, currency: string): string {
+  return new Intl.NumberFormat("en-US", {
+    style: "currency",
+    currency,
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(cents / 100);
 }
 
 async function sendProWelcomeEmail(
@@ -710,40 +909,133 @@ async function sendProWelcomeEmail(
 }
 
 function receiptTemplate({
-  links,
-  libraryUrl,
   copy,
+  shortOrderId,
+  dateStr,
+  email,
+  items,
+  currency,
+  subtotalCents,
+  taxCents,
+  totalCents,
+  libraryUrl,
+  refundPolicyUrl,
 }: {
-  links: { name: string; url: string }[];
+  copy: ReceiptCopy;
+  shortOrderId: string;
+  dateStr: string;
+  email: string;
+  items: { name: string; priceCents: number; url: string }[];
+  currency: string;
+  subtotalCents: number;
+  taxCents: number;
+  totalCents: number;
   libraryUrl: string;
-  copy: (typeof RECEIPT_COPY)[Locale];
+  refundPolicyUrl: string;
 }): string {
+  const itemsRows = items
+    .map(
+      (i) => `
+              <tr>
+                <td style="padding:10px 0;border-top:1px solid #ececec;font-size:14px;color:#111418;">${escapeHtml(i.name)}</td>
+                <td style="padding:10px 0;border-top:1px solid #ececec;font-size:14px;color:#111418;text-align:right;font-variant-numeric:tabular-nums;">${escapeHtml(formatMoney(i.priceCents, currency))}</td>
+              </tr>`,
+    )
+    .join("");
+
+  const taxRow =
+    taxCents > 0
+      ? `
+              <tr>
+                <td style="padding:6px 0;font-size:14px;color:#6b7280;">${escapeHtml(copy.taxLabel)}</td>
+                <td style="padding:6px 0;font-size:14px;color:#6b7280;text-align:right;font-variant-numeric:tabular-nums;">${escapeHtml(formatMoney(taxCents, currency))}</td>
+              </tr>`
+      : "";
+
+  const downloadButtons = items
+    .map(
+      (i) => `
+              <p style="margin:0 0 10px;">
+                <a href="${i.url}" style="display:inline-block;padding:13px 20px;background:#111418;color:#ffffff;border-radius:999px;text-decoration:none;font-weight:500;font-size:14px;">${escapeHtml(copy.downloadPrefix)} — ${escapeHtml(i.name)}</a>
+              </p>`,
+    )
+    .join("");
+
   return `<!doctype html>
 <html>
   <body style="margin:0;padding:0;background:#fafafa;font-family:-apple-system,BlinkMacSystemFont,'SF Pro Text','Inter',system-ui,sans-serif;color:#111418;">
     <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#fafafa;padding:40px 16px;">
       <tr><td align="center">
         <table role="presentation" width="560" cellpadding="0" cellspacing="0" style="background:#ffffff;border:1px solid #ececec;border-radius:22px;overflow:hidden;">
-          <tr><td style="padding:36px 36px 8px;">
-            <h1 style="margin:0 0 8px;font-size:28px;font-weight:600;letter-spacing:-0.02em;">${escapeHtml(copy.heading)}</h1>
-            <p style="margin:0;color:#6b7280;font-size:16px;line-height:1.55;">${escapeHtml(copy.intro)}</p>
+
+          <!-- Header -->
+          <tr><td style="padding:32px 36px 8px;">
+            <p style="margin:0 0 4px;font-size:12px;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:#9ca3af;">${escapeHtml(copy.receiptHeading)}</p>
+            <h1 style="margin:0 0 10px;font-size:24px;font-weight:600;letter-spacing:-0.02em;">${escapeHtml(copy.subjectPrefix)}</h1>
+            <p style="margin:0;color:#6b7280;font-size:14px;line-height:1.55;">${escapeHtml(copy.thanksLine)}</p>
           </td></tr>
-          <tr><td style="padding:24px 36px;">
-            ${links
-              .map(
-                (l) => `
-              <p style="margin:0 0 14px;">
-                <a href="${l.url}" style="display:inline-block;padding:14px 20px;background:#111418;color:#ffffff;border-radius:999px;text-decoration:none;font-weight:500;font-size:15px;">${escapeHtml(copy.downloadPrefix)} ${escapeHtml(l.name)}</a>
-              </p>`,
-              )
-              .join("")}
+
+          <!-- Order metadata -->
+          <tr><td style="padding:20px 36px 4px;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="font-size:13px;">
+              <tr>
+                <td style="padding:4px 0;color:#6b7280;width:120px;">${escapeHtml(copy.orderIdLabel)}</td>
+                <td style="padding:4px 0;color:#111418;font-variant-numeric:tabular-nums;">#${escapeHtml(shortOrderId)}</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 0;color:#6b7280;">${escapeHtml(copy.dateLabel)}</td>
+                <td style="padding:4px 0;color:#111418;">${escapeHtml(dateStr)}</td>
+              </tr>
+              <tr>
+                <td style="padding:4px 0;color:#6b7280;">${escapeHtml(copy.emailLabel)}</td>
+                <td style="padding:4px 0;color:#111418;">${escapeHtml(email)}</td>
+              </tr>
+            </table>
           </td></tr>
-          <tr><td style="padding:8px 36px 36px;">
-            <p style="margin:0;color:#6b7280;font-size:13px;line-height:1.55;">
+
+          <!-- Items -->
+          <tr><td style="padding:24px 36px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <th align="left" style="padding:0 0 6px;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;">${escapeHtml(copy.itemHeader)}</th>
+                <th align="right" style="padding:0 0 6px;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;">${escapeHtml(copy.amountHeader)}</th>
+              </tr>
+              ${itemsRows}
+            </table>
+          </td></tr>
+
+          <!-- Totals -->
+          <tr><td style="padding:14px 36px 0;">
+            <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+              <tr>
+                <td style="padding:6px 0;font-size:14px;color:#6b7280;">${escapeHtml(copy.subtotalLabel)}</td>
+                <td style="padding:6px 0;font-size:14px;color:#6b7280;text-align:right;font-variant-numeric:tabular-nums;">${escapeHtml(formatMoney(subtotalCents, currency))}</td>
+              </tr>
+              ${taxRow}
+              <tr>
+                <td style="padding:10px 0 0;border-top:1px solid #ececec;font-size:15px;font-weight:600;color:#111418;">${escapeHtml(copy.totalLabel)}</td>
+                <td style="padding:10px 0 0;border-top:1px solid #ececec;font-size:15px;font-weight:600;color:#111418;text-align:right;font-variant-numeric:tabular-nums;">${escapeHtml(formatMoney(totalCents, currency))} ${escapeHtml(currency)}</td>
+              </tr>
+            </table>
+          </td></tr>
+
+          <!-- Downloads -->
+          <tr><td style="padding:28px 36px 0;">
+            <p style="margin:0 0 12px;font-size:11px;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:#9ca3af;">${escapeHtml(copy.downloadsHeading)}</p>
+            ${downloadButtons}
+          </td></tr>
+
+          <!-- Library + footer -->
+          <tr><td style="padding:14px 36px 30px;">
+            <p style="margin:0 0 16px;color:#6b7280;font-size:13px;line-height:1.55;">
               ${escapeHtml(copy.libraryPrefix)} <a href="${libraryUrl}" style="color:#111418;">${libraryUrl}</a>
             </p>
-            <p style="margin:18px 0 0;color:#9ca3af;font-size:12px;">© Lumenari · lumenari.io</p>
+            <p style="margin:0 0 6px;color:#6b7280;font-size:13px;line-height:1.55;">${escapeHtml(copy.needHelpLine)}</p>
+            <p style="margin:18px 0 0;color:#9ca3af;font-size:12px;line-height:1.55;">
+              ${escapeHtml(copy.merchantLine)} · <a href="${refundPolicyUrl}" style="color:#9ca3af;">${escapeHtml(copy.refundPolicyLabel)}</a>
+            </p>
           </td></tr>
+
         </table>
       </td></tr>
     </table>
