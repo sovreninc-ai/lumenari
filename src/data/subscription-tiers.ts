@@ -2,9 +2,9 @@
  * Lumenari Pro+ subscription definition.
  *
  * One product, three pricing buckets:
- *   - monthly  → Stripe subscription, $19/mo USD
- *   - annual   → Stripe subscription, $149/yr USD (~35% off vs monthly)
- *   - lifetime → Stripe one-time payment, $399 USD (~2.7× annual)
+ *   - monthly  → Stripe subscription, $39/mo USD
+ *   - annual   → Stripe subscription, $199/yr USD (~5 months of monthly)
+ *   - lifetime → Stripe one-time payment, $499 USD (~12.5 months of monthly)
  *
  * Stripe price IDs come from env vars so the dashboard remains the source
  * of truth (same convention as kits in `kits.ts`).
@@ -27,9 +27,9 @@ export interface SubscriptionTier {
 export const PRO_PLUS: SubscriptionTier = {
   id: "pro-plus",
   name: "Lumenari Pro+",
-  monthly_cents: 1900,
-  annual_cents: 14900,
-  lifetime_cents: 39900,
+  monthly_cents: 3900,
+  annual_cents: 19900,
+  lifetime_cents: 49900,
   stripe_price_monthly_env: "STRIPE_PRICE_PRO_MONTHLY",
   stripe_price_annual_env: "STRIPE_PRICE_PRO_ANNUAL",
   stripe_price_lifetime_env: "STRIPE_PRICE_PRO_LIFETIME",

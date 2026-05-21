@@ -68,7 +68,7 @@ export const post: BlogPost = {
     },
   ],
   outro: [
-    "The tool wars are mostly settled in 2026 — Claude and ChatGPT do 80% of agent work, the vertical apps cover CRM glue, and the gap is the prompt quality between them. That's what kits fix. The /en/kits/real-estate-pro kit is $14 (Pro+ unlocks all 100+ for $19/mo); the catalog has equivalents for recruiters, sales, founders, content writers, and another 95 specific roles.",
+    "The tool wars are mostly settled in 2026 — Claude and ChatGPT do 80% of agent work, the vertical apps cover CRM glue, and the gap is the prompt quality between them. That's what kits fix. The /en/kits/real-estate-pro kit is $14 (Pro+ unlocks all 100+ for $39/mo); the catalog has equivalents for recruiters, sales, founders, content writers, and another 95 specific roles.",
     "Whatever you pick, the rule of thumb is: spend the money on the prompt structure, not the platform. The platforms commoditize every year; the prompt structure is what makes the output yours.",
   ],
 };

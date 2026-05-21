@@ -166,23 +166,23 @@ Catalog: ${env.siteUrl}/kits
 export function welcomeDay7() {
   const body = `
     <p>You've had a week with one free kit. If it landed, here's the upgrade math.</p>
-    <p>Pro+ is <strong>$19 USD a month</strong> and unlocks every current kit (100+) and every future one. If you'd reach for two more kits this year — say one for sales outreach and one for SEO content — you've already paid for the year.</p>
-    <p>Annual is $149 USD (saves $79 vs paying monthly). Lifetime is $399 USD if you'd rather never see the renewal again.</p>
+    <p>Pro+ is <strong>$39 USD a month</strong> and unlocks every current kit (100+) and every future one. If you'd reach for two more kits this year — say one for sales outreach and one for SEO content — you've already paid for the year.</p>
+    <p>Annual is $199 USD (saves $269 vs paying monthly). Lifetime is $499 USD if you'd rather never see the renewal again.</p>
     <p>No pressure. If the free kit was enough, the free kit was enough.</p>
   `;
   return {
     subject: "Pro+ math — should you?",
     html: renderEmail({
-      preheader: "Every kit, current and future, for $19/mo.",
+      preheader: "Every kit, current and future, for $39/mo.",
       heading: "The Pro+ pitch — short version.",
       body,
       cta: { label: "See Pro+", url: proUrl() },
     }),
-    text: `Pro+ is $19 USD/mo and unlocks every current + future kit (100+).
+    text: `Pro+ is $39 USD/mo and unlocks every current + future kit (100+).
 
 Two more kits this year = it's paid for itself.
 
-Annual: $149 (saves $79). Lifetime: $399.
+Annual: $199 (saves $269). Lifetime: $499.
 
 ${proUrl()}
 
@@ -335,7 +335,7 @@ export function proOneTimeBuyerUpsell({
   const body = `
     <p>You've grabbed a couple of kits — thanks. Here's the upgrade math:</p>
     <ul style="margin:0 0 16px;padding:0 0 0 18px;color:#475569;">${list}</ul>
-    <p><strong>Pro+ is $19 USD a month and unlocks every kit (100+) plus future ones.</strong> If you'd reach for two or three more kits in the next year, Pro+ is the cheaper path.</p>
+    <p><strong>Pro+ is $39 USD a month and unlocks every kit (100+) plus future ones.</strong> If you'd reach for two or three more kits in the next year, Pro+ is the cheaper path.</p>
     <p>No pressure — but the math is there.</p>
   `;
   return {
@@ -346,7 +346,7 @@ export function proOneTimeBuyerUpsell({
       body,
       cta: { label: "See Pro+", url: proUrl() },
     }),
-    text: `You've grabbed multiple kits. Pro+ is $19/mo and unlocks all 100+. If you'd buy 2-3 more this year, Pro+ wins.
+    text: `You've grabbed multiple kits. Pro+ is $39/mo and unlocks all 100+. If you'd buy 2-3 more this year, Pro+ wins.
 
 ${proUrl()}
 

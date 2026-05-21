@@ -107,6 +107,6 @@ export const post: BlogPost = {
   ],
   outro: [
     "Skills are the highest-leverage thing you can ship into your AI tooling in 2026. The format is simple, the craft is harder, and the gap between a working skill and a bad one is the difference between a senior teammate and a confused intern. Whether you author your own or grab a Lumenari kit as a starting point, the move is the same: get a SKILL.md in place this week, test it, edit it, and watch your AI start to do the job instead of just demoing it.",
-    "The Lumenari dev kit shelf is at /kits — 21 dev-specific kits, every one with a tested SKILL.md, memory.md template, and the four-format delivery. Pro+ unlocks the whole catalog plus future kits for $19 USD/mo if you'd reach for two or three a year anyway.",
+    "The Lumenari dev kit shelf is at /kits — 21 dev-specific kits, every one with a tested SKILL.md, memory.md template, and the four-format delivery. Pro+ unlocks the whole catalog plus future kits for $39 USD/mo if you'd reach for two or three a year anyway.",
   ],
 };

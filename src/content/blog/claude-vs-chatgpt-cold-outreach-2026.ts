@@ -67,7 +67,7 @@ export const post: BlogPost = {
     },
   ],
   outro: [
-    "Sales Outreach Pro is $14 once. If it stops you re-editing one opener tomorrow, it's paid for. Pro+ ($19/mo) unlocks Sales Outreach plus 99 other kits — /en/kits/recruiter-pro, /en/kits/brand-voice, founder, real estate, SEO, support, the rest. Pick the kit that matches your day; the model behind it doesn't matter as much as the prompt structure does.",
+    "Sales Outreach Pro is $14 once. If it stops you re-editing one opener tomorrow, it's paid for. Pro+ ($39/mo) unlocks Sales Outreach plus 99 other kits — /en/kits/recruiter-pro, /en/kits/brand-voice, founder, real estate, SEO, support, the rest. Pick the kit that matches your day; the model behind it doesn't matter as much as the prompt structure does.",
     "Whichever model you pick, the rule still holds: the prompt structure is the thing that converts. Get that right and either AI will book you meetings. Skip it and neither one will.",
   ],
 };

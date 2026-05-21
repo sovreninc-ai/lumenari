@@ -1,0 +1,6 @@
+# Lumenari Pro+ pricing rotation — live mode
+# Generated: 2026-05-21T02:04:37.673Z
+
+STRIPE_PRICE_PRO_MONTHLY=price_1TZLySCrqKrTJvbL5prKNxnW
+STRIPE_PRICE_PRO_ANNUAL=price_1TZLySCrqKrTJvbLqGD62Vhy
+STRIPE_PRICE_PRO_LIFETIME=price_1TZLyTCrqKrTJvbLZpC5uA7p

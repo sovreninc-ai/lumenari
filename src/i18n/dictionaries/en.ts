@@ -745,9 +745,9 @@ export const en = {
       "We want you to be happy with your purchase. If a kit isn't working for you, here's how we handle refunds.",
     s1: {
       title: "One-time kit and bundle purchases",
-      b1: "14-day full refund if you haven't downloaded the kit. Email hello@lumenari.io with the email you used at checkout. We process it within 5 business days; Stripe takes another 5-10 to settle on your card statement.",
-      b2: "14-day partial refund if you've downloaded the kit but it didn't fit your workflow. We'll refund up to 50%, case-by-case. The point of this band is to keep the policy honest while keeping us from being a free preview channel for the catalog.",
-      b3: "After 14 days, refunds are at our discretion. We almost always honor a polite request when the underlying complaint is fair (e.g. the kit content wasn't what was promised on the kit page). We rarely honor it when the complaint is “I bought it and forgot.”",
+      b1: "Refundable until you download. If you haven't clicked the download link in your receipt email, email hello@lumenari.io with the email you used at checkout and we'll refund you in full. Process: 5 business days on our side, Stripe takes another 5-10 to settle on your card statement.",
+      b2: "Once you've downloaded the kit, the sale is final. Digital goods — the content is now on your machine and can be used indefinitely, so we can't reclaim it. This is also why we keep prices low and offer a free starter kit at lumenari.io so you can see the format before you commit.",
+      b3: "Exception: if the kit content materially differs from what the kit page advertised, we'll refund regardless of download status. Email us with the kit slug and what you expected vs what you got — honest feedback helps us fix it.",
     },
     s2: {
       title: "Pro+ subscriptions",

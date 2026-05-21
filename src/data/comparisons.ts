@@ -228,7 +228,7 @@ export const COMPETITORS: Competitor[] = [
       { feature: "Curated prompts", lumenari: "Yes — every kit tested in-house", competitor: "Built-in summarize/draft buttons" },
       { feature: "Workspace context", lumenari: "Whatever you paste in", competitor: "Reads your Notion pages directly" },
       { feature: "Portability", lumenari: "Files you own", competitor: "Tied to Notion subscription" },
-      { feature: "Pricing", lumenari: "$14–$29 USD per kit or Pro+ $19/mo", competitor: "$10 USD/mo on top of Notion" },
+      { feature: "Pricing", lumenari: "$14–$29 USD per kit or Pro+ $39/mo", competitor: "$10 USD/mo on top of Notion" },
       { feature: "Multi-AI portability", lumenari: "Same kit across every AI", competitor: "Notion AI only" },
       { feature: "Update cadence", lumenari: "Refresh pushed when models change", competitor: "Notion's roadmap" },
     ],
@@ -250,8 +250,8 @@ export const COMPETITORS: Competitor[] = [
         a: "It can draft an email, but the result reads generic — the model wasn't tuned for that specific job. For one-off internal use it's fine; for a rep sending 50 personalized emails a day, the quality gap shows up in reply rates within a week. The Sales Outreach Pro or Recruiter Pro kits running in Claude or ChatGPT will out-convert Notion AI on the same task by a wide margin.",
       },
       {
-        q: "What about cost — Notion AI is $10/mo, Pro+ is $19/mo?",
-        a: "Compare like-for-like. Notion AI gets you a general-purpose assistant inside Notion only. Pro+ gets you 100+ role-specific kits that work across every AI tool you use, plus updates. If you'd otherwise pay for Notion AI and a tuned ChatGPT GPT and a Claude project setup, the math swings toward Pro+ quickly. If Notion AI is genuinely all you need, save the $9.",
+        q: "What about cost — Notion AI is $10/mo, Pro+ is $39/mo?",
+        a: "Compare like-for-like. Notion AI gets you a general-purpose assistant inside Notion only. Pro+ gets you 100+ role-specific kits that work across every AI tool you use, plus updates. If you'd otherwise pay for Notion AI and a tuned ChatGPT GPT and a Claude project setup, the math swings toward Pro+ quickly. If Notion AI is genuinely all you need, save the $29.",
       },
     ],
   },
@@ -282,7 +282,7 @@ export const COMPETITORS: Competitor[] = [
     rows: [
       { feature: "Product shape", lumenari: "Portable kits + recommendation wizard", competitor: "Full marketing platform" },
       { feature: "AI tool support", lumenari: "Claude, ChatGPT, Cursor, Gemini, any", competitor: "Jasper-hosted models" },
-      { feature: "Pricing model", lumenari: "Per kit / Pro+ $19 USD/mo", competitor: "Per seat, $39–$59 USD/mo and up" },
+      { feature: "Pricing model", lumenari: "Per kit / Pro+ $39 USD/mo", competitor: "Per seat, $39–$59 USD/mo and up" },
       { feature: "Brand-voice management", lumenari: "Brand-voice kit + per-kit voice presets", competitor: "First-class workspace feature" },
       { feature: "Team collaboration", lumenari: "Files you share like any doc", competitor: "Built-in review + roles" },
       { feature: "Specialization breadth", lumenari: "100+ role-specific kits", competitor: "Marketing + adjacent" },
@@ -394,7 +394,7 @@ export const COMPETITORS: Competitor[] = [
       "Active GitHub community around the repo — discussions, issues, and forks reveal real patterns of how the format is being adopted in practice.",
     ],
     rows: [
-      { feature: "Price", lumenari: "$14–$29 USD per kit or Pro+ $19/mo", competitor: "Free" },
+      { feature: "Price", lumenari: "$14–$29 USD per kit or Pro+ $39/mo", competitor: "Free" },
       { feature: "Catalog scope", lumenari: "100+ role + stack kits", competitor: "Reference / canonical examples" },
       { feature: "Multi-AI delivery", lumenari: "Claude, ChatGPT, Cursor, Gemini, any", competitor: "Claude-first" },
       { feature: "Updates", lumenari: "Maintained — pull included", competitor: "Anthropic's release cadence" },
